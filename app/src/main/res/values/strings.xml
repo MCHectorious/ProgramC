@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Symbiotic Learning</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home_screen">Home</string>
+    <string name="title_activity_exam_board_screen">Exam Boards</string>
+    <string name="title_activity_qualification_screen">Qualifications</string>
+    <string name="title_activity_course_list_screen">Courses</string>
+
+    <string name="title_activity_course_screen">Course</string>
+    <string name="title_activity_course_points">Course Points</string>
+    <string name="title_activity_revision_screen">Revision</string>
+</resources>

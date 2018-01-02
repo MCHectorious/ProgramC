@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <group
+        android:checkableBehavior="all"
+        >
+
+        <item
+            android:id="@+id/sentenceListNav"
+            android:icon="@drawable/fill_in_the_gap_icon"
+            android:title="Fill In The Gap"
+            android:checked="true" />
+
+        <item
+            android:id="@+id/cardListNav"
+            android:icon="@drawable/question_answer_icon"
+            android:title="Question-Answer"
+            android:checked="true"
+            />
+
+    </group>
+</menu>

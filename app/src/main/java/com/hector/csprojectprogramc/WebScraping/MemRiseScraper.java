@@ -1,8 +1,10 @@
 package com.hector.csprojectprogramc.WebScraping;
 
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.hector.csprojectprogramc.Activities.CourseListScreen;
 import com.hector.csprojectprogramc.Database.Course;
@@ -26,11 +28,11 @@ import java.util.ArrayList;
  */
 
 public class MemRiseScraper{
-    Context context;
+    Context context,appContext;
     ArrayList<String> relatedWebsites = new ArrayList<>();
     ArrayList<Flashcard> output = new ArrayList<>();
     GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
-
+    Course course;
    /* private ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
 
         new getRelatedCourses().execute(topic);
@@ -39,19 +41,22 @@ public class MemRiseScraper{
         return output;
     }*/
 
-    public void insertCoursePointsInDataBase(Context context, Course course, MyDatabase database){
+    public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
         this.context = context;
+        this.appContext = appContext;
+        this.course = course;
+        Log.i("Course ID being added", Integer.toString(course.getCourse_ID())  );
         StringBuilder builder = new StringBuilder();
         builder.append(course.getExamBoard()).append(" ");
         builder.append(course.getQualification()).append(" ");
         builder.append(course.getColloquial_name());
         new GetRelatedFlashcards().execute(builder.toString());
-        MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
+        //MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
         //ArrayList<Flashcard> cards = getFlashcardRelatedTo(builder.toString());
-        for (Flashcard card: output) {
-            String sentence = FlashcardToSentenceModel.convertToSentence(card);
-            database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
-        }
+        //for (Flashcard card: output) {
+            //String sentence = FlashcardToSentenceModel.convertToSentence(card);
+            //database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
+        //}
     }
 
 
@@ -82,6 +87,9 @@ public class MemRiseScraper{
                         if(website.length()>8){
                             if(website.substring(0,8).equals("/course/")){
                                 relatedWebsites.add(website);
+                                if (relatedWebsites.size()==5){
+                                    return null;
+                                }
                             }
                         }
 
@@ -98,6 +106,8 @@ public class MemRiseScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
+            Log.i("Got this far","Found MemRise Courses");
+
             getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
         }
     }
@@ -116,8 +126,13 @@ public class MemRiseScraper{
 
         @Override
         protected Void doInBackground(String... strings) {
+            MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
+            //Log.i()
+            Log.i("Got this far","Started MemRise Background");
+
             for (String url: strings) {
                 try {
+                    Log.i("MemRise URL",url);
                     Document courseWebsite = Jsoup.connect("https://www.memrise.com"+url).get();
                     Elements section = courseWebsite.select("div[class=levels clearfix]").select("a[href]");
                     for (Element element: section) {
@@ -126,7 +141,10 @@ public class MemRiseScraper{
                         for(Element div:informationSection){
                             String front = div.select("div[class=col_a col text]").select("div[class=text]").first().text();
                             String back = div.select("div[class=col_b col text]").select("div[class=text]").first().text();
-                            output.add(new Flashcard(front,back));
+                            //output.add(new Flashcard(front,back));
+                            String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
+                            //Log.i("Points", front+" | "+back);
+                            database.customDao().insertCoursePoint(new CoursePoints(1,front,back,sentence));//TODO:Change Back
                         }
 
                     }
@@ -135,11 +153,20 @@ public class MemRiseScraper{
                 }
 
             }
+            database.close();
+
             return null;
         }
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
+
+            Log.i("Got this far","Finished MemRise");
+
+            new CramScraper().insertCoursePointsInDataBase(context, course,appContext);
+
+
+
         }
     }
 }

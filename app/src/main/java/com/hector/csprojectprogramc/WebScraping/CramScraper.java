@@ -1,10 +1,13 @@
 package com.hector.csprojectprogramc.WebScraping;
 
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
@@ -26,11 +29,11 @@ import java.util.ArrayList;
  */
 
 public class CramScraper{
-    private Context context;
+    private Context context, appContext;
     private ArrayList<String> relatedWebsites = new ArrayList<>();
     private ArrayList<Flashcard> output = new ArrayList<>();
     private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
-
+    private Course course;
     /*public ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
 
         new getRelatedCourses().execute(topic);
@@ -39,8 +42,10 @@ public class CramScraper{
         return output;
     }*/
 
-    public void insertCoursePointsInDataBase(Context context, Course course, MyDatabase database){
+    public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
         this.context = context;
+        this.appContext = appContext;
+        this.course = course;
         StringBuilder builder = new StringBuilder();
         builder.append(course.getExamBoard()).append(" ");
         builder.append(course.getQualification()).append(" ");
@@ -48,11 +53,11 @@ public class CramScraper{
         GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards();
         getRelatedFlashcards.execute(builder.toString());
         //ArrayList<Flashcard> cards = getFlashcardRelatedTo(builder.toString());
-        MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
-        for (Flashcard card: output) {
-            String sentence = FlashcardToSentenceModel.convertToSentence(card);
-            database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
-        }
+        //MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
+        //for (Flashcard card: output) {
+            //String sentence = FlashcardToSentenceModel.convertToSentence(card);
+            //database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
+        //}
     }
 
     private class GetRelatedFlashcards extends AsyncTask<String,Void,Void> {
@@ -87,6 +92,9 @@ public class CramScraper{
                         if (website.length()>12){
                             if(website.substring(0,12).equals("/flashcards/")){
                                 relatedWebsites.add(website);
+                                if (relatedWebsites.size()==5){
+                                    return null;
+                                }
                             }
                         }
 
@@ -103,6 +111,8 @@ public class CramScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
+            Log.i("Got this far","Found Cram Courses");
+
             getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
         }
     }
@@ -121,25 +131,45 @@ public class CramScraper{
 
         @Override
         protected Void doInBackground(String... strings) {
+            MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
+
             for (String url: strings) {
                 try {
+                    Log.i("Got this far","Started Cram Background");
+
+
+
+
                     Document courseWebsite = Jsoup.connect("http://www.cram.com"+url).get();
                     Elements FlashCardSection = courseWebsite.select("table[class=flashCardsListingTable]").select("tr");
                     for (Element e: FlashCardSection){
                         String front = e.select("div[class=front_text card_text]").text();
                         String back = e.select("div[class=back_text card_text]").text();
-                        output.add(new Flashcard(front,back));
+                        //output.add(new Flashcard(front,back));
+                        String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
+
+                        database.customDao().insertCoursePoint(new CoursePoints(1,front,back,sentence));//TODO: Change Back
+
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.i("Error","Website removed");
                 }
 
             }
+            database.close();
+
             return null;
         }
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
+            Log.i("Got this far","Finished Cram");
+            Log.i("Need to","Implement going back to home screen");
+
+            Intent intent = new Intent(context, HomeScreen.class);
+            context.startActivity(intent);
+
+
         }
     }
 }

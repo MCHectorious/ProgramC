@@ -44,7 +44,7 @@ public class CourseListScreen extends AppCompatActivity {
         if(qualification.equals("GCSE")){
             divClassForQualificatoin = "panelInner gcse-header";
         }
-        if (qualification.equals("A Level")){
+        if (qualification.equals("AS and A-Level")){
             divClassForQualificatoin = "panelInner as_and_a-level-header";
         }
 
@@ -69,10 +69,11 @@ public class CourseListScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try{
+
                 Document document = Jsoup.connect("http://www.aqa.org.uk/qualifications").timeout(1000000).get();
                 Elements links = document.select("div[class="+divClassForQualificatoin+"]").select("a[href]");
                 for(Element element: links){
-                    //Log.i("Subject",element.text());
+                    Log.i("Subject",element.text());
                     courseNames.add(element.text());
                     courseWebsites.add(element.attr("href"));
 
@@ -94,12 +95,14 @@ public class CourseListScreen extends AppCompatActivity {
 
             progressDialog.dismiss();
 
+            //Log.i("Got this far","Finsihed Background on CourseListScreen ");
+
             RecyclerView recyclerView =  findViewById(R.id.courseListScreenRecyclerView);
             recyclerView.setHasFixedSize(true);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CourseListScreen.this);
             recyclerView.setLayoutManager(linearLayoutManager);
-            CourseListAdapter courseListAdapter = new CourseListAdapter(courseNames, courseWebsites, CourseListScreen.this, getApplicationContext());
+            CourseListAdapter courseListAdapter = new CourseListAdapter(courseNames, courseWebsites, CourseListScreen.this, getApplicationContext(), qualification);
             recyclerView.setAdapter(courseListAdapter);
 
         }

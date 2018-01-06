@@ -2,6 +2,7 @@ package com.hector.csprojectprogramc.Activities;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.hector.csprojectprogramc.Adapter.HomeScreenRecyclerAdapter;
 import com.hector.csprojectprogramc.Database.Course;
+import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 
@@ -29,6 +31,7 @@ public class HomeScreen extends AppCompatActivity {
     private boolean haveSubjects;
     private List<Course> savedCourses;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,32 +39,10 @@ public class HomeScreen extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-
-
-
-
+        //new deleteTables().execute();
 
         new getSavedCourses().execute();
-        if(haveSubjects){
-            FloatingActionButton fab =  findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
-                    startActivity(toExamBoardScreen);
-                }
-            });
 
-            RecyclerView recyclerView = findViewById(R.id.cardList);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            HomeScreenRecyclerAdapter adapter = new HomeScreenRecyclerAdapter(savedCourses, HomeScreen.this);
-            recyclerView.setAdapter(adapter);
-        }else{
-            showNoSubjectAlertDialog();
-        }
         //List<Course> savedCourses = database.customDao().getAllSavedCourses();
         //ArrayList<Course> savedCourses = new ArrayList<>();
         //savedCourses.add(new Course("Accounting","Accounting (2120)",
@@ -117,7 +98,30 @@ public class HomeScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class getSavedCourses extends AsyncTask<Void,Void,Void>{
+    private class deleteTables extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MyDatabase database = Room.databaseBuilder(HomeScreen.this, MyDatabase.class, "my-db").build();
+            List<Course> courses = database.customDao().getAllSavedCourses();
+            for (Course course:courses){
+                database.customDao().deleteCourse(course);
+            }
+            List<CoursePoints> points = database.customDao().getAllSavedCoursePoints();
+            for (CoursePoints point:points){
+                database.customDao().deleteCoursePoint(point);
+            }
+
+            //savedCourses = database.customDao().getAllSavedCourses();
+            //haveSubjects = savedCourses.size()==0;
+            //haveSubjects = false;
+
+            //Log.i("haveSubjects",Boolean.toString(haveSubjects) );
+            return null;
+
+        }
+    }
+
+    private class getSavedCourses extends AsyncTask<Void,Void,Void>{
         ProgressDialog progressDialog;
 
         @Override
@@ -134,8 +138,10 @@ public class HomeScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             MyDatabase database = Room.databaseBuilder(HomeScreen.this, MyDatabase.class, "my-db").build();
             savedCourses = database.customDao().getAllSavedCourses();
-            //Log.i("No. of Course", Integer.toString(savedCourses.size())  );
-            haveSubjects = savedCourses.size()==0;
+            Log.e("No. of Saved Courses",Integer.toString(savedCourses.size()));
+            haveSubjects = savedCourses.size()>0;
+            //haveSubjects = false;
+
             Log.i("haveSubjects",Boolean.toString(haveSubjects) );
             return null;
 
@@ -144,6 +150,24 @@ public class HomeScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
            progressDialog.dismiss();
+            if(haveSubjects){
+                FloatingActionButton fab =  findViewById(R.id.fab);
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
+                        startActivity(toExamBoardScreen);
+                    }
+                });
+
+                RecyclerView recyclerView = findViewById(R.id.cardList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeScreen.this);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                HomeScreenRecyclerAdapter adapter = new HomeScreenRecyclerAdapter(savedCourses, HomeScreen.this);
+                recyclerView.setAdapter(adapter);
+            }else{
+                showNoSubjectAlertDialog();
+            }
         }
     }
 

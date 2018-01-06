@@ -35,12 +35,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
 
     private static ArrayList<String> courseNames, courseWebsites;
     private static Context context, appContext;
+    private static String qualification;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         //public CardView cardView;
         public TextView textView;
-        private Course course;
-        private MyDatabase database;
+        //private Course course;
+        //private MyDatabase database;
         public ViewHolder(View view){
             super(view);
             textView = view.findViewById(R.id.courseNameInList);
@@ -48,11 +49,9 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
                 @Override
                 public void onClick(View v){
                     Log.i("Click", "Has Occurred");
-                    AQAScraper scraper = new AQAScraper(courseWebsites.get(getAdapterPosition()),context);
-                    course = scraper.getCourse();
-                    Log.i("Info","course has been collected");
-                    InsertCourseIntoDatabase insertCourse = new InsertCourseIntoDatabase();
-                    insertCourse.execute();
+                    AQAScraper scraper = new AQAScraper(courseWebsites.get(getAdapterPosition()),context,appContext, qualification,courseNames.get(getAdapterPosition()));
+
+
                     //MemRiseScraper memRiseScraper = new MemRiseScraper();
                     //memRiseScraper.insertCoursePointsInDataBase(context, course, database);
                     //CramScraper cramScraper = new CramScraper();
@@ -61,39 +60,34 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
                     //toast.show();
                     //AsyncTask.Status finished = AsyncTask.Status.FINISHED;
                     //while (insertCourse.getStatus().equals(finished)){}
-                    MultiThreading.waitUntilFinished(insertCourse);
-                    new MemRiseScraper().insertCoursePointsInDataBase(context, course, database);
-                    new CramScraper().insertCoursePointsInDataBase(context, course, database);
+                    //MultiThreading.waitUntilFinished(insertCourse);
+                    //new MemRiseScraper().insertCoursePointsInDataBase(context, course, database);
+                    //new CramScraper().insertCoursePointsInDataBase(context, course, database);
 
-                    Intent intent = new Intent(context, HomeScreen.class);
+                    //Log.i("Need to","Implement going back to home screen");
+
+                    //Intent intent = new Intent(context, HomeScreen.class);
                     //new CourseListScreen().startActivity(intent);
-                    context.startActivity(intent);
+                    //context.startActivity(intent);
 
                 }
             });
         }
 
-        private boolean hasNotFinished(AsyncTask.Status status){
+        /*private boolean hasNotFinished(AsyncTask.Status status){
             return !status.equals(AsyncTask.Status.FINISHED);
-        }
+        }*/
 
-        private class InsertCourseIntoDatabase extends AsyncTask<Void,Void,Void>{
 
-            @Override
-            protected Void doInBackground(Void... voids) {
-                database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
-                database.customDao().insertCourse(course);
-                return null;
-            }
-        }
 
     }
 
-    public CourseListAdapter(ArrayList<String> cNames, ArrayList<String> cWebsites, Context context, Context appContext){
+    public CourseListAdapter(ArrayList<String> cNames, ArrayList<String> cWebsites, Context context, Context appContext, String qualification){
         courseNames = cNames;
         courseWebsites = cWebsites;
         this.context = context;
         this.appContext = appContext;
+        this.qualification = qualification;
 
     }
 

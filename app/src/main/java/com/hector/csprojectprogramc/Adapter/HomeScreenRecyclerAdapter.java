@@ -14,6 +14,7 @@ import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.R;
+import com.hector.csprojectprogramc.Util.CustomColourCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,9 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(cardView, context);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
+        ViewHolder viewHolder = new ViewHolder(view);
+
         return viewHolder;
 
     }
@@ -44,16 +46,17 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.courseNameView.setText(dataset.get(position).getColloquial_name());
+        holder.courseNameView.setBackgroundColor(CustomColourCreator.getColourFromString(dataset.get(position).getOfficial_name()));
         holder.qualificationView.setText(dataset.get(position).getQualification());
         holder.examboardView.setText(dataset.get(position).getExamBoard());
         holder.dateView.setText(dataset.get(position).getNext_key_date());
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+        /*holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dataset.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
             }
-        });
+        });*/
     }
 
     @Override
@@ -67,7 +70,7 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
         public Context context;
 
 
-        public ViewHolder(CardView cv,Context context){
+        public ViewHolder(View cv){
             super(cv);
             courseNameView =  cv.findViewById(R.id.courseName);
             qualificationView =  cv.findViewById(R.id.qualification);
@@ -75,7 +78,7 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
             dateView =  cv.findViewById(R.id.date);
             deleteButton =  cv.findViewById(R.id.options);//TODO: add deleting subjects
 
-            this.context = context;
+            //this.context = context;
         }
 
         @Override

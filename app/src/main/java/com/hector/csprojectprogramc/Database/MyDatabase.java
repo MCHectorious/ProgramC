@@ -8,7 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
  */
 
 @Database(entities = {Course.class,CoursePoints.class},
-        version = 1, exportSchema = false)
+        version = 2, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase{
     public abstract CustomDao customDao();
 }

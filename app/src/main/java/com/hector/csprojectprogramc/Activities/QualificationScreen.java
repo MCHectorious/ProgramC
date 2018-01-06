@@ -32,7 +32,7 @@ public class QualificationScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toCourseListScreen = new Intent(QualificationScreen.this, CourseListScreen.class);
-                toCourseListScreen.putExtra(qualificationExtraName, "A Level");
+                toCourseListScreen.putExtra(qualificationExtraName, "AS and A-Level");
                 startActivity(toCourseListScreen);
             }
         });

@@ -23,28 +23,29 @@ public class CourseScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        int courseID = 1;//Find automatically
-        MyDatabase database = Room.databaseBuilder(CourseScreen.this, MyDatabase.class, "my-db").build();
-        final Course course = database.customDao().getInformationFromCourse(courseID);
+        //MyDatabase database = Room.databaseBuilder(CourseScreen.this, MyDatabase.class, "my-db").build();
+        final Bundle bundle = getIntent().getExtras();
+
+        //final Course course = database.customDao().getInformationFromCourse(courseID);
 
         TextView qualificationTV = (TextView) findViewById(R.id.qualificationSpecificNameInCourse);
-        qualificationTV.setText(course.getQualification());
+        qualificationTV.setText(bundle.getString("Qualification"));
 
         TextView examboardTV = (TextView) findViewById(R.id.examboardSpecificNameInCourse);
-        examboardTV.setText(course.getExamBoard());
+        examboardTV.setText(bundle.getString("Exam Board"));
 
         TextView nextKeyDate = (TextView) findViewById(R.id.dateCardInCourse);
-        nextKeyDate.setText(course.getNext_key_date());
+        nextKeyDate.setText(bundle.getString("Key Date"));
 
         TextView nextKeyDateDetail = (TextView) findViewById(R.id.dateSpecificCardInCourse);
-        nextKeyDateDetail.setText(course.getNext_key_date_detail());
+        nextKeyDateDetail.setText(bundle.getString("Key Date Details"));
 
         CardView coursePointsCard = (CardView) findViewById(R.id.coursePoints);
         coursePointsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent toCoursePoints = new Intent(CourseScreen.this, CoursePointsScreen.class);
-                toCoursePoints.putExtra("course ID",course.getCourse_ID());
+                toCoursePoints.putExtra("course ID",bundle.getInt("Course ID"));
                 startActivity(toCoursePoints);
             }
         });
@@ -53,8 +54,9 @@ public class CourseScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CourseScreen.this, RevisionScreen.class);
-                startActivity(intent);
+                Intent toRevisionScreen = new Intent(CourseScreen.this, RevisionScreen.class);
+                toRevisionScreen.putExtra("course ID",bundle.getInt("Course ID"));
+                startActivity(toRevisionScreen);
             }
         });
     }

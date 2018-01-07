@@ -11,6 +11,7 @@ import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hector - New on 25/12/2017.
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 
 public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePointsAdapter.ViewHolder> {
 
-    ArrayList<CoursePoints> dataset;
+    List<CoursePoints> dataset;
 
-    public EditCoursePointsAdapter(ArrayList<CoursePoints> points, Context context){
+    public EditCoursePointsAdapter(List<CoursePoints> points, Context context){
         dataset = points;
     }
 

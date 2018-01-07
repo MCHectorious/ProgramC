@@ -40,6 +40,9 @@ public interface CustomDao {
     @Query("SELECT * FROM courses WHERE course_ID = :id")
     Course getInformationFromCourse(int id);
 
+    @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
+    List<CoursePoints> getPointsForCourse(int id);
+
     //@Query("SELECT * FROM course_points " +
     //        "INNER JOIN Course ON Course.course_ID = course_points.course_ID_foreign" +
     //        "WHERE .course_ID_foreign = :courseID")

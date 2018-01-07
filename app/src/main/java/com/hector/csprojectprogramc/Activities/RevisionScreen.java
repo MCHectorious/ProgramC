@@ -1,11 +1,14 @@
 package com.hector.csprojectprogramc.Activities;
 
+import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +18,17 @@ import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
     boolean includeQAQuestions, includeGapQuestions;
     Random random = new Random();
-    ArrayList<CoursePoints> points;
+    List<CoursePoints> points;
     String prompt, correctAnswer;
     TextView promptView, answerView;
+    int CourseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,30 +40,12 @@ public class RevisionScreen extends AppCompatActivity {
         answerView = (TextView) findViewById(R.id.answerText);
 
 
+        Bundle bundle = getIntent().getExtras();
+        CourseID = bundle.getInt("course ID"); //TODO: Do automatically
 
-        int courseID = 1; //TODO: Do automatically
+        new getPoints().execute();
 
-        MyDatabase database = Room.databaseBuilder(getApplicationContext(),MyDatabase.class,"my-db").build();
-        //points = database.customDao().getCoursePointsForCourse(courseID);
-        points = new ArrayList<CoursePoints>();
-        points.add(new CoursePoints(1,"Hi","Bye","Hi-Bye"));
 
-        generateQuestion();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(answerView.getText().equals(correctAnswer)){
-                    Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
-                    toast.show();
-                }else{
-                    Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is "+correctAnswer+".",Toast.LENGTH_LONG);
-                    toast.show();
-                }
-                generateQuestion();
-            }
-        });
 
 
 
@@ -108,4 +95,50 @@ public class RevisionScreen extends AppCompatActivity {
         prompt = coursePoint.getFlashcard_front();
         correctAnswer = coursePoint.getFlashcard_back();
     }
+
+    private class getPoints extends AsyncTask<Void,Void,Void>{
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(RevisionScreen.this);
+            progressDialog.setTitle("Loading Testable Material ");
+            progressDialog.setMessage("This should only take a moment");
+            progressDialog.setIndeterminate(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MyDatabase database = Room.databaseBuilder(RevisionScreen.this, MyDatabase.class, "my-db").build();
+            points = database.customDao().getPointsForCourse(CourseID);
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            progressDialog.dismiss();
+
+            generateQuestion();
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(answerView.getText().equals(correctAnswer)){
+                        Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
+                        toast.show();
+                    }else{
+                        Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is "+correctAnswer+".",Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    generateQuestion();
+                }
+            });
+        }
+    }
+
 }

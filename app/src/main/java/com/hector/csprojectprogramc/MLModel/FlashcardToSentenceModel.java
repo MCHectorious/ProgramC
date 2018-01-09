@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class FlashcardToSentenceModel {
 
     public static String convertToSentence(String front, String back){
-        return front+back;//TODO: Implement actual model
+        return front+" "+back;//TODO: Implement actual model
     }
 
     public static String convertToSentence(Flashcard flashcard){

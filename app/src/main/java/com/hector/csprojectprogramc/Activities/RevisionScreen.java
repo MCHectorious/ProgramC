@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,8 @@ public class RevisionScreen extends AppCompatActivity {
     Random random = new Random();
     List<CoursePoints> points;
     String prompt, correctAnswer;
-    TextView promptView, answerView;
+    TextView promptView;
+    EditText answerView;
     int CourseID;
 
     @Override
@@ -37,7 +41,7 @@ public class RevisionScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         promptView = (TextView) findViewById(R.id.questionText);
-        answerView = (TextView) findViewById(R.id.answerText);
+        answerView =  findViewById(R.id.answerText);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -122,7 +126,7 @@ public class RevisionScreen extends AppCompatActivity {
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
 
-            generateQuestion();
+            Log.i("Got this far","Finished Revision Screen Background");
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -132,12 +136,54 @@ public class RevisionScreen extends AppCompatActivity {
                         Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
                         toast.show();
                     }else{
-                        Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is "+correctAnswer+".",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is: \""+correctAnswer+"\".",Toast.LENGTH_LONG);
                         toast.show();
                     }
                     generateQuestion();
                 }
             });
+
+            includeGapQuestions = true;
+            includeQAQuestions = true;
+
+            final RelativeLayout QuestionAnswerOption = findViewById(R.id.QuestionAnswerLayout);
+            final RelativeLayout GapOption = findViewById(R.id.FillInTheGapLayout);
+
+            View.OnClickListener QuestionAnswerOnClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (includeGapQuestions){
+                        Log.i("Clicked on","Question");
+                        includeQAQuestions = !includeQAQuestions;
+                        QuestionAnswerOption.setBackgroundColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.lightLightGrey));
+
+                    }
+                }
+            };
+
+            View.OnClickListener GapOnClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (includeQAQuestions){
+                        Log.i("Clicked on","Gap");
+                        includeGapQuestions = !includeGapQuestions;
+                        GapOption.setBackgroundColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.lightLightGrey));
+
+                    }
+                }
+            };
+
+            ImageView QuestionAnswerImage = findViewById(R.id.QuestionAnswerIcon);
+            QuestionAnswerImage.setOnClickListener(QuestionAnswerOnClick);
+            TextView QuestionAnswerText = findViewById(R.id.QuestionAnswerOption);
+            QuestionAnswerText.setOnClickListener(QuestionAnswerOnClick);
+
+            ImageView GapImage = findViewById(R.id.FillInTheGapIcon);
+            GapImage.setOnClickListener(GapOnClick);
+            TextView GapText = findViewById(R.id.FillInTheGapOption);
+            GapText.setOnClickListener(GapOnClick);
+
+            generateQuestion();
         }
     }
 

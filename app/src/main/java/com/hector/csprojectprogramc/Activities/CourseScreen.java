@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,6 +57,7 @@ public class CourseScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Intent toRevisionScreen = new Intent(CourseScreen.this, RevisionScreen.class);
                 toRevisionScreen.putExtra("course ID",bundle.getInt("Course ID"));
+                Log.i("Got this far","Opening Revision Screen");
                 startActivity(toRevisionScreen);
             }
         });

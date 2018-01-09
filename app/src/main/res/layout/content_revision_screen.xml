@@ -9,22 +9,101 @@
     tools:context="com.hector.csprojectprogramc.Activities.RevisionScreen"
     tools:showIn="@layout/activity_revision_screen">
 
-    <android.support.design.widget.NavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lightLightGrey"
-        app:menu="@menu/revision_navigation"
-        android:id="@+id/navigationView">
-
-    </android.support.design.widget.NavigationView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/navigationView"
+        android:id="@+id/optionCard"
+        android:layout_margin="1dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/Options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Options"
+                android:layout_margin="5dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:layout_below="@+id/Options"
+                android:id="@+id/QuestionAnswerLayout"
+                >
+
+                <ImageView
+                    android:id="@+id/QuestionAnswerIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:srcCompat="@drawable/question_answer_icon" />
+
+                <TextView
+                    android:id="@+id/QuestionAnswerOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/QuestionAnswerIcon"
+                    android:text="Question-Answer"
+                    android:textColor="@color/darkDarkGrey" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:layout_below="@+id/QuestionAnswerLayout"
+                android:id="@+id/FillInTheGapLayout"
+                android:layout_marginTop="5dp"
+                >
+
+                <ImageView
+                    android:id="@+id/FillInTheGapIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:srcCompat="@drawable/fill_in_the_gap_icon" />
+
+                <TextView
+                    android:id="@+id/FillInTheGapOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/FillInTheGapIcon"
+                    android:text="Fill in the Gap"
+                    android:textColor="@color/darkDarkGrey"
+                    />
+
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_margin="5dp"
         android:id="@+id/questionCard"
+        android:layout_below="@+id/optionCard"
         >
 
         <RelativeLayout
@@ -68,11 +147,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <EditText
             android:id="@+id/answerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is a answer"
+            android:hint="Please Enter Your Answer Here"
             android:layout_margin="5dp"
             android:textColor="@color/black"
             android:textStyle="italic"

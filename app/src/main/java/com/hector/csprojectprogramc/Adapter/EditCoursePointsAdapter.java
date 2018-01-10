@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -27,8 +28,8 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(cardView);
+        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
@@ -48,11 +49,11 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView cardFront, cardBack, sentence;
 
-        public ViewHolder (CardView cv){
-            super(cv);
-            sentence = (TextView) cv.findViewById(R.id.sentences);
-            cardFront = cv.findViewById(R.id.cardFront);
-            cardBack = cv.findViewById(R.id.cardBack);
+        public ViewHolder (View v){
+            super(v);
+            sentence = (TextView) v.findViewById(R.id.sentences);
+            cardFront = v.findViewById(R.id.cardFront);
+            cardBack = v.findViewById(R.id.cardBack);
         }
 
 

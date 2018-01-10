@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
 
-            <TextView
+            <EditText
                 android:id="@+id/cardFront"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
-            <TextView
+            <EditText
                 android:id="@+id/cardBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:layout_margin="5dp"
                 />
 
-            <TextView
+            <EditText
                 android:id="@+id/sentence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

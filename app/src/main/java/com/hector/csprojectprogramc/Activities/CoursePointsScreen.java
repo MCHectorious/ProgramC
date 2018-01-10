@@ -83,7 +83,7 @@ public class CoursePointsScreen extends AppCompatActivity {
 
             sentencesRV.setLayoutManager(linearLayoutManager);
             SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points, CoursePointsScreen.this);
-            sentencesRV.setAdapter(sentencesAdapter);
+            sentencesRV.setAdapter(sentencesAdapter);//Starts in Sentence
 
             final RecyclerView editRV = findViewById(R.id.editsRecyclerView);
             editRV.setVisibility(View.GONE);
@@ -92,8 +92,8 @@ public class CoursePointsScreen extends AppCompatActivity {
             sentencesRV.setAdapter(editAdapter);
 
 
-            final TextView NavigationMessage = (TextView) findViewById(R.id.message);
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            final TextView NavigationMessage =  findViewById(R.id.message);
+            BottomNavigationView navigation =  findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {

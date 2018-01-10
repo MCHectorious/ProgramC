@@ -21,7 +21,7 @@ public class CourseScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //MyDatabase database = Room.databaseBuilder(CourseScreen.this, MyDatabase.class, "my-db").build();
@@ -29,19 +29,19 @@ public class CourseScreen extends AppCompatActivity {
 
         //final Course course = database.customDao().getInformationFromCourse(courseID);
 
-        TextView qualificationTV = (TextView) findViewById(R.id.qualificationSpecificNameInCourse);
+        TextView qualificationTV =  findViewById(R.id.qualificationSpecificNameInCourse);
         qualificationTV.setText(bundle.getString("Qualification"));
 
-        TextView examboardTV = (TextView) findViewById(R.id.examboardSpecificNameInCourse);
+        TextView examboardTV =  findViewById(R.id.examboardSpecificNameInCourse);
         examboardTV.setText(bundle.getString("Exam Board"));
 
-        TextView nextKeyDate = (TextView) findViewById(R.id.dateCardInCourse);
+        TextView nextKeyDate =  findViewById(R.id.dateCardInCourse);
         nextKeyDate.setText(bundle.getString("Key Date"));
 
-        TextView nextKeyDateDetail = (TextView) findViewById(R.id.dateSpecificCardInCourse);
+        TextView nextKeyDateDetail =  findViewById(R.id.dateSpecificCardInCourse);
         nextKeyDateDetail.setText(bundle.getString("Key Date Details"));
 
-        CardView coursePointsCard = (CardView) findViewById(R.id.coursePoints);
+        CardView coursePointsCard =  findViewById(R.id.coursePoints);
         coursePointsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +51,7 @@ public class CourseScreen extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

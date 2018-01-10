@@ -42,7 +42,9 @@
         <activity
             android:name=".Activities.RevisionScreen"
             android:label="@string/title_activity_revision_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"
+            ></activity>
     </application>
 
 </manifest>

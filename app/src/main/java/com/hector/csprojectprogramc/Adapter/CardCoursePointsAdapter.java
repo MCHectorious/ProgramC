@@ -29,8 +29,8 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_flashcard_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(cardView);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_flashcard_card,parent,false);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
@@ -58,11 +58,11 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
         ImageView arrowLeft, arrowRight;
         boolean showFront = true;
 
-        public ViewHolder (CardView cv){
-            super(cv);
-            cardSide = cv.findViewById(R.id.cardSide);
-            arrowLeft = cv.findViewById(R.id.leftPointer);
-            arrowRight = cv.findViewById(R.id.rightPointer);
+        public ViewHolder (View v){
+            super(v);
+            cardSide = v.findViewById(R.id.cardSide);
+            arrowLeft = v.findViewById(R.id.leftPointer);
+            arrowRight = v.findViewById(R.id.rightPointer);
         }
 
 

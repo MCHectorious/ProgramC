@@ -45,7 +45,7 @@ public class RevisionScreen extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-        CourseID = bundle.getInt("course ID"); //TODO: Do automatically
+        CourseID = bundle.getInt("course ID");
 
         new getPoints().execute();
 

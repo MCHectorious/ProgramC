@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CSProjectProgramC.iml" filepath="$PROJECT_DIR$/CSProjectProgramC.iml" />
+      <module fileurl="file://C:\Users\betteridgeh16\StudioProjects\ProgramC\CSProjectProgramC.iml" filepath="C:\Users\betteridgeh16\StudioProjects\ProgramC\CSProjectProgramC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgramC.iml" filepath="$PROJECT_DIR$/ProgramC.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

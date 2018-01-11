@@ -38,9 +38,9 @@ public class RevisionScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revision_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
 
-        promptView = (TextView) findViewById(R.id.questionText);
+        promptView =  findViewById(R.id.questionText);
         answerView =  findViewById(R.id.answerText);
 
 
@@ -128,11 +128,12 @@ public class RevisionScreen extends AppCompatActivity {
 
             Log.i("Got this far","Finished Revision Screen Background");
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            FloatingActionButton fab = findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(answerView.getText().equals(correctAnswer)){
+                    Log.i(answerView.getText().toString(),correctAnswer);
+                    if( answerView.getText().toString().equals(correctAnswer) ){
                         Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
                         toast.show();
                     }else{

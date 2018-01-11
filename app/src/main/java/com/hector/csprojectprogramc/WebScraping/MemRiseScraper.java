@@ -33,6 +33,7 @@ public class MemRiseScraper{
     ArrayList<Flashcard> output = new ArrayList<>();
     GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
     Course course;
+    int courseID;
    /* private ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
 
         new getRelatedCourses().execute(topic);
@@ -46,6 +47,7 @@ public class MemRiseScraper{
         this.appContext = appContext;
         this.course = course;
         Log.i("Course ID being added", Integer.toString(course.getCourse_ID())  );
+        courseID = course.getCourse_ID();
         StringBuilder builder = new StringBuilder();
         builder.append(course.getExamBoard()).append(" ");
         builder.append(course.getQualification()).append(" ");
@@ -130,6 +132,7 @@ public class MemRiseScraper{
             //Log.i()
             Log.i("Got this far","Started MemRise Background");
 
+
             for (String url: strings) {
                 try {
                     Log.i("MemRise URL",url);
@@ -144,7 +147,7 @@ public class MemRiseScraper{
                             //output.add(new Flashcard(front,back));
                             String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
                             //Log.i("Points", front+" | "+back);
-                            database.customDao().insertCoursePoint(new CoursePoints(1,front,back,sentence));//TODO:Change Back
+                            database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO:Change Back
                         }
 
                     }

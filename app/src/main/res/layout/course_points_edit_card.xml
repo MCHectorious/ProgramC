@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -17,76 +17,66 @@
 
 
             <EditText
-                android:id="@+id/cardFront"
+                android:id="@+id/cardFrontEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="5dp"
                 android:text="Flashcard Front"
                 android:textAlignment="center"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/cardBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/border1"
-                android:text="Flashcard Back"
                 android:textColor="@color/black"
-                android:layout_margin="5dp"
-                />
-
-            <EditText
-                android:id="@+id/sentence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_alignBottom="@+id/cardBack"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/border2"
-                android:text="Sentence"
-                android:textColor="@color/black" />
+                android:layout_alignParentStart="true"
+                />
 
             <TextView
                 android:id="@+id/border1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/sentences"
                 android:text=" "
                 android:background="@color/red"
-                android:layout_toLeftOf="@+id/sentence"
-                android:layout_margin="5dp"
+                android:layout_below="@+id/cardFrontEdit"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/cardFrontEdit"
+                />
+
+            <EditText
+                android:id="@+id/cardBackEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flashcard Back"
+                android:textColor="@color/black"
+                android:layout_below="@+id/border1"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/cardFrontEdit"
                 />
 
             <TextView
                 android:id="@+id/border2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/border1"
-                android:layout_toEndOf="@+id/sentences"
                 android:background="@color/red"
-                android:layout_alignBottom="@+id/cardBack"
-                android:layout_alignParentTop="true"
                 android:text="     "
-                android:layout_margin="5dp"
+                android:layout_toRightOf="@+id/cardFrontEdit"
+                android:layout_alignBottom="@+id/cardBackEdit"
+                android:layout_alignParentTop="true"
                 />
 
-            <ImageView
-                android:id="@+id/editDelete"
+            <EditText
+                android:id="@+id/sentenceEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textAlignment="center"
+                android:text="Sentence"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/border2"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/border2"
-                android:layout_alignEnd="@+id/border2"
-                app:srcCompat="@drawable/vertical_dots"
-                android:layout_marginTop="5dp"
-                
+                android:layout_alignBottom="@+id/cardBackEdit"
+                android:layout_alignParentRight="true"
                 />
+
+
+
+
 
 
         </RelativeLayout>

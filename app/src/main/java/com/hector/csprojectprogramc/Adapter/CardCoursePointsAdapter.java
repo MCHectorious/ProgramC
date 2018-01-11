@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.R;
+import com.hector.csprojectprogramc.Util.CustomColourCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +31,16 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_flashcard_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, dataset);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.cardSide.setText(dataset.get(position).getFlashcard_front());
-        final int pos = position;
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.showFront = !holder.showFront;
-                holder.cardSide.setText( (holder.showFront)? dataset.get(pos).getFlashcard_front() : dataset.get(pos).getFlashcard_back()  );
-            }
-        };
+        int colour = CustomColourCreator.getColourFromString(dataset.get(position).getSentence());
+        holder.arrowRight.setBackgroundColor(colour);
+        holder.arrowLeft.setBackgroundColor(colour);
     }
 
     @Override
@@ -58,11 +54,21 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
         ImageView arrowLeft, arrowRight;
         boolean showFront = true;
 
-        public ViewHolder (View v){
+        public ViewHolder (View v, final List<CoursePoints> dataset){
             super(v);
             cardSide = v.findViewById(R.id.cardSide);
             arrowLeft = v.findViewById(R.id.leftPointer);
             arrowRight = v.findViewById(R.id.rightPointer);
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFront = !showFront;
+                    cardSide.setText( (showFront)? dataset.get(getAdapterPosition()).getFlashcard_front() : dataset.get(getAdapterPosition()).getFlashcard_back()  );
+                }
+            };
+            arrowLeft.setOnClickListener(onClickListener);
+            arrowRight.setOnClickListener(onClickListener);
+
         }
 
 

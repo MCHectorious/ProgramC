@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hector.csprojectprogramc.Adapter.CardCoursePointsAdapter;
+import com.hector.csprojectprogramc.Adapter.EditCoursePointsAdapter;
 import com.hector.csprojectprogramc.Adapter.SentencesCoursePointsAdapter;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
@@ -71,47 +72,47 @@ public class CoursePointsScreen extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CoursePointsScreen.this);
+            //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CoursePointsScreen.this);
 
             final RecyclerView cardsRV = findViewById(R.id.cardsRecyclerView);
             cardsRV.setVisibility(View.GONE);
-            cardsRV.setLayoutManager(linearLayoutManager);
+            cardsRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
             CardCoursePointsAdapter cardsAdapter = new CardCoursePointsAdapter(points, CoursePointsScreen.this);
             cardsRV.setAdapter(cardsAdapter);
 
-            final RecyclerView sentencesRV = findViewById(R.id.sentencesRecyclerView);
 
-            sentencesRV.setLayoutManager(linearLayoutManager);
-            SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points, CoursePointsScreen.this);
-            sentencesRV.setAdapter(sentencesAdapter);//Starts in Sentence
 
             final RecyclerView editRV = findViewById(R.id.editsRecyclerView);
             editRV.setVisibility(View.GONE);
-            editRV.setLayoutManager(linearLayoutManager);
-            SentencesCoursePointsAdapter editAdapter = new SentencesCoursePointsAdapter(points, CoursePointsScreen.this);
-            sentencesRV.setAdapter(editAdapter);
+            editRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
+            EditCoursePointsAdapter editAdapter = new EditCoursePointsAdapter(points, CoursePointsScreen.this);
+            editRV.setAdapter(editAdapter);
 
+            final RecyclerView sentencesRV = findViewById(R.id.sentencesRecyclerView);
+            sentencesRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
+            SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points, CoursePointsScreen.this);
+            sentencesRV.setAdapter(sentencesAdapter);//Starts in Sentence
 
-            final TextView NavigationMessage =  findViewById(R.id.message);
+            //final TextView NavigationMessage =  findViewById(R.id.message);
             BottomNavigationView navigation =  findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.sentenceListNav:
-                            NavigationMessage.setText("Sentences");
+                            //NavigationMessage.setText("Sentences");
                             sentencesRV.setVisibility(View.VISIBLE);
                             cardsRV.setVisibility(View.GONE);
                             editRV.setVisibility(View.GONE);
                             return true;
                         case R.id.cardListNav:
-                            NavigationMessage.setText("Cards");
+                            //NavigationMessage.setText("Cards");
                             sentencesRV.setVisibility(View.GONE);
                             cardsRV.setVisibility(View.VISIBLE);
                             editRV.setVisibility(View.GONE);
                             return true;
                         case R.id.editNav:
-                            NavigationMessage.setText("Edit");
+                            //NavigationMessage.setText("Edit");
                             sentencesRV.setVisibility(View.GONE);
                             cardsRV.setVisibility(View.GONE);
                             editRV.setVisibility(View.VISIBLE);

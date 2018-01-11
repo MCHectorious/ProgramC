@@ -34,6 +34,7 @@ public class CramScraper{
     private ArrayList<Flashcard> output = new ArrayList<>();
     private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
     private Course course;
+    int courseID;
     /*public ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
 
         new getRelatedCourses().execute(topic);
@@ -46,6 +47,7 @@ public class CramScraper{
         this.context = context;
         this.appContext = appContext;
         this.course = course;
+        courseID = course.getCourse_ID();
         StringBuilder builder = new StringBuilder();
         builder.append(course.getExamBoard()).append(" ");
         builder.append(course.getQualification()).append(" ");
@@ -148,7 +150,7 @@ public class CramScraper{
                         //output.add(new Flashcard(front,back));
                         String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
 
-                        database.customDao().insertCoursePoint(new CoursePoints(1,front,back,sentence));//TODO: Change Back
+                        database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO: Change Back
 
                     }
                 } catch (IOException e) {

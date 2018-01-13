@@ -27,6 +27,9 @@ public interface CustomDao {
     @Update
     void updateCourse(Course course);
 
+    @Update
+    void updateCoursePoint(CoursePoints coursePoints);
+
     @Query("SELECT * FROM courses")
     List<Course> getAllSavedCourses();
 

@@ -30,8 +30,8 @@
             <TextView
                 android:id="@+id/border1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" "
+                android:layout_height="5dp"
+
                 android:background="@color/red"
                 android:layout_below="@+id/cardFrontEdit"
                 android:layout_alignParentStart="true"
@@ -51,10 +51,9 @@
 
             <TextView
                 android:id="@+id/border2"
-                android:layout_width="wrap_content"
+                android:layout_width="5dp"
                 android:layout_height="wrap_content"
                 android:background="@color/red"
-                android:text="     "
                 android:layout_toRightOf="@+id/cardFrontEdit"
                 android:layout_alignBottom="@+id/cardBackEdit"
                 android:layout_alignParentTop="true"

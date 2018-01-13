@@ -1,19 +1,27 @@
 package com.hector.csprojectprogramc.Adapter;
 
 import android.app.AlertDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
+import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 
@@ -28,6 +36,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
     List<CoursePoints> dataset;
     Context context;
+    CoursePoints tempPoint;
 
     public EditCoursePointsAdapter(List<CoursePoints> points, Context context){
         dataset = points;
@@ -37,7 +46,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view,context);
+        ViewHolder viewHolder = new ViewHolder(view,context,dataset);
         return viewHolder;
     }
 
@@ -57,7 +66,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView cardFront, cardBack, sentence;
         TextView border1, border2;
         public ViewHolder (View v, final Context context, final List<CoursePoints> dataset){
@@ -70,44 +79,114 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i("Got this far","Clicked on Edit");
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Edit This Course Point As You Wish");
                     LinearLayout layout = new LinearLayout(context);
                     layout.setOrientation(LinearLayout.VERTICAL);
-
+                    Log.i("Line","86");
                     final EditText cardFrontEdit = new EditText(context);
                     cardFrontEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_front() );
                     layout.addView(cardFrontEdit);
-
+                    Log.i("Line","90");
                     final EditText cardBackEdit = new EditText(context);
                     cardBackEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_back() );
                     layout.addView(cardBackEdit);
-
+                    Log.i("Line","94");
                     final EditText sentenceEdit = new EditText(context);
                     sentenceEdit.setText(dataset.get(getAdapterPosition()).getSentence() );
                     layout.addView(sentenceEdit);
 
+                    Button button = new Button(context);
+                    button.setText("Delete");
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tempPoint = dataset.get(getAdapterPosition());
+                            new deleteCoursePoint().execute();
+                        }
+                    });
+
+                    Log.i("Line","98");
                     builder.setView(layout);
+                    Log.i("Line","100");
 
                     builder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Log.i("Line","104");
+                            String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
+                            tempPoint = dataset.get(getAdapterPosition());
+                            Log.i("Line","107");
+                            new updateCoursePoint().execute(textArray);
 
                         }
                     });
-
+                    Log.i("Line","112");
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     });
-
+                    Log.i("Line","119");
+                    builder.create().show();
+                    Log.i("Line","121");
                 }
             };
+            sentence.setOnClickListener(onClickListener);
+            cardFront.setOnClickListener(onClickListener);
+            cardBack.setOnClickListener(onClickListener);
+            Log.i("Line","127");
         }
 
 
+    }
+
+    private class updateCoursePoint extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            Log.i("Line","137");
+            MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
+            Log.i("Line","139");
+            //database.customDao().updateCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
+            //Log.i("Line","141");
+            //dataset = database.customDao().getPointsForCourse(tempPoint.getCourse_ID_foreign());
+
+            database.customDao().deleteCoursePoint(tempPoint);
+            database.customDao().insertCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
+            Log.i("Line","146");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            Log.i("Line","149");
+            Intent intent = new Intent(context, CoursePointsScreen.class);
+            intent.putExtra("course ID",tempPoint.getCourse_ID_foreign());
+            Log.i("Line","152");
+            context.startActivity(intent);
+        }
+
+    }
+
+    private class deleteCoursePoint extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
+            database.customDao().deleteCoursePoint(tempPoint);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            Intent intent = new Intent(context, CoursePointsScreen.class);
+            intent.putExtra("course ID",tempPoint.getCourse_ID_foreign());
+            context.startActivity(intent);
+        }
     }
 
 

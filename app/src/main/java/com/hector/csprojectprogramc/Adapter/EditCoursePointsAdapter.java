@@ -106,6 +106,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                             new deleteCoursePoint().execute();
                         }
                     });
+                    layout.addView(button);
 
                     Log.i("Line","98");
                     builder.setView(layout);

@@ -82,18 +82,33 @@ public class MemRiseScraper{
                 builder.append(StringManipulation.convertSpacesToPluses(string));
                 String url = builder.toString();
                 try {
+                    Log.i("Overall MemRiseWebsite",url);
                     Document document = Jsoup.connect(url).get();
-                    Elements section = document.select("div[class=col-sm-12 col-md-9]").select("a[href]");
+                    Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
                     for (Element element:section ) {
-                        String website = element.attr("href");
-                        if(website.length()>8){
-                            if(website.substring(0,8).equals("/course/")){
-                                relatedWebsites.add(website);
-                                if (relatedWebsites.size()==5){
-                                    return null;
+
+                        Element courseNameElement = element.select("a[class=inner]").first();
+                        String courseName = courseNameElement.text().toLowerCase();
+                        String categoryName = element.select("a[class=category]").first().text().toLowerCase();
+
+                        if (courseName.contains(course.getColloquial_name().toLowerCase()) ||
+                                categoryName.contains(course.getColloquial_name().toLowerCase())){
+
+                            String website = courseNameElement.attr("href");
+                            if(website.length()>8){
+                                if(website.substring(0,8).equals("/course/")){
+                                    relatedWebsites.add(website);
+                                    if (relatedWebsites.size()==5){
+                                        return null;
+                                    }
                                 }
                             }
+
+
                         }
+
+
+
 
                     }
                 } catch (IOException e) {
@@ -135,7 +150,7 @@ public class MemRiseScraper{
 
             for (String url: strings) {
                 try {
-                    Log.i("MemRise URL",url);
+                    Log.i("MemRise URL","https://www.memrise.com"+url);
                     Document courseWebsite = Jsoup.connect("https://www.memrise.com"+url).get();
                     Elements section = courseWebsite.select("div[class=levels clearfix]").select("a[href]");
                     for (Element element: section) {

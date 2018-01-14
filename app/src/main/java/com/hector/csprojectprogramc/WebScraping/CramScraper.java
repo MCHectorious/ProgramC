@@ -86,6 +86,7 @@ public class CramScraper{
 
                 String url = builder.toString();
                 try {
+                    Log.i("Overall Cram Website",url);
                     Document document = Jsoup.connect(url).get();
                     Elements section = document.select("div[id=searchResults]").select("a[href]");
 
@@ -93,6 +94,7 @@ public class CramScraper{
                         String website = element.attr("href");
                         if (website.length()>12){
                             if(website.substring(0,12).equals("/flashcards/")){
+
                                 relatedWebsites.add(website);
                                 if (relatedWebsites.size()==5){
                                     return null;
@@ -113,7 +115,7 @@ public class CramScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            Log.i("Got this far","Found Cram Courses");
+            //Log.i("Got this far","Found Cram Courses");
 
             getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
         }
@@ -137,8 +139,9 @@ public class CramScraper{
 
             for (String url: strings) {
                 try {
-                    Log.i("Got this far","Started Cram Background");
+                    //Log.i("Got this far","Started Cram Background");
 
+                    //Log.i("Cram Website","http://www.cram.com"+url);
 
 
 
@@ -149,12 +152,12 @@ public class CramScraper{
                         String back = e.select("div[class=back_text card_text]").text();
                         //output.add(new Flashcard(front,back));
                         String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
-
+                        //Log.i(front,back);
                         database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO: Change Back
 
                     }
                 } catch (IOException e) {
-                    Log.i("Error","Website removed");
+                    Log.i("Error",e.getMessage());
                 }
 
             }
@@ -166,7 +169,7 @@ public class CramScraper{
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
             Log.i("Got this far","Finished Cram");
-            Log.i("Need to","Implement going back to home screen");
+            //Log.i("Need to","Implement going back to home screen");
 
             Intent intent = new Intent(context, HomeScreen.class);
             context.startActivity(intent);

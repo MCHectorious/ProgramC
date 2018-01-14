@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -97,13 +98,27 @@ public class CourseListScreen extends AppCompatActivity {
 
             //Log.i("Got this far","Finsihed Background on CourseListScreen ");
 
-            RecyclerView recyclerView =  findViewById(R.id.courseListScreenRecyclerView);
+            final RecyclerView recyclerView =  findViewById(R.id.courseListScreenRecyclerView);
             recyclerView.setHasFixedSize(true);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CourseListScreen.this);
             recyclerView.setLayoutManager(linearLayoutManager);
             CourseListAdapter courseListAdapter = new CourseListAdapter(courseNames, courseWebsites, CourseListScreen.this, getApplicationContext(), qualification);
             recyclerView.setAdapter(courseListAdapter);
+
+            /*for(int i=0;i<courseNames.size();i++){
+                Log.i("i",Integer.toString(i));
+                final int pos = i;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (recyclerView.findViewHolderForAdapterPosition(pos).itemView != null){
+                            recyclerView.findViewHolderForAdapterPosition(pos).itemView.performClick();
+                        }
+
+                    }
+                },1);
+            }*/
 
         }
     }

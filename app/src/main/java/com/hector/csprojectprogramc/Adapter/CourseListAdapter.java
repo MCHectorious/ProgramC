@@ -48,7 +48,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    Log.i("Click", "Has Occurred");
+                    Log.i("Click", courseWebsites.get(getAdapterPosition()));
                     AQAScraper scraper = new AQAScraper(courseWebsites.get(getAdapterPosition()),context,appContext, qualification,courseNames.get(getAdapterPosition()));
 
 
@@ -102,6 +102,16 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText(courseNames.get(position));
         holder.textView.setBackgroundColor(CustomColourCreator.getColourFromString(courseNames.get(position)));
+
+
+
+        //try{
+          //  holder.textView.performClick();
+
+        //}catch (Exception e){
+          //  Log.e("Error - "+position,e.getMessage());
+        //}
+
     }
 
     @Override

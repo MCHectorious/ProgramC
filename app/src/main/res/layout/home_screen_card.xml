@@ -37,7 +37,7 @@
                 />
 
             <ImageView
-                android:id="@+id/options"
+                android:id="@+id/deleteCourseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/courseName"

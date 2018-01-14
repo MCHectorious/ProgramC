@@ -86,7 +86,7 @@ public class AQAScraper {
                     Element keyDateSection = document.select("ul[class=listEvents]").select("li").first();
                     nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
                     nextKeyDateDetails = keyDateSection.text().substring(nextKeyDate.length());
-                    Log.i("Got this far", "Collected All Details");
+                    //Log.i("Got this far", "Collected All Details");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

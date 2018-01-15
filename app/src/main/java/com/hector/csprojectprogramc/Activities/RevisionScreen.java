@@ -147,8 +147,10 @@ public class RevisionScreen extends AppCompatActivity {
             includeGapQuestions = true;
             includeQAQuestions = true;
 
-            final RelativeLayout QuestionAnswerOption = findViewById(R.id.QuestionAnswerLayout);
-            final RelativeLayout GapOption = findViewById(R.id.FillInTheGapLayout);
+            final TextView QuestionAnswerOption = findViewById(R.id.QuestionAnswerOption);
+            final ImageView QuestionAnswerIcon = findViewById(R.id.QuestionAnswerIcon);
+            final TextView GapOption = findViewById(R.id.FillInTheGapOption);
+            final ImageView GapIcon = findViewById(R.id.FillInTheGapIcon);
 
             View.OnClickListener QuestionAnswerOnClick = new View.OnClickListener() {
                 @Override
@@ -156,8 +158,9 @@ public class RevisionScreen extends AppCompatActivity {
                     if (includeGapQuestions){
                         Log.i("Clicked on","Question");
                         includeQAQuestions = !includeQAQuestions;
-                        QuestionAnswerOption.setBackgroundColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.lightLightGrey));
 
+                        QuestionAnswerOption.setBackgroundColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
+                        QuestionAnswerIcon.setBackgroundResource((includeQAQuestions)? R.drawable.question_answer_icon_accent:R.drawable.question_answer_icon_black);
                     }
                 }
             };
@@ -168,7 +171,8 @@ public class RevisionScreen extends AppCompatActivity {
                     if (includeQAQuestions){
                         Log.i("Clicked on","Gap");
                         includeGapQuestions = !includeGapQuestions;
-                        GapOption.setBackgroundColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.lightLightGrey));
+                        GapOption.setBackgroundColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
+                        GapIcon.setBackgroundResource((includeQAQuestions)? R.drawable.fill_in_the_gap_icon_accent:R.drawable.fill_in_the_gap_icon_black);
 
                     }
                 }

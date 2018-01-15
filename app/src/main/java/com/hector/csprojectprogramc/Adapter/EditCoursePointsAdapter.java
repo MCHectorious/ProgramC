@@ -84,15 +84,12 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                     builder.setTitle("Edit This Course Point As You Wish");
                     LinearLayout layout = new LinearLayout(context);
                     layout.setOrientation(LinearLayout.VERTICAL);
-                    Log.i("Line","86");
                     final EditText cardFrontEdit = new EditText(context);
                     cardFrontEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_front() );
                     layout.addView(cardFrontEdit);
-                    Log.i("Line","90");
                     final EditText cardBackEdit = new EditText(context);
                     cardBackEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_back() );
                     layout.addView(cardBackEdit);
-                    Log.i("Line","94");
                     final EditText sentenceEdit = new EditText(context);
                     sentenceEdit.setText(dataset.get(getAdapterPosition()).getSentence() );
                     layout.addView(sentenceEdit);
@@ -108,17 +105,13 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                     });
                     layout.addView(button);
 
-                    Log.i("Line","98");
                     builder.setView(layout);
-                    Log.i("Line","100");
 
                     builder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i("Line","104");
                             String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
                             tempPoint = dataset.get(getAdapterPosition());
-                            Log.i("Line","107");
                             new updateCoursePoint().execute(textArray);
 
                         }

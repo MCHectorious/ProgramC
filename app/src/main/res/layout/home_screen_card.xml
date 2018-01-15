@@ -24,25 +24,31 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/deleteCourseButton"
+                android:layout_toStartOf="@+id/deleteCourseButton"
                 android:background="@color/red"
+                android:padding="1sp"
                 android:text="Accounting"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:padding="1sp"
-                android:textStyle="bold"
                 android:textSize="25sp"
-                android:layout_margin="5dp"
-                android:layout_marginRight="0dp"
+                android:textStyle="bold"
+                android:elevation="5dp"
+
                 />
 
             <ImageView
                 android:id="@+id/deleteCourseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/courseName"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_alignTop="@+id/courseName"
+                android:layout_alignBottom="@+id/courseName"
                 app:srcCompat="@drawable/delete_icon" />
 
             <TextView

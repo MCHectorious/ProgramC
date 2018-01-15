@@ -15,30 +15,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:id="@+id/optionCard"
-        android:layout_margin="1dp"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:background="@color/lightLightGrey"
             >
 
-            <TextView
-                android:id="@+id/Options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Options"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                />
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:layout_below="@+id/Options"
                 android:id="@+id/QuestionAnswerLayout"
+                android:layout_margin="5dp"
                 >
 
                 <ImageView
@@ -46,27 +37,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    app:srcCompat="@drawable/question_answer_icon" />
+                    app:srcCompat="@drawable/question_answer_icon_accent" />
 
                 <TextView
                     android:id="@+id/QuestionAnswerOption"
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/QuestionAnswerIcon"
                     android:text="Question-Answer"
-                    android:textColor="@color/darkDarkGrey" />
+                    android:textColor="@color/colorAccent" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:layout_below="@+id/QuestionAnswerLayout"
                 android:id="@+id/FillInTheGapLayout"
-                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
                 >
 
                 <ImageView
@@ -74,18 +65,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    app:srcCompat="@drawable/fill_in_the_gap_icon" />
+                    app:srcCompat="@drawable/fill_in_the_gap_icon_accent" />
 
                 <TextView
                     android:id="@+id/FillInTheGapOption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
                     android:layout_toEndOf="@+id/FillInTheGapIcon"
                     android:text="Fill in the Gap"
-                    android:textColor="@color/darkDarkGrey"
-                    />
+                    android:textColor="@color/colorAccent" />
 
             </RelativeLayout>
 
@@ -101,18 +91,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/questionCard"
         android:layout_below="@+id/optionCard"
+        app:cardCornerRadius="5dp"
+
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <TextView
                 android:id="@+id/questionText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="This is a question"
                 android:layout_margin="5dp"
@@ -121,15 +116,7 @@
                 android:textSize="20sp"
                 />
 
-            <ImageView
-                android:id="@+id/menuRevisionScreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/vertical_dots"
-                android:layout_margin="5dp"
-                />
+
 
 
         </RelativeLayout>
@@ -141,6 +128,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/questionCard"
         android:layout_margin="5dp"
+        app:cardCornerRadius="3dp"
+
 
         >
         <RelativeLayout
@@ -149,7 +138,7 @@
 
             <EditText
             android:id="@+id/answerText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Please Enter Your Answer Here"
             android:layout_margin="5dp"

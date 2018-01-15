@@ -40,11 +40,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder{
         //public CardView cardView;
         public TextView textView;
+        public CardView cardView;
         //private Course course;
         //private MyDatabase database;
         public ViewHolder(View view){
             super(view);
             textView = view.findViewById(R.id.courseNameInList);
+            cardView = view.findViewById(R.id.courseListCard);
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -101,7 +103,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText(courseNames.get(position));
-        holder.textView.setBackgroundColor(CustomColourCreator.getColourFromString(courseNames.get(position)));
+        holder.cardView.setBackgroundColor(CustomColourCreator.getColourFromString(courseNames.get(position)));
 
 
 

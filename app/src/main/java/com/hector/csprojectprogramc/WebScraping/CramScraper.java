@@ -171,8 +171,8 @@ public class CramScraper{
             Log.i("Got this far","Finished Cram");
             //Log.i("Need to","Implement going back to home screen");
 
-            Intent intent = new Intent(context, HomeScreen.class);
-            context.startActivity(intent);
+            //Intent intent = new Intent(context, HomeScreen.class);
+            //context.startActivity(intent);
 
 
         }

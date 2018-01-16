@@ -106,19 +106,10 @@ public class CourseListScreen extends AppCompatActivity {
             CourseListAdapter courseListAdapter = new CourseListAdapter(courseNames, courseWebsites, CourseListScreen.this, getApplicationContext(), qualification);
             recyclerView.setAdapter(courseListAdapter);
 
-            /*for(int i=0;i<courseNames.size();i++){
-                Log.i("i",Integer.toString(i));
-                final int pos = i;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (recyclerView.findViewHolderForAdapterPosition(pos).itemView != null){
-                            recyclerView.findViewHolderForAdapterPosition(pos).itemView.performClick();
-                        }
-
-                    }
-                },1);
-            }*/
+            for(int i=0;i<courseNames.size();i++){
+                Log.i("Click", courseWebsites.get(i));
+                new AQAScraper(courseWebsites.get(i),CourseListScreen.this,getApplicationContext(), qualification,courseNames.get(i));
+            }
 
         }
     }

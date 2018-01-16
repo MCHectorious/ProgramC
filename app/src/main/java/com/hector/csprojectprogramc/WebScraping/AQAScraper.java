@@ -84,10 +84,13 @@ public class AQAScraper {
                     }
                     examBoard = "AQA";
                     Element keyDateSection = document.select("ul[class=listEvents]").select("li").first();
-                    nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
-                    nextKeyDateDetails = keyDateSection.text().substring(nextKeyDate.length());
+                    if(keyDateSection != null){
+                        nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
+                        nextKeyDateDetails = keyDateSection.text().substring(nextKeyDate.length());
+                    }
+
                     //Log.i("Got this far", "Collected All Details");
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

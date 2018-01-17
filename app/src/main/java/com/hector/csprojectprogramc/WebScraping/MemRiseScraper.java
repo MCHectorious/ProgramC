@@ -82,7 +82,7 @@ public class MemRiseScraper{
                 builder.append(StringManipulation.convertSpacesToPluses(string));
                 String url = builder.toString();
                 try {
-                    Log.i("Overall MemRiseWebsite",url);
+                    //Log.i("Overall MemRiseWebsite",url);
                     Document document = Jsoup.connect(url).get();
                     Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
                     for (Element element:section ) {
@@ -111,8 +111,9 @@ public class MemRiseScraper{
 
 
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e("Issue MemRise Overall",course.getOfficial_name());
+                    Log.e("Error",e.getMessage());
                 }
 
             }
@@ -145,12 +146,13 @@ public class MemRiseScraper{
         protected Void doInBackground(String... strings) {
             MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
             //Log.i()
-            Log.i("Got this far","Started MemRise Background");
+            //Log.i("Got this far","Started MemRise Background");
 
+            boolean foundCard = false;
 
             for (String url: strings) {
                 try {
-                    Log.i("MemRise URL","https://www.memrise.com"+url);
+                    //Log.i("MemRise URL","https://www.memrise.com"+url);
                     Document courseWebsite = Jsoup.connect("https://www.memrise.com"+url).get();
                     Elements section = courseWebsite.select("div[class=levels clearfix]").select("a[href]");
                     for (Element element: section) {
@@ -162,24 +164,27 @@ public class MemRiseScraper{
                             //output.add(new Flashcard(front,back));
                             String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
                             //Log.i("Points", front+" | "+back);
+                            foundCard = true;
                             database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO:Change Back
                         }
 
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {
+                    Log.e("Issue with MemRise",course.getOfficial_name());
+                    Log.e("Error",e.getMessage());                }
 
             }
             database.close();
-
+            if (!foundCard){
+                Log.e("No MemRise for",course.getOfficial_name());
+            }
             return null;
         }
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
 
-            Log.i("Got this far","Finished MemRise");
+            //Log.i("Got this far","Finished MemRise");
 
             new CramScraper().insertCoursePointsInDataBase(context, course,appContext);
 

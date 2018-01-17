@@ -138,7 +138,7 @@ public class HomeScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             MyDatabase database = Room.databaseBuilder(HomeScreen.this, MyDatabase.class, "my-db").build();
             savedCourses = database.customDao().getAllSavedCourses();
-            Log.e("No. of Saved Courses",Integer.toString(savedCourses.size()));
+            Log.i("No. of Saved Courses",Integer.toString(savedCourses.size()));
             haveSubjects = savedCourses.size()>0;
             //haveSubjects = false;
 

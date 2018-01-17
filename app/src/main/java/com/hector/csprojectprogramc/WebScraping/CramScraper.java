@@ -103,8 +103,9 @@ public class CramScraper{
                         }
 
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e("Issue with Cram Overall",course.getOfficial_name());
+                    Log.e("Error",e.getMessage());
                 }
 
             }
@@ -137,6 +138,8 @@ public class CramScraper{
         protected Void doInBackground(String... strings) {
             MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
 
+            boolean foundCard = false;
+
             for (String url: strings) {
                 try {
                     //Log.i("Got this far","Started Cram Background");
@@ -153,16 +156,20 @@ public class CramScraper{
                         //output.add(new Flashcard(front,back));
                         String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
                         //Log.i(front,back);
-                        database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO: Change Back
+                        foundCard = true;
+                        database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));
 
                     }
-                } catch (IOException e) {
-                    Log.i("Error",e.getMessage());
+                } catch (Exception e) {
+                    Log.e("Issue with Cram",course.getOfficial_name());
+                    Log.e("Error",e.getMessage());
                 }
 
             }
             database.close();
-
+            if (!foundCard){
+                Log.e("No Cram for",course.getOfficial_name());
+            }
             return null;
         }
         @Override

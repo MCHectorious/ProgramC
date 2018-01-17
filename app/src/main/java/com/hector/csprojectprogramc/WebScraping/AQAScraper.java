@@ -74,7 +74,7 @@ public class AQAScraper {
                 website = string;
                 try {
                     Document document = Jsoup.connect(string).timeout(100000).get();
-                    Log.i("Got this far","connected to AQA website");
+                    //Log.i("Got this far","connected to AQA website");
                     //officialName = (document.select("h1[class=mainTitle]").size()>0)? document.select("h1[class=mainTitle]").first().text():"";
                     Elements codesAndReferences = document.select("table[class=tableCodes]");
                     colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): StringManipulation.convertOfficalToColloquial(officialName);
@@ -91,7 +91,8 @@ public class AQAScraper {
 
                     //Log.i("Got this far", "Collected All Details");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e("Issue with AQA",officialName);
+                    Log.e("Error",e.getMessage());
                 }
             }
             MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();

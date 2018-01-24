@@ -1,5 +1,6 @@
 package com.hector.csprojectprogramc.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
@@ -132,7 +133,10 @@ public class RevisionScreen extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i(answerView.getText().toString(),correctAnswer);
+                    //Log.i(answerView.getText().toString(),correctAnswer);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
+                    TextView textView = new TextView(RevisionScreen.this);
+
                     if( answerView.getText().toString().equals(correctAnswer) ){
                         Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
                         toast.show();

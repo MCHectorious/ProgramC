@@ -55,9 +55,8 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
         holder.cardFront.setText(dataset.get(position).getFlashcard_front());
         holder.cardBack.setText(dataset.get(position).getFlashcard_back());
         holder.sentence.setText(dataset.get(position).getSentence());
-        int colour = CustomColourCreator.getColourFromString(dataset.get(position).getSentence());
-        holder.border1.setBackgroundColor(colour);
-        holder.border2.setBackgroundColor(colour);
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(dataset.get(position).getSentence()));
+
     }
 
     @Override
@@ -68,18 +67,16 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView cardFront, cardBack, sentence;
-        TextView border1, border2;
+        CardView cardView;
         public ViewHolder (View v, final Context context, final List<CoursePoints> dataset){
             super(v);
             sentence = v.findViewById(R.id.sentenceEdit);
             cardFront = v.findViewById(R.id.cardFrontEdit);
             cardBack = v.findViewById(R.id.cardBackEdit);
-            border1 = v.findViewById(R.id.border1);
-            border2 = v.findViewById(R.id.border2);
+            cardView = v.findViewById(R.id.cardViewCoursePointsEdit);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("Got this far","Clicked on Edit");
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Edit This Course Point As You Wish");
                     LinearLayout layout = new LinearLayout(context);
@@ -116,22 +113,18 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
                         }
                     });
-                    Log.i("Line","112");
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     });
-                    Log.i("Line","119");
                     builder.create().show();
-                    Log.i("Line","121");
                 }
             };
             sentence.setOnClickListener(onClickListener);
             cardFront.setOnClickListener(onClickListener);
             cardBack.setOnClickListener(onClickListener);
-            Log.i("Line","127");
         }
 
 
@@ -141,25 +134,20 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
         @Override
         protected Void doInBackground(String... strings) {
-            Log.i("Line","137");
             MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
-            Log.i("Line","139");
             //database.customDao().updateCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
             //Log.i("Line","141");
             //dataset = database.customDao().getPointsForCourse(tempPoint.getCourse_ID_foreign());
 
             database.customDao().deleteCoursePoint(tempPoint);
             database.customDao().insertCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
-            Log.i("Line","146");
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
-            Log.i("Line","149");
             Intent intent = new Intent(context, CoursePointsScreen.class);
             intent.putExtra("course ID",tempPoint.getCourse_ID_foreign());
-            Log.i("Line","152");
             context.startActivity(intent);
         }
 

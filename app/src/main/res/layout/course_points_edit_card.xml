@@ -9,7 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:id="@+id/cardView">
+        android:id="@+id/cardViewCoursePointsEdit"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="3dp"
+        app:contentPadding="3dp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,18 +29,10 @@
                 android:textColor="@color/black"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
+                android:background="@color/white"
                 />
 
-            <TextView
-                android:id="@+id/border1"
-                android:layout_width="wrap_content"
-                android:layout_height="3dp"
 
-                android:background="@color/red"
-                android:layout_below="@+id/cardFrontEdit"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/cardFrontEdit"
-                />
 
             <TextView
                 android:id="@+id/cardBackEdit"
@@ -44,22 +40,16 @@
                 android:layout_height="wrap_content"
                 android:text="Flashcard Back"
                 android:textColor="@color/black"
-                android:layout_below="@+id/border1"
+                android:layout_below="@+id/cardFrontEdit"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/cardFrontEdit"
+                android:layout_marginTop="2dp"
                 android:textAlignment="center"
+                android:background="@color/white"
 
                 />
 
-            <TextView
-                android:id="@+id/border2"
-                android:layout_width="3dp"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
-                android:layout_toRightOf="@+id/cardFrontEdit"
-                android:layout_alignBottom="@+id/cardBackEdit"
-                android:layout_alignParentTop="true"
-                />
+
 
             <TextView
                 android:id="@+id/sentenceEdit"
@@ -69,10 +59,12 @@
                 android:textAlignment="center"
                 android:text="Sentence"
                 android:textColor="@color/black"
-                android:layout_toRightOf="@+id/border2"
+                android:layout_toRightOf="@+id/cardFrontEdit"
+                android:layout_marginLeft="2dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignBottom="@+id/cardBackEdit"
                 android:layout_alignParentRight="true"
+                android:background="@color/white"
                 />
 
 

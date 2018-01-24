@@ -39,9 +39,8 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String sentence = dataset.get(position).getSentence();
         holder.sentence.setText(sentence);
-        int colour = CustomColourCreator.getColourFromString(sentence);
-        holder.left.setBackgroundColor(colour);
-        holder.right.setBackgroundColor(colour);
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(sentence));
+
     }
 
     @Override
@@ -52,12 +51,13 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView sentence;
-        ImageView left,right;
+        CardView cardView;
+
         public ViewHolder (View v){
             super(v);
             sentence = v.findViewById(R.id.sentenceSentence);
-            left = v.findViewById(R.id.leftPointerSentence);
-            right = v.findViewById(R.id.rightPointerSentence);
+            cardView = v.findViewById(R.id.cardViewCoursePointsSentence);
+
         }
 
 

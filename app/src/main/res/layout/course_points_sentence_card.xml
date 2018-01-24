@@ -9,51 +9,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:id="@+id/cardView">
+        android:id="@+id/cardViewCoursePointsSentence"
+
+        app:cardCornerRadius="2dp"
+        app:cardBackgroundColor="@color/red"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
 
-            <ImageView
-                android:id="@+id/leftPointerSentence"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/line"
-                android:background="@color/red"
-                android:layout_margin="5dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignBottom="@+id/sentences"
-                android:layout_centerVertical="true"
-                />
+
 
             <TextView
                 android:id="@+id/sentenceSentence"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/leftPointerSentence"
-                android:layout_toLeftOf="@id/rightPointerSentence"
+
 
                 android:textAlignment="center"
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:layout_margin="5dp"
+                android:background="@color/white"
                 />
 
-            <ImageView
-                android:id="@+id/rightPointerSentence"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/line"
-                android:background="@color/red"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:layout_alignBottom="@+id/sentences"
 
-                />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

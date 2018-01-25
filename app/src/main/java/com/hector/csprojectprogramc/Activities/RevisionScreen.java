@@ -3,6 +3,7 @@ package com.hector.csprojectprogramc.Activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
+import com.hector.csprojectprogramc.Util.StringDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,16 +137,42 @@ public class RevisionScreen extends AppCompatActivity {
                 public void onClick(View view) {
                     //Log.i(answerView.getText().toString(),correctAnswer);
                     AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
+                    //builder.setTitle("Your Response");
+
                     TextView textView = new TextView(RevisionScreen.this);
 
-                    if( answerView.getText().toString().equals(correctAnswer) ){
-                        Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
-                        toast.show();
+                    double similarity = StringDistance.getNormalisedSimilarity(answerView.getText().toString(), correctAnswer);
+
+                    if(similarity>0.9){
+                        builder.setTitle("Well done - "+ similarity*100 + "%");
+
+                    } else if(similarity>0.5){
+                        builder.setTitle("Almost - "+ similarity*100 + "%");
                     }else{
-                        Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is: \""+correctAnswer+"\".",Toast.LENGTH_LONG);
-                        toast.show();
+                        builder.setTitle("Wrong - "+ similarity*100 + "%");
+
                     }
-                    generateQuestion();
+
+                    textView.setText("The correct answer is: \" "+correctAnswer+"\".");
+
+                    /*if( answerView.getText().toString().equals(correctAnswer) ){
+                        //Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
+                        textView.setText("Well done. You answered correctly.");
+                        //toast.show();
+                    }else{
+                        //Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is: \""+correctAnswer+"\".",Toast.LENGTH_LONG);
+                        textView.setText("Wrong. The correct answer is: \""+correctAnswer+"\".");
+                        //toast.show();
+                    }*/
+                    builder.setView(textView);
+                    builder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            generateQuestion();
+                        }
+                    });
+                    builder.create().show();
+
                 }
             });
 

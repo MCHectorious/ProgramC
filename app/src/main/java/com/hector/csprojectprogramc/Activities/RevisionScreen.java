@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
+import com.hector.csprojectprogramc.Util.CommonWords;
 import com.hector.csprojectprogramc.Util.StringDistance;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
+
+    CommonWords check;
 
     boolean includeQAQuestions, includeGapQuestions;
     Random random = new Random();
@@ -42,6 +45,8 @@ public class RevisionScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revision_screen);
         Toolbar toolbar =  findViewById(R.id.toolbar);
+
+        check = new CommonWords();
 
         promptView =  findViewById(R.id.questionText);
         answerView =  findViewById(R.id.answerText);
@@ -80,21 +85,23 @@ public class RevisionScreen extends AppCompatActivity {
         String[] words = sentence.split(" ");
         int missingWordIndex = random.nextInt(words.length);
         String missingWord = words[missingWordIndex];
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            if(i==missingWordIndex){
-                for (int j = 0; j < missingWord.length(); j++) {
-                    builder.append("_");
+        if (check.isACommonWord(missingWord)){
+            generateGapQuestion();
+        }else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < words.length; i++) {
+                if (i == missingWordIndex) {
+                    for (int j = 0; j < missingWord.length(); j++) {
+                        builder.append("_");
+                    }
+                } else {
+                    builder.append(words[i]);
                 }
-            }else{
-                builder.append(words[i]);
+                builder.append(" ");
             }
-            builder.append(" ");
+            prompt = builder.toString();
+            correctAnswer = missingWord;
         }
-        prompt = builder.toString();
-        correctAnswer = missingWord;
-
-
     }
 
     public void generateQAQuestion(){
@@ -141,19 +148,19 @@ public class RevisionScreen extends AppCompatActivity {
 
                     TextView textView = new TextView(RevisionScreen.this);
 
-                    double similarity = StringDistance.getNormalisedSimilarity(answerView.getText().toString(), correctAnswer);
+                    double similarity = 100*StringDistance.getNormalisedSimilarity(answerView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
 
-                    if(similarity>0.9){
-                        builder.setTitle("Well done - "+ similarity*100 + "%");
+                    if(similarity>90){
+                        builder.setTitle("Well Done - "+ String.format("%.2f",similarity)  + "% Similar!");
 
-                    } else if(similarity>0.5){
-                        builder.setTitle("Almost - "+ similarity*100 + "%");
+                    } else if(similarity>50){
+                        builder.setTitle("Almost - "+ String.format("%.2f",similarity) + "% Similar");
                     }else{
-                        builder.setTitle("Wrong - "+ similarity*100 + "%");
+                        builder.setTitle("Wrong - Only "+ String.format("%.2f",similarity) + "% Similar");
 
                     }
 
-                    textView.setText("The correct answer is: \" "+correctAnswer+"\".");
+                    textView.setText("The correct answer is: \""+correctAnswer+"\".");
 
                     /*if( answerView.getText().toString().equals(correctAnswer) ){
                         //Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);

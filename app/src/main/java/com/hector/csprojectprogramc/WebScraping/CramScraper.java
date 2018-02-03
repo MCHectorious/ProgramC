@@ -13,7 +13,6 @@ import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
 import com.hector.csprojectprogramc.Util.Flashcard;
-import com.hector.csprojectprogramc.Util.MultiThreading;
 import com.hector.csprojectprogramc.Util.StringManipulation;
 
 import org.jsoup.Jsoup;
@@ -178,8 +177,8 @@ public class CramScraper{
             Log.i("Got this far","Finished Cram");
             //Log.i("Need to","Implement going back to home screen");
 
-            //Intent intent = new Intent(context, HomeScreen.class);
-            //context.startActivity(intent);
+            Intent intent = new Intent(context, HomeScreen.class);
+            context.startActivity(intent);
 
 
         }

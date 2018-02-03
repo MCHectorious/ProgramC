@@ -21,11 +21,23 @@ public class CourseScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_screen);
+        final Bundle bundle = getIntent().getExtras();
+
         Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setTitle(bundle.getString("Colloqial Name"));
         setSupportActionBar(toolbar);
 
+        /*Toolbar toolbar =  findViewById(R.id.custom_toolbar);
+        TextView title =  findViewById(R.id.custom_toolbar_title_view);
+
+        setSupportActionBar(toolbar);
+        title.setText(bundle.getString("Colloqial Name"));
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        */
+
         //MyDatabase database = Room.databaseBuilder(CourseScreen.this, MyDatabase.class, "my-db").build();
-        final Bundle bundle = getIntent().getExtras();
+
 
         //final Course course = database.customDao().getInformationFromCourse(courseID);
 
@@ -57,7 +69,7 @@ public class CourseScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Intent toRevisionScreen = new Intent(CourseScreen.this, RevisionScreen.class);
                 toRevisionScreen.putExtra("course ID",bundle.getInt("Course ID"));
-                Log.i("Got this far","Opening Revision Screen");
+                //Log.i("Got this far","Opening Revision Screen");
                 startActivity(toRevisionScreen);
             }
         });

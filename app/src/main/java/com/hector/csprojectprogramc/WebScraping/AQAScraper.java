@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.MyDatabase;
-import com.hector.csprojectprogramc.Util.MultiThreading;
 import com.hector.csprojectprogramc.Util.StringManipulation;
 
 import org.jsoup.Jsoup;

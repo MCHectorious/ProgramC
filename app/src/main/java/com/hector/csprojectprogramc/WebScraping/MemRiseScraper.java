@@ -12,7 +12,6 @@ import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
 import com.hector.csprojectprogramc.Util.Flashcard;
-import com.hector.csprojectprogramc.Util.MultiThreading;
 import com.hector.csprojectprogramc.Util.StringManipulation;
 
 import org.jsoup.Jsoup;

@@ -7,24 +7,18 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CommonWords;
 import com.hector.csprojectprogramc.Util.StringDistance;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -51,16 +45,10 @@ public class RevisionScreen extends AppCompatActivity {
         promptView =  findViewById(R.id.questionText);
         answerView =  findViewById(R.id.answerText);
 
-
         Bundle bundle = getIntent().getExtras();
         CourseID = bundle.getInt("course ID");
 
         new getPoints().execute();
-
-
-
-
-
     }
 
     public void generateQuestion(){
@@ -129,7 +117,6 @@ public class RevisionScreen extends AppCompatActivity {
             points = database.customDao().getPointsForCourse(CourseID);
 
             return null;
-
         }
 
         @Override
@@ -142,9 +129,7 @@ public class RevisionScreen extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Log.i(answerView.getText().toString(),correctAnswer);
                     AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
-                    //builder.setTitle("Your Response");
 
                     TextView textView = new TextView(RevisionScreen.this);
 
@@ -162,15 +147,6 @@ public class RevisionScreen extends AppCompatActivity {
 
                     textView.setText("The correct answer is: \""+correctAnswer+"\".");
 
-                    /*if( answerView.getText().toString().equals(correctAnswer) ){
-                        //Toast toast = Toast.makeText(getApplicationContext(),"Well done. You answered correctly.",Toast.LENGTH_LONG);
-                        textView.setText("Well done. You answered correctly.");
-                        //toast.show();
-                    }else{
-                        //Toast toast = Toast.makeText(getApplicationContext(),"Wrong. The correct answer is: \""+correctAnswer+"\".",Toast.LENGTH_LONG);
-                        textView.setText("Wrong. The correct answer is: \""+correctAnswer+"\".");
-                        //toast.show();
-                    }*/
                     builder.setView(textView);
                     builder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {
                         @Override
@@ -179,10 +155,8 @@ public class RevisionScreen extends AppCompatActivity {
                         }
                     });
                     builder.create().show();
-
                 }
             });
-
             includeGapQuestions = true;
             includeQAQuestions = true;
 
@@ -195,10 +169,7 @@ public class RevisionScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (includeGapQuestions){
-                        Log.i("Clicked on","Question");
                         includeQAQuestions = !includeQAQuestions;
-
-
                         QuestionAnswerOption.setTextColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
                         QuestionAnswerIcon.setImageResource((includeQAQuestions)? R.drawable.question_answer_icon_accent:R.drawable.question_answer_icon_black);
                     }
@@ -209,7 +180,6 @@ public class RevisionScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (includeQAQuestions){
-                        Log.i("Clicked on","Gap");
                         includeGapQuestions = !includeGapQuestions;
                         GapOption.setTextColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
                         GapIcon.setImageResource((includeGapQuestions)? R.drawable.fill_in_the_gap_icon_accent:R.drawable.fill_in_the_gap_icon_black);

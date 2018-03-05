@@ -45,16 +45,12 @@ public class StringDistance {
                 newCost[j+1] = min(newCost[j]+1,oldCost[j+1]+1, oldCost[j] +  cost);
 
             }
-
             tempCost = oldCost;
             oldCost = newCost;
             newCost = tempCost;
-
         }
 
         return oldCost[string2.length()];
-
-
     }
 
     private static int min(int a, int b, int c){

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
@@ -19,8 +18,6 @@ import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,13 +51,6 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
         holder.qualificationView.setText(dataset.get(position).getQualification());
         holder.examboardView.setText(dataset.get(position).getExamBoard());
         holder.dateView.setText(dataset.get(position).getNext_key_date());
-        /*holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dataset.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-            }
-        });*/
     }
 
     @Override
@@ -93,8 +83,6 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
                     intent.putExtra("Qualification",course.getQualification() );
                     intent.putExtra("Key Date",course.getNext_key_date() );
                     intent.putExtra("Key Date Details", course.getNext_key_date_detail());
-
-
                     context.startActivity(intent);
                 }
             });
@@ -111,8 +99,6 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
                     new deleteCourse().execute();
                 }
             });
-
-            //this.context = context;
         }
 
         private class deleteCourse extends AsyncTask<Void,Void,Void>{
@@ -137,8 +123,4 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
         }
 
     }
-
-
-
-
 }

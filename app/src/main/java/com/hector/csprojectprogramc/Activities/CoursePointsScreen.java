@@ -13,23 +13,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.hector.csprojectprogramc.Adapter.CardCoursePointsAdapter;
 import com.hector.csprojectprogramc.Adapter.EditCoursePointsAdapter;
 import com.hector.csprojectprogramc.Adapter.SentencesCoursePointsAdapter;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class CoursePointsScreen extends AppCompatActivity {
@@ -45,13 +39,9 @@ public class CoursePointsScreen extends AppCompatActivity {
         editRV = findViewById(R.id.editsRecyclerView);
 
         Bundle bundle = getIntent().getExtras();
-        CourseID = bundle.getInt("course ID");
+        CourseID = bundle.getInt("course ID",0);
 
         new getPoints().execute();
-
-
-
-
     }
 
     private class getPoints extends AsyncTask<Void, Void, Void> {
@@ -73,15 +63,11 @@ public class CoursePointsScreen extends AppCompatActivity {
             points = database.customDao().getPointsForCourse(CourseID);
 
             return null;
-
         }
 
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
-
-            //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CoursePointsScreen.this);
-
             if(points.size()==0){
                 AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
                 TextView textView = new TextView(CoursePointsScreen.this);
@@ -145,14 +131,20 @@ public class CoursePointsScreen extends AppCompatActivity {
                         return false;
                     }
                 });
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
+                TextView textView = new TextView(CoursePointsScreen.this);
+                textView.setText("These sentences may be machine generated and thus can be inaccurate."+ System.getProperty("line.separator")  +
+                        "You can edit these sentences in the Edit Tab (as well as making further edits such as adding your own Course Points).");
+                builder.setView(textView);
+                builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        addCoursePointDialog(false);
+                    }
+                });
+                builder.create().show();
             }
-
-
-
-
         }
-
-
     }
 
     public void addCoursePointDialog(boolean cancelable){
@@ -187,7 +179,6 @@ public class CoursePointsScreen extends AppCompatActivity {
             });
         }
         builder.setCancelable(cancelable);
-
         builder.create().show();
     }
 

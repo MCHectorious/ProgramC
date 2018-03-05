@@ -1,7 +1,6 @@
 package com.hector.csprojectprogramc.Adapter;
 
 import android.content.Context;
-
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-
-
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import com.hector.csprojectprogramc.WebScraping.AQAScraper;
@@ -28,11 +24,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     private static String qualification;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        //public CardView cardView;
         public TextView textView;
         public CardView cardView;
-        //private Course course;
-        //private MyDatabase database;
         public ViewHolder(View view){
             super(view);
             textView = view.findViewById(R.id.courseNameInList);
@@ -40,7 +33,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    Log.i("Click", courseWebsites.get(getAdapterPosition()));
                     new AQAScraper(courseWebsites.get(getAdapterPosition()),context,appContext, qualification,courseNames.get(getAdapterPosition()));
                 }
             });
@@ -54,7 +46,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         this.context = context;
         this.appContext = appContext;
         this.qualification = qualification;
-
     }
 
     @Override

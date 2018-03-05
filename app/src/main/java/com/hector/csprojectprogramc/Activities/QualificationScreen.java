@@ -5,12 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
-
 import com.hector.csprojectprogramc.R;
 
 public class QualificationScreen extends AppCompatActivity {
     public final String qualificationExtraName = "Qualification";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

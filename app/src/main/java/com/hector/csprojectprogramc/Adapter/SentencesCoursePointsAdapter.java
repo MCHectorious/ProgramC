@@ -6,14 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,9 +55,5 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
             cardView = v.findViewById(R.id.cardViewCoursePointsSentence);
 
         }
-
-
     }
-
-
 }

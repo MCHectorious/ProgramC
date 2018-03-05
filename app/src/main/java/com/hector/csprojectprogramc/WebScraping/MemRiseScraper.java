@@ -5,61 +5,36 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.hector.csprojectprogramc.Activities.CourseListScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
-import com.hector.csprojectprogramc.Util.Flashcard;
 import com.hector.csprojectprogramc.Util.StringManipulation;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Hector - New on 23/12/2017.
- */
 
 public class MemRiseScraper{
-    Context context,appContext;
-    ArrayList<String> relatedWebsites = new ArrayList<>();
-    ArrayList<Flashcard> output = new ArrayList<>();
-    GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
-    Course course;
-    int courseID;
-   /* private ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
-
-        new getRelatedCourses().execute(topic);
-        getFlashcardFromWebsite flashcardFromWebsite = new getFlashcardFromWebsite();
-        flashcardFromWebsite.execute(relatedWebsites.toArray(new String[0]));
-        return output;
-    }*/
+    private Context context,appContext;
+    private ArrayList<String> relatedWebsites = new ArrayList<>();
+    private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
+    private Course course;
+    private int courseID;
 
     public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
         this.context = context;
         this.appContext = appContext;
         this.course = course;
-        Log.i("Course ID being added", Integer.toString(course.getCourse_ID())  );
         courseID = course.getCourse_ID();
         StringBuilder builder = new StringBuilder();
         builder.append(course.getExamBoard()).append(" ");
         builder.append(course.getQualification()).append(" ");
         builder.append(course.getColloquial_name());
         new GetRelatedFlashcards().execute(builder.toString());
-        //MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
-        //ArrayList<Flashcard> cards = getFlashcardRelatedTo(builder.toString());
-        //for (Flashcard card: output) {
-            //String sentence = FlashcardToSentenceModel.convertToSentence(card);
-            //database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
-        //}
     }
-
 
     private class GetRelatedFlashcards extends AsyncTask<String,Void,Void>{
         ProgressDialog progressDialog;
@@ -81,11 +56,9 @@ public class MemRiseScraper{
                 builder.append(StringManipulation.convertSpacesToPluses(string));
                 String url = builder.toString();
                 try {
-                    //Log.i("Overall MemRiseWebsite",url);
                     Document document = Jsoup.connect(url).get();
                     Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
                     for (Element element:section ) {
-
                         Element courseNameElement = element.select("a[class=inner]").first();
                         String courseName = courseNameElement.text().toLowerCase();
                         String categoryName = element.select("a[class=category]").first().text().toLowerCase();
@@ -102,29 +75,19 @@ public class MemRiseScraper{
                                     }
                                 }
                             }
-
-
                         }
-
-
-
-
                     }
                 } catch (Exception e) {
                     Log.e("Issue MemRise Overall",course.getOfficial_name());
                     Log.e("Error",e.getMessage());
                 }
-
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            Log.i("Got this far","Found MemRise Courses");
-
             getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
         }
     }
@@ -144,14 +107,10 @@ public class MemRiseScraper{
         @Override
         protected Void doInBackground(String... strings) {
             MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
-            //Log.i()
-            //Log.i("Got this far","Started MemRise Background");
-
             boolean foundCard = false;
 
             for (String url: strings) {
                 try {
-                    //Log.i("MemRise URL","https://www.memrise.com"+url);
                     Document courseWebsite = Jsoup.connect("https://www.memrise.com"+url).get();
                     Elements section = courseWebsite.select("div[class=levels clearfix]").select("a[href]");
                     for (Element element: section) {
@@ -160,9 +119,7 @@ public class MemRiseScraper{
                         for(Element div:informationSection){
                             String front = div.select("div[class=col_a col text]").select("div[class=text]").first().text();
                             String back = div.select("div[class=col_b col text]").select("div[class=text]").first().text();
-                            //output.add(new Flashcard(front,back));
                             String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
-                            //Log.i("Points", front+" | "+back);
                             foundCard = true;
                             database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO:Change Back
                         }
@@ -182,13 +139,7 @@ public class MemRiseScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-
-            //Log.i("Got this far","Finished MemRise");
-
             new CramScraper().insertCoursePointsInDataBase(context, course,appContext);
-
-
-
         }
     }
 }

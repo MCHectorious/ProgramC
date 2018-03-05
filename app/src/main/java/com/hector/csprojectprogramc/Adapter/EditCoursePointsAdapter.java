@@ -8,24 +8,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
-import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,9 +95,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                         }
                     });
                     layout.addView(button);
-
                     builder.setView(layout);
-
                     builder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -135,10 +127,6 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
         @Override
         protected Void doInBackground(String... strings) {
             MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
-            //database.customDao().updateCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
-            //Log.i("Line","141");
-            //dataset = database.customDao().getPointsForCourse(tempPoint.getCourse_ID_foreign());
-
             database.customDao().deleteCoursePoint(tempPoint);
             database.customDao().insertCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
             return null;
@@ -159,7 +147,6 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
         protected Void doInBackground(Void... voids) {
             MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
             database.customDao().deleteCoursePoint(tempPoint);
-
             return null;
         }
 
@@ -170,6 +157,5 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
             context.startActivity(intent);
         }
     }
-
 
 }

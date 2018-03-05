@@ -2,7 +2,6 @@ package com.hector.csprojectprogramc.Activities;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,10 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
-
 import com.hector.csprojectprogramc.Adapter.HomeScreenRecyclerAdapter;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
@@ -39,23 +35,7 @@ public class HomeScreen extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //new deleteTables().execute();
-
         new getSavedCourses().execute();
-
-        //List<Course> savedCourses = database.customDao().getAllSavedCourses();
-        //ArrayList<Course> savedCourses = new ArrayList<>();
-        //savedCourses.add(new Course("Accounting","Accounting (2120)",
-                //"http://www.aqa.org.uk/subjects/accounting/as-and-a-level/accounting-2120",
-                //"AQA","A Level",
-                //"15 May 2018","Exam for AS and A-level Accounting 1 June 2018 series"));
-
-        /*for(Course course : savedCourses){
-            Log.i("Official Name",course.getOfficial_name());
-        }*/
-
-
-
 
     }
 
@@ -76,28 +56,6 @@ public class HomeScreen extends AppCompatActivity {
     }
 
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        return true;
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     private class deleteTables extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
@@ -107,15 +65,9 @@ public class HomeScreen extends AppCompatActivity {
                 database.customDao().deleteCourse(course);
             }
             List<CoursePoints> points = database.customDao().getAllSavedCoursePoints();
-            for (CoursePoints point:points){
+            for (CoursePoints point:points) {
                 database.customDao().deleteCoursePoint(point);
             }
-
-            //savedCourses = database.customDao().getAllSavedCourses();
-            //haveSubjects = savedCourses.size()==0;
-            //haveSubjects = false;
-
-            //Log.i("haveSubjects",Boolean.toString(haveSubjects) );
             return null;
 
         }

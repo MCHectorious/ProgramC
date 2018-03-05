@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
@@ -14,13 +13,10 @@ import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
 import com.hector.csprojectprogramc.Util.Flashcard;
 import com.hector.csprojectprogramc.Util.StringManipulation;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -34,13 +30,7 @@ public class CramScraper{
     private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
     private Course course;
     int courseID;
-    /*public ArrayList<Flashcard> getFlashcardRelatedTo(String topic) {
 
-        new getRelatedCourses().execute(topic);
-        getFlashcardFromWebsite flashcardFromWebsite = new getFlashcardFromWebsite();
-        flashcardFromWebsite.execute(relatedWebsites.toArray(new String[0]));
-        return output;
-    }*/
 
     public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
         this.context = context;
@@ -53,12 +43,6 @@ public class CramScraper{
         builder.append(course.getColloquial_name());
         GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards();
         getRelatedFlashcards.execute(builder.toString());
-        //ArrayList<Flashcard> cards = getFlashcardRelatedTo(builder.toString());
-        //MultiThreading.waitUntilFinished(getFlashcardsFromWebsite);
-        //for (Flashcard card: output) {
-            //String sentence = FlashcardToSentenceModel.convertToSentence(card);
-            //database.customDao().insertCoursePoint(new CoursePoints(course.getCourse_ID(),card.getFront(),card.getBack(),sentence));
-        //}
     }
 
     private class GetRelatedFlashcards extends AsyncTask<String,Void,Void> {
@@ -72,7 +56,6 @@ public class CramScraper{
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
-
 
         @Override
         protected Void doInBackground(String... strings) {
@@ -100,23 +83,18 @@ public class CramScraper{
                                 }
                             }
                         }
-
                     }
                 } catch (Exception e) {
                     Log.e("Issue with Cram Overall",course.getOfficial_name());
                     Log.e("Error",e.getMessage());
                 }
-
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            //Log.i("Got this far","Found Cram Courses");
-
             getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
         }
     }
@@ -141,23 +119,14 @@ public class CramScraper{
 
             for (String url: strings) {
                 try {
-                    //Log.i("Got this far","Started Cram Background");
-
-                    //Log.i("Cram Website","http://www.cram.com"+url);
-
-
-
                     Document courseWebsite = Jsoup.connect("http://www.cram.com"+url).get();
                     Elements FlashCardSection = courseWebsite.select("table[class=flashCardsListingTable]").select("tr");
                     for (Element e: FlashCardSection){
                         String front = e.select("div[class=front_text card_text]").text();
                         String back = e.select("div[class=back_text card_text]").text();
-                        //output.add(new Flashcard(front,back));
                         String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
-                        //Log.i(front,back);
                         foundCard = true;
                         database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));
-
                     }
                 } catch (Exception e) {
                     Log.e("Issue with Cram",course.getOfficial_name());
@@ -175,12 +144,8 @@ public class CramScraper{
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
             Log.i("Got this far","Finished Cram");
-            //Log.i("Need to","Implement going back to home screen");
-
             Intent intent = new Intent(context, HomeScreen.class);
             context.startActivity(intent);
-
-
         }
     }
 }

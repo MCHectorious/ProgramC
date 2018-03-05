@@ -9,7 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
  * Created by Hector - New on 24/12/2017.
  */
 
-//TODO:Include indices
+
 @Entity(tableName = "course_points",
         foreignKeys = @ForeignKey(
                 entity = Course.class,
@@ -35,13 +35,6 @@ public class CoursePoints {
         this.sentence = sentence;
     }
 
-    /*public CoursePoints(int point_ID, int course_ID_foreign, String flashcard_front,  String flashcard_back, String sentence){
-        this.point_ID = point_ID;
-        this.course_ID_foreign = course_ID_foreign;
-        this.flashcard_front = flashcard_front;
-        this.flashcard_back = flashcard_back;
-        this.sentence = sentence;
-    }*/
 
     public int getPoint_ID() {
         return point_ID;

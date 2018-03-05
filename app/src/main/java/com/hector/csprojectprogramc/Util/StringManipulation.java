@@ -16,7 +16,7 @@ public class StringManipulation {
         return builder.toString();
     }
 
-    public static String convertOfficalToColloquial(String text){
+    public static String convertOfficialToColloquial(String text){
         String[] prefixesToRemove = {"AS and A-level","A-level ", "GCSE", "GCSE ","AS","AS "};
         String[] phrasesToRemove = {"New ", "New"};
         for (String s:prefixesToRemove){
@@ -41,7 +41,6 @@ public class StringManipulation {
 
             }
         }
-
         return text;
     }
 

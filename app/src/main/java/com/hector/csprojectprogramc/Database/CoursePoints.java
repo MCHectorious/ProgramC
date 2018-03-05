@@ -5,11 +5,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-/**
- * Created by Hector - New on 24/12/2017.
- */
-
-
 @Entity(tableName = "course_points",
         foreignKeys = @ForeignKey(
                 entity = Course.class,

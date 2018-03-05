@@ -2,10 +2,6 @@ package com.hector.csprojectprogramc.Util;
 
 import android.graphics.Color;
 
-/**
- * Created by Hector - New on 23/12/2017.
- */
-
 public class CustomColourCreator {
 
     public static int getColourFromString(String string){
@@ -18,8 +14,7 @@ public class CustomColourCreator {
             green = green*103 + 3*ascii;
             blue = blue*23 + ascii;
         }
-        int color = Color.argb(255,249 - (red % 234),249 - (green % 233),249 - (blue % 226));
-        return color;
+        return Color.argb(255,249 - (red % 234),249 - (green % 233),249 - (blue % 226));
     }
 
 }

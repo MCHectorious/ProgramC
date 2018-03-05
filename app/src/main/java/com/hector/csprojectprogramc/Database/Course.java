@@ -3,10 +3,6 @@ package com.hector.csprojectprogramc.Database;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-/**
- * Created by Hector - New on 24/12/2017.
- */
-
 @Entity(tableName = "courses")
 public class Course {
     @PrimaryKey

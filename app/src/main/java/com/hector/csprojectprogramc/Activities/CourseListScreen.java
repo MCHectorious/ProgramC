@@ -29,8 +29,6 @@ public class CourseListScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list_screen);
-
-
         qualification = getIntent().getStringExtra("Qualification");
         if(qualification.equals("GCSE")){
             divClassForQualification = "panelInner gcse-header";
@@ -38,15 +36,11 @@ public class CourseListScreen extends AppCompatActivity {
         if (qualification.equals("AS and A-Level")){
             divClassForQualification = "panelInner as_and_a-level-header";
         }
-
         new getCourses().execute();
-
     }
 
-
-
     private class getCourses extends AsyncTask<Void,Void,Void>{
-        ProgressDialog progressDialog;
+        private ProgressDialog progressDialog;
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -60,38 +54,27 @@ public class CourseListScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try{
-
                 Document document = Jsoup.connect("http://www.aqa.org.uk/qualifications").timeout(1000000).get();
                 Elements links = document.select("div[class="+ divClassForQualification +"]").select("a[href]");
                 for(Element element: links){
-                    Log.i("Subject",element.text());
                     courseNames.add(element.text());
                     courseWebsites.add(element.attr("href"));
-
                 }
-
-
             }catch (IOException exception){
                 Log.e("Error","A IOException occurred");
             }
             return null;
-
         }
 
         @Override
         protected void onPostExecute(Void result){
-
             progressDialog.dismiss();
-
             final RecyclerView recyclerView =  findViewById(R.id.courseListScreenRecyclerView);
             recyclerView.setHasFixedSize(true);
-
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CourseListScreen.this);
             recyclerView.setLayoutManager(linearLayoutManager);
             CourseListAdapter courseListAdapter = new CourseListAdapter(courseNames, courseWebsites, CourseListScreen.this, getApplicationContext(), qualification);
             recyclerView.setAdapter(courseListAdapter);
-
         }
     }
-
 }

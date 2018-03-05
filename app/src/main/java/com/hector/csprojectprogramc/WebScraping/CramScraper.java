@@ -11,7 +11,6 @@ import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
 import com.hector.csprojectprogramc.Database.MyDatabase;
 import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
-import com.hector.csprojectprogramc.Util.Flashcard;
 import com.hector.csprojectprogramc.Util.StringManipulation;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,17 +18,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
-/**
- * Created by Hector - New on 23/12/2017.
- */
-
 public class CramScraper{
     private Context context, appContext;
     private ArrayList<String> relatedWebsites = new ArrayList<>();
-    private ArrayList<Flashcard> output = new ArrayList<>();
     private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
     private Course course;
-    int courseID;
+    private int courseID;
 
 
     public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){

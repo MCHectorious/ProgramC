@@ -20,12 +20,6 @@ public interface CustomDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCoursePoint(CoursePoints point);
 
-    @Update
-    void updateCourse(Course course);
-
-    @Update
-    void updateCoursePoint(CoursePoints coursePoints);
-
     @Query("SELECT * FROM courses")
     List<Course> getAllSavedCourses();
 
@@ -33,8 +27,8 @@ public interface CustomDao {
     @Query("SELECT * FROM course_points")
     List<CoursePoints> getAllSavedCoursePoints();
 
-    @Query("SELECT * FROM courses WHERE course_ID = :id")
-    Course getInformationFromCourse(int id);
+    //@Query("SELECT * FROM courses WHERE course_ID = :id")
+    //Course getInformationFromCourse(int id);
 
     @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
     List<CoursePoints> getPointsForCourse(int id);

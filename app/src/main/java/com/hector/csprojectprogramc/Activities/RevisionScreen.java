@@ -24,21 +24,21 @@ import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
-    CommonWords check;
+    private CommonWords check;
 
-    boolean includeQAQuestions, includeGapQuestions;
-    Random random = new Random();
-    List<CoursePoints> points;
-    String prompt, correctAnswer;
-    TextView promptView;
-    EditText answerView;
-    int CourseID;
+    private boolean includeQAQuestions, includeGapQuestions;
+    private Random random = new Random();
+    private List<CoursePoints> points;
+    private String prompt, correctAnswer;
+    private TextView promptView;
+    private EditText answerView;
+    private int CourseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revision_screen);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        //Toolbar toolbar =  findViewById(R.id.toolbar);
 
         check = new CommonWords();
 
@@ -46,12 +46,12 @@ public class RevisionScreen extends AppCompatActivity {
         answerView =  findViewById(R.id.answerText);
 
         Bundle bundle = getIntent().getExtras();
-        CourseID = bundle.getInt("course ID");
+        CourseID = bundle.getInt("course ID",0);
 
         new getPoints().execute();
     }
 
-    public void generateQuestion(){
+    private void generateQuestion(){
         if (includeGapQuestions&&includeQAQuestions){
             if(random.nextBoolean()){
                 generateGapQuestion();
@@ -67,7 +67,7 @@ public class RevisionScreen extends AppCompatActivity {
 
     }
 
-    public void generateGapQuestion(){
+    private void generateGapQuestion(){
         CoursePoints coursePoint = points.get(random.nextInt(points.size()));
         String sentence = coursePoint.getSentence();
         String[] words = sentence.split(" ");
@@ -92,14 +92,14 @@ public class RevisionScreen extends AppCompatActivity {
         }
     }
 
-    public void generateQAQuestion(){
+    private void generateQAQuestion(){
         CoursePoints coursePoint = points.get(random.nextInt(points.size()));
         prompt = coursePoint.getFlashcard_front();
         correctAnswer = coursePoint.getFlashcard_back();
     }
 
     private class getPoints extends AsyncTask<Void,Void,Void>{
-        ProgressDialog progressDialog;
+        private ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute(){
@@ -188,15 +188,16 @@ public class RevisionScreen extends AppCompatActivity {
                 }
             };
 
-            ImageView QuestionAnswerImage = findViewById(R.id.QuestionAnswerIcon);
-            QuestionAnswerImage.setOnClickListener(QuestionAnswerOnClick);
-            TextView QuestionAnswerText = findViewById(R.id.QuestionAnswerOption);
-            QuestionAnswerText.setOnClickListener(QuestionAnswerOnClick);
+            //ImageView QuestionAnswerImage = findViewById(R.id.QuestionAnswerIcon);
+            QuestionAnswerIcon.setOnClickListener(QuestionAnswerOnClick);
+            //TextView QuestionAnswerText = findViewById(R.id.QuestionAnswerOption);
+            QuestionAnswerOption.setOnClickListener(QuestionAnswerOnClick);
 
-            ImageView GapImage = findViewById(R.id.FillInTheGapIcon);
-            GapImage.setOnClickListener(GapOnClick);
-            TextView GapText = findViewById(R.id.FillInTheGapOption);
-            GapText.setOnClickListener(GapOnClick);
+
+            //ImageView GapImage = findViewById(R.id.FillInTheGapIcon);
+            GapIcon.setOnClickListener(GapOnClick);
+            //TextView GapText = findViewById(R.id.FillInTheGapOption);
+            GapOption.setOnClickListener(GapOnClick);
 
             generateQuestion();
         }

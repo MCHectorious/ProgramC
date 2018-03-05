@@ -2,11 +2,6 @@ package com.hector.csprojectprogramc.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
-/**
- * Created by Hector - New on 03/02/2018.
- */
 
 public class CommonWords {
 

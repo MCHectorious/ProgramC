@@ -20,14 +20,10 @@ import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-/**
- * Created by Hector - New on 25/12/2017.
- */
-
 public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRecyclerAdapter.ViewHolder> {
 
     private List<Course> dataset;
-    Context context;
+    private Context context;
 
     public HomeScreenRecyclerAdapter(List<Course> courses, Context context){
         dataset = courses;
@@ -38,9 +34,7 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view, dataset, context);
-
-        return viewHolder;
+        return new ViewHolder(view, dataset, context);
 
     }
 
@@ -59,9 +53,9 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView courseNameView, qualificationView, examboardView,  dateView;
-        public ImageView deleteButton;
-        public CardView cardView;
+        private TextView courseNameView, qualificationView, examboardView,  dateView;
+        private ImageView deleteButton;
+        private CardView cardView;
         public Context context;
         public Course course;
 

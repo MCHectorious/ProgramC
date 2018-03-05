@@ -1,9 +1,5 @@
 package com.hector.csprojectprogramc.Util;
 
-/**
- * Created by betteridgeh16 on 25/01/2018.
- */
-
 public class StringDistance {
 
     public static double getNormalisedSimilarity(String string1, String string2){

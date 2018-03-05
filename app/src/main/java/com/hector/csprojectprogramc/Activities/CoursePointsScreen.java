@@ -28,25 +28,22 @@ import java.util.List;
 
 public class CoursePointsScreen extends AppCompatActivity {
 
-    List<CoursePoints> points;
-    int CourseID;
-    RecyclerView editRV;
+    private List<CoursePoints> points;
+    private int CourseID;
+    private RecyclerView editRV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_points);
         editRV = findViewById(R.id.editsRecyclerView);
-
         Bundle bundle = getIntent().getExtras();
         CourseID = bundle.getInt("course ID",0);
-
         new getPoints().execute();
     }
 
     private class getPoints extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -61,7 +58,6 @@ public class CoursePointsScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             MyDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MyDatabase.class, "my-db").build();
             points = database.customDao().getPointsForCourse(CourseID);
-
             return null;
         }
 
@@ -83,7 +79,7 @@ public class CoursePointsScreen extends AppCompatActivity {
                 final RecyclerView cardsRV = findViewById(R.id.cardsRecyclerView);
                 cardsRV.setVisibility(View.GONE);
                 cardsRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                CardCoursePointsAdapter cardsAdapter = new CardCoursePointsAdapter(points, CoursePointsScreen.this);
+                CardCoursePointsAdapter cardsAdapter = new CardCoursePointsAdapter(points);
                 cardsRV.setAdapter(cardsAdapter);
 
                 editRV.setVisibility(View.GONE);
@@ -167,14 +163,12 @@ public class CoursePointsScreen extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
                 new addCoursePoint().execute(textArray);
-
             }
         });
         if(cancelable){
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                 }
             });
         }
@@ -183,12 +177,10 @@ public class CoursePointsScreen extends AppCompatActivity {
     }
 
     private class addCoursePoint extends AsyncTask<String,Void,Void>{
-
         @Override
         protected Void doInBackground(String... strings) {
             MyDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MyDatabase.class, "my-db").build();
             database.customDao().insertCoursePoint(new CoursePoints(CourseID,strings[0],strings[1],strings[2]));
-
             return null;
         }
 
@@ -199,5 +191,4 @@ public class CoursePointsScreen extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
 }

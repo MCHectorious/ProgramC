@@ -12,13 +12,9 @@ import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-/**
- * Created by Hector - New on 25/12/2017.
- */
-
 public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<SentencesCoursePointsAdapter.ViewHolder> {
 
-    List<CoursePoints> dataset;
+    private List<CoursePoints> dataset;
 
     public SentencesCoursePointsAdapter(List<CoursePoints> points, Context context){
         dataset = points;
@@ -27,8 +23,7 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -49,7 +44,7 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
         TextView sentence;
         CardView cardView;
 
-        public ViewHolder (View v){
+        private ViewHolder (View v){
             super(v);
             sentence = v.findViewById(R.id.sentenceSentence);
             cardView = v.findViewById(R.id.cardViewCoursePointsSentence);

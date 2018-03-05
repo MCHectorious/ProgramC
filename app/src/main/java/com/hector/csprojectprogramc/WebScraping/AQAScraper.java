@@ -14,24 +14,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.List;
 
-/**
- * Created by Hector - New on 24/12/2017.
- */
-
 public class AQAScraper {
 
     private String colloquialName, officialName, website, examBoard, qualification, nextKeyDate, nextKeyDateDetails;
     private Context context,appContext;
-    private GetInformationFromOnlineAndAddCourse getInformation;
     private Course course;
 
     public AQAScraper(String url, Context currentContext, Context appContext, String genericQualification, String officialName){
         context = currentContext;
-        getInformation = new GetInformationFromOnlineAndAddCourse();
-        getInformation.execute(url);
         this.appContext = appContext;
         this.qualification = genericQualification;
         this.officialName = officialName;
+        GetInformationFromOnlineAndAddCourse getInformation = new GetInformationFromOnlineAndAddCourse();
+        getInformation.execute(url);
+
     }
 
 
@@ -77,6 +73,18 @@ public class AQAScraper {
                     qualification,nextKeyDate,
                     nextKeyDateDetails);
             database.customDao().insertCourse(course);
+            //List<Course> newCourses = database.customDao().getAllSavedCourses();
+            //for (Course course1:newCourses){
+              //  Log.i("Course",course1.getOfficial_name());
+            //}
+            //Log.i("New Course ID", Integer.toString(course.getCourse_ID()));
+
+            //Log.i("CourseSize", Integer.toString(courses.size()) );
+
+            /*for(Course course:courses){
+                Log.i("Course ID", Integer.toString(course.getCourse_ID()) );
+            }*/
+
             database.close();
             return null;
         }

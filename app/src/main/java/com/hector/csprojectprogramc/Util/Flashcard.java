@@ -1,9 +1,5 @@
 package com.hector.csprojectprogramc.Util;
 
-/**
- * Created by Hector - New on 24/12/2017.
- */
-
 public class Flashcard {
     private final String front;
     private final String back;

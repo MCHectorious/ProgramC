@@ -2,10 +2,6 @@ package com.hector.csprojectprogramc.Util;
 
 import android.util.Log;
 
-/**
- * Created by Hector - New on 23/12/2017.
- */
-
 public class StringManipulation {
 
     public static String convertSpacesToPluses(String string){
@@ -32,7 +28,7 @@ public class StringManipulation {
         }
 
         if(text.contains("(")){
-            if(text.substring(text.lastIndexOf('(')+1,text.lastIndexOf(')')-1).matches("(Draft )*(0|1|2|3|4|5|6|7|8|9| )+")){
+            if(text.substring(text.lastIndexOf('(')+1,text.lastIndexOf(')')-1).matches("(Draft )*([0123456789])+")){
                 try{
                     text = text.substring(0,text.lastIndexOf('(')-1).concat(text.substring(text.lastIndexOf(')')+1));
                 }catch (Exception e){

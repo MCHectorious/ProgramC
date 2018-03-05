@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder>{
 
     private static ArrayList<String> courseNames, courseWebsites;
-    private static Context context, appContext;
-    private static String qualification;
+    private Context context, appContext;
+    private String qualification;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textView;
-        public CardView cardView;
-        public ViewHolder(View view){
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        private TextView textView;
+        private CardView cardView;
+        private ViewHolder(View view){
             super(view);
             textView = view.findViewById(R.id.courseNameInList);
             cardView = view.findViewById(R.id.courseListCard);
@@ -51,8 +51,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list_card,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override

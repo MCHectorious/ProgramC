@@ -3,13 +3,13 @@ package com.hector.csprojectprogramc.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CommonWords {
+public class CommonWordsChecker {
 
     private ArrayList<String> words = new ArrayList<>();
     private int maxStringLength = 0;
     private int wordsSize;
 
-    public CommonWords(){
+    public CommonWordsChecker(){
         words.add("to");
         words.add("of");
         words.add("in");

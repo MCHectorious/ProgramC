@@ -19,7 +19,7 @@ public class CourseScreen extends AppCompatActivity {
         final Bundle bundle = getIntent().getExtras();
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
-        toolbar.setTitle(bundle.getString("Colloqial Name"));
+        toolbar.setTitle(bundle.getString("Colloquial Name"));
         setSupportActionBar(toolbar);
 
         TextView qualificationTV =  findViewById(R.id.qualificationSpecificNameInCourse);

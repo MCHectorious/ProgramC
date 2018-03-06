@@ -8,23 +8,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
+import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Util.CommonWords;
+import com.hector.csprojectprogramc.Util.CommonWordsChecker;
 import com.hector.csprojectprogramc.Util.StringDistance;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
-    private CommonWords check;
+    private CommonWordsChecker check;
 
     private boolean includeQAQuestions, includeGapQuestions;
     private Random random = new Random();
@@ -40,7 +40,7 @@ public class RevisionScreen extends AppCompatActivity {
         setContentView(R.layout.activity_revision_screen);
         //Toolbar toolbar =  findViewById(R.id.toolbar);
 
-        check = new CommonWords();
+        check = new CommonWordsChecker();
 
         promptView =  findViewById(R.id.questionText);
         answerView =  findViewById(R.id.answerText);
@@ -113,7 +113,7 @@ public class RevisionScreen extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MyDatabase database = Room.databaseBuilder(RevisionScreen.this, MyDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, "my-db").build();
             points = database.customDao().getPointsForCourse(CourseID);
 
             return null;
@@ -136,16 +136,17 @@ public class RevisionScreen extends AppCompatActivity {
                     double similarity = 100*StringDistance.getNormalisedSimilarity(answerView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
 
                     if(similarity>90){
-                        builder.setTitle("Well Done - "+ String.format("%.2f",similarity)  + "% Similar!");
+                        builder.setTitle("Well Done - "+ String.format(Locale.UK,"%.2f",similarity)  + "% Similar!");
 
                     } else if(similarity>50){
-                        builder.setTitle("Almost - "+ String.format("%.2f",similarity) + "% Similar");
+                        builder.setTitle("Almost - "+ String.format(Locale.UK,"%.2f",similarity) + "% Similar");
                     }else{
-                        builder.setTitle("Wrong - Only "+ String.format("%.2f",similarity) + "% Similar");
+                        builder.setTitle("Wrong - Only "+ String.format(Locale.UK,"%.2f",similarity) + "% Similar");
 
                     }
 
-                    textView.setText("The correct answer is: \""+correctAnswer+"\".");
+                    String textViewText = R.string.the_answer_is+correctAnswer+"\".";
+                    textView.setText(textViewText);
 
                     builder.setView(textView);
                     builder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {

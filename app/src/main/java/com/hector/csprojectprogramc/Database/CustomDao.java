@@ -5,12 +5,8 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 import java.util.List;
 
-/**
- * Created by Hector - New on 24/12/2017.
- */
 
 @Dao
 public interface CustomDao {
@@ -26,9 +22,6 @@ public interface CustomDao {
 
     @Query("SELECT * FROM course_points")
     List<CoursePoints> getAllSavedCoursePoints();
-
-    //@Query("SELECT * FROM courses WHERE course_ID = :id")
-    //Course getInformationFromCourse(int id);
 
     @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
     List<CoursePoints> getPointsForCourse(int id);

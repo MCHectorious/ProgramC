@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
+import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
@@ -81,7 +81,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                     layout.addView(sentenceEdit);
 
                     Button button = new Button(context);
-                    button.setText("Delete");
+                    button.setText(R.string.delete);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -121,7 +121,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
         @Override
         protected Void doInBackground(String... strings) {
-            MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
             database.customDao().deleteCoursePoint(tempPoint);
             database.customDao().insertCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
             return null;
@@ -140,7 +140,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
             database.customDao().deleteCoursePoint(tempPoint);
             return null;
         }

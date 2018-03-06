@@ -1,6 +1,5 @@
 package com.hector.csprojectprogramc.Adapter;
 
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,10 +13,10 @@ import java.util.List;
 
 public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<SentencesCoursePointsAdapter.ViewHolder> {
 
-    private List<CoursePoints> dataset;
+    private List<CoursePoints> dataSet;
 
-    public SentencesCoursePointsAdapter(List<CoursePoints> points, Context context){
-        dataset = points;
+    public SentencesCoursePointsAdapter(List<CoursePoints> points){
+        dataSet = points;
     }
 
     @Override
@@ -28,7 +27,7 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String sentence = dataset.get(position).getSentence();
+        String sentence = dataSet.get(position).getSentence();
         holder.sentence.setText(sentence);
         holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(sentence));
 
@@ -36,7 +35,7 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return dataSet.size();
     }
 
 

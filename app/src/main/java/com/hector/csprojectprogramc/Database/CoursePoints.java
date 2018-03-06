@@ -43,31 +43,16 @@ public class CoursePoints {
         return course_ID_foreign;
     }
 
-    public void setCourse_ID_foreign(int course_ID_foreign) {
-        this.course_ID_foreign = course_ID_foreign;
-    }
-
     public String getFlashcard_front() {
         return flashcard_front;
-    }
-
-    public void setFlashcard_front(String flashcard_front) {
-        this.flashcard_front = flashcard_front;
     }
 
     public String getFlashcard_back() {
         return flashcard_back;
     }
 
-    public void setFlashcard_back(String flashcard_back) {
-        this.flashcard_back = flashcard_back;
-    }
-
     public String getSentence() {
         return sentence;
     }
 
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
-    }
 }

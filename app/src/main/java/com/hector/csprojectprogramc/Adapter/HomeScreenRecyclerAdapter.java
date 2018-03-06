@@ -15,7 +15,7 @@ import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
+import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
@@ -99,7 +99,7 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
 
             @Override
             protected Void doInBackground(Void... voids) {
-                MyDatabase database = Room.databaseBuilder(context, MyDatabase.class, "my-db").build();
+                MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
                 database.customDao().deleteCourse(course);
                 List<CoursePoints> points = database.customDao().getPointsForCourse(course.getCourse_ID());
                 for(CoursePoints point:points){

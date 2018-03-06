@@ -22,7 +22,7 @@ import com.hector.csprojectprogramc.Adapter.CardCoursePointsAdapter;
 import com.hector.csprojectprogramc.Adapter.EditCoursePointsAdapter;
 import com.hector.csprojectprogramc.Adapter.SentencesCoursePointsAdapter;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
+import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class CoursePointsScreen extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MyDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MyDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
             points = database.customDao().getPointsForCourse(CourseID);
             return null;
         }
@@ -67,7 +67,8 @@ public class CoursePointsScreen extends AppCompatActivity {
             if(points.size()==0){
                 AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
                 TextView textView = new TextView(CoursePointsScreen.this);
-                textView.setText("You currently have no course points."+ System.getProperty("line.separator") + "To add course points and continue click OKAY");
+                String textViewText = R.string.you_have_no_courses_points+ System.getProperty("line.separator")+R.string.no_courses_points_instructions;
+                textView.setText(textViewText);
                 builder.setView(textView);
                 builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -97,7 +98,7 @@ public class CoursePointsScreen extends AppCompatActivity {
 
                 final RecyclerView sentencesRV = findViewById(R.id.sentencesRecyclerView);
                 sentencesRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points, CoursePointsScreen.this);
+                SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points);
                 sentencesRV.setAdapter(sentencesAdapter);//Starts in Sentence
 
                 BottomNavigationView navigation =  findViewById(R.id.navigation);
@@ -130,8 +131,8 @@ public class CoursePointsScreen extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
                 TextView textView = new TextView(CoursePointsScreen.this);
-                textView.setText("These sentences may be machine generated and thus can be inaccurate."+ System.getProperty("line.separator")  +
-                        "You can edit these sentences in the Edit Tab (as well as making further edits such as adding your own Course Points).");
+                String textViewText = R.string.machine_generated_sentences_warning+ System.getProperty("line.separator")+R.string.edit_tab_instructions;
+                textView.setText(textViewText);
                 builder.setView(textView);
                 builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -179,7 +180,7 @@ public class CoursePointsScreen extends AppCompatActivity {
     private class addCoursePoint extends AsyncTask<String,Void,Void>{
         @Override
         protected Void doInBackground(String... strings) {
-            MyDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MyDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
             database.customDao().insertCoursePoint(new CoursePoints(CourseID,strings[0],strings[1],strings[2]));
             return null;
         }

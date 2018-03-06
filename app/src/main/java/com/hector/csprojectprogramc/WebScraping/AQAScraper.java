@@ -6,8 +6,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.MyDatabase;
-import com.hector.csprojectprogramc.Util.StringManipulation;
+import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.Util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,7 +50,7 @@ public class AQAScraper {
                 try {
                     Document document = Jsoup.connect(string).timeout(100000).get();
                     Elements codesAndReferences = document.select("table[class=tableCodes]");
-                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): StringManipulation.convertOfficialToColloquial(officialName);
+                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): StringUtils.convertOfficialToColloquial(officialName);
                     if(codesAndReferences.select("tr").size()>0){
                         qualification = codesAndReferences.select("tr").get(0).select("td").text();
                     }
@@ -65,7 +65,7 @@ public class AQAScraper {
                     Log.e("Error",e.getMessage());
                 }
             }
-            MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
             List<Course> courses = database.customDao().getAllSavedCourses();
 
             course = new Course(courses.size()+1,colloquialName,

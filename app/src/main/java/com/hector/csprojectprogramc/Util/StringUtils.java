@@ -2,7 +2,7 @@ package com.hector.csprojectprogramc.Util;
 
 import android.util.Log;
 
-public class StringManipulation {
+public class StringUtils {
 
     public static String convertSpacesToPluses(String string){
         StringBuilder builder = new StringBuilder();

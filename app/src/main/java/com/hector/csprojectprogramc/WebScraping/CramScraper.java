@@ -9,9 +9,9 @@ import android.util.Log;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
-import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
-import com.hector.csprojectprogramc.Util.StringManipulation;
+import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.Util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -57,7 +57,7 @@ public class CramScraper{
 
                 StringBuilder builder = new StringBuilder();
                 builder.append("http://www.cram.com/search?query=");
-                builder.append(StringManipulation.convertSpacesToPluses(string));
+                builder.append(StringUtils.convertSpacesToPluses(string));
                 builder.append("&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any");
 
                 String url = builder.toString();
@@ -107,7 +107,7 @@ public class CramScraper{
 
         @Override
         protected Void doInBackground(String... strings) {
-            MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
 
             boolean foundCard = false;
 

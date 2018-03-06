@@ -7,9 +7,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoints;
-import com.hector.csprojectprogramc.Database.MyDatabase;
-import com.hector.csprojectprogramc.MLModel.FlashcardToSentenceModel;
-import com.hector.csprojectprogramc.Util.StringManipulation;
+import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.Util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,7 +53,7 @@ public class MemRiseScraper{
             for ( String string: strings) {
                 StringBuilder builder = new StringBuilder();
                 builder.append("https://www.memrise.com/courses/english/?q=");
-                builder.append(StringManipulation.convertSpacesToPluses(string));
+                builder.append(StringUtils.convertSpacesToPluses(string));
                 String url = builder.toString();
                 try {
                     Document document = Jsoup.connect(url).get();
@@ -106,7 +106,7 @@ public class MemRiseScraper{
 
         @Override
         protected Void doInBackground(String... strings) {
-            MyDatabase database = Room.databaseBuilder(appContext,MyDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
             boolean foundCard = false;
 
             for (String url: strings) {

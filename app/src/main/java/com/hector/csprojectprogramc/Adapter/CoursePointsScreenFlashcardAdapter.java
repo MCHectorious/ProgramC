@@ -6,16 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePointsAdapter.ViewHolder> {
+public class CoursePointsScreenFlashcardAdapter extends RecyclerView.Adapter<CoursePointsScreenFlashcardAdapter.ViewHolder> {
 
-    private List<CoursePoints> dataSet;
+    private List<CoursePoint> dataSet;
 
-    public CardCoursePointsAdapter(List<CoursePoints> points){
+    public CoursePointsScreenFlashcardAdapter(List<CoursePoint> points){
         dataSet = points;
     }
 
@@ -28,7 +28,7 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.cardSide.setText(dataSet.get(position).getFlashcard_front());
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(dataSet.get(position).getSentence()));
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataSet.get(position).getSentence()));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CardCoursePointsAdapter extends RecyclerView.Adapter<CardCoursePoin
         CardView cardView;
         boolean showFront = true;
 
-        private ViewHolder (View v, final List<CoursePoints> dataset){
+        private ViewHolder (View v, final List<CoursePoint> dataset){
             super(v);
             cardSide = v.findViewById(R.id.cardSide);
             cardView = v.findViewById(R.id.cardViewCoursePointsFlashcard);

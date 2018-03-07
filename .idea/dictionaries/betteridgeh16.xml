@@ -2,6 +2,7 @@
   <dictionary name="betteridgeh16">
     <words>
       <w>gcse</w>
+      <w>levenshtein</w>
     </words>
   </dictionary>
 </component>

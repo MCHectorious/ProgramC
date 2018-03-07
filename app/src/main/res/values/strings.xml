@@ -9,7 +9,7 @@
     <string name="title_activity_course_points">Course Points</string>
     <string name="title_activity_revision_screen">Revision</string>
     <string name="you_have_no_courses_points">You currently have no courses points</string>
-    <string name="no_courses_points_instructions">To add course points and continue click OKAY</string>
+    <string name="no_courses_points_instructions">To add course points and continue click Continue</string>
     <string name="machine_generated_sentences_warning">These sentences may be machine generated and thus can be inaccurate.</string>
     <string name="edit_tab_instructions">You can edit these sentences in the Edit Tab (as well as making further edits such as adding your own Course Points).</string>
     <string name="you_have_no_courses">You currently have no courses</string>

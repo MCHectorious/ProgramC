@@ -81,9 +81,6 @@ public class CommonWordsChecker {
         words.add("its");
         words.add("because");
 
-
-
-
         Collections.sort(words);
 
         for (String string: words) {
@@ -93,7 +90,7 @@ public class CommonWordsChecker {
 
     }
 
-    public boolean isACommonWord(String input){
+    public boolean checkIfCommonWord(String input){
         String wordToTest = input.toLowerCase();
 
         if (wordToTest.length()<maxStringLength){

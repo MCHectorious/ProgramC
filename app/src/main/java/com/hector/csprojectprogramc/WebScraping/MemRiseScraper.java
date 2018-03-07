@@ -6,10 +6,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
-import com.hector.csprojectprogramc.Util.StringUtils;
+import com.hector.csprojectprogramc.Util.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class MemRiseScraper{
     private Context context,appContext;
     private ArrayList<String> relatedWebsites = new ArrayList<>();
-    private GetFlashcardsFromWebsite getFlashcardsFromWebsite = new GetFlashcardsFromWebsite();
+    private GetFlashcardsFromRelatedMemRiseCourses getFlashcardsFromWebsite = new GetFlashcardsFromRelatedMemRiseCourses();
     private Course course;
     private int courseID;
 
-    public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
+    public void insertCoursePointsToDataBase(Context context, Course course, Context appContext){
         this.context = context;
         this.appContext = appContext;
         this.course = course;
@@ -53,7 +53,7 @@ public class MemRiseScraper{
             for ( String string: strings) {
                 StringBuilder builder = new StringBuilder();
                 builder.append("https://www.memrise.com/courses/english/?q=");
-                builder.append(StringUtils.convertSpacesToPluses(string));
+                builder.append(GeneralStringUtils.convertSpacesToPluses(string));
                 String url = builder.toString();
                 try {
                     Document document = Jsoup.connect(url).get();
@@ -92,7 +92,7 @@ public class MemRiseScraper{
         }
     }
 
-    private class GetFlashcardsFromWebsite extends AsyncTask<String,Void,Void>{
+    private class GetFlashcardsFromRelatedMemRiseCourses extends AsyncTask<String,Void,Void>{
         ProgressDialog progressDialog;
         @Override
         protected void onPreExecute(){
@@ -119,9 +119,9 @@ public class MemRiseScraper{
                         for(Element div:informationSection){
                             String front = div.select("div[class=col_a col text]").select("div[class=text]").first().text();
                             String back = div.select("div[class=col_b col text]").select("div[class=text]").first().text();
-                            String sentence = FlashcardToSentenceModel.convertToSentence(front,back);
+                            String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
                             foundCard = true;
-                            database.customDao().insertCoursePoint(new CoursePoints(courseID,front,back,sentence));//TODO:Change Back
+                            database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));//TODO:Change Back
                         }
 
                     }

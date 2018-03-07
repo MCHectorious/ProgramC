@@ -18,31 +18,31 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Adapter.CardCoursePointsAdapter;
-import com.hector.csprojectprogramc.Adapter.EditCoursePointsAdapter;
-import com.hector.csprojectprogramc.Adapter.SentencesCoursePointsAdapter;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Adapter.CoursePointsScreenFlashcardAdapter;
+import com.hector.csprojectprogramc.Adapter.CoursePointsScreenEditAdapter;
+import com.hector.csprojectprogramc.Adapter.CoursePointsScreenSentencesAdapter;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import java.util.List;
 
 public class CoursePointsScreen extends AppCompatActivity {
 
-    private List<CoursePoints> points;
+    private List<CoursePoint> coursePoints;
     private int CourseID;
-    private RecyclerView editRV;
+    private RecyclerView editPointsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_points);
-        editRV = findViewById(R.id.editsRecyclerView);
+        editPointsRecyclerView = findViewById(R.id.editsRecyclerView);
         Bundle bundle = getIntent().getExtras();
         CourseID = bundle.getInt("course ID",0);
-        new getPoints().execute();
+        new getCoursePointsFromDatabase().execute();
     }
 
-    private class getPoints extends AsyncTask<Void, Void, Void> {
+    private class getCoursePointsFromDatabase extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog;
         @Override
         protected void onPreExecute() {
@@ -57,72 +57,70 @@ public class CoursePointsScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            points = database.customDao().getPointsForCourse(CourseID);
+            coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
-            if(points.size()==0){
-                AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
-                TextView textView = new TextView(CoursePointsScreen.this);
-                String textViewText = R.string.you_have_no_courses_points+ System.getProperty("line.separator")+R.string.no_courses_points_instructions;
-                textView.setText(textViewText);
-                builder.setView(textView);
-                builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            if(coursePoints.size()==0){
+                AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
+                TextView noCoursesWarningTextView = new TextView(CoursePointsScreen.this);
+                String noCoursesWarning = R.string.you_have_no_courses_points+ System.getProperty("line.separator")+R.string.no_courses_points_instructions;
+                noCoursesWarningTextView.setText(noCoursesWarning);
+                noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
+                noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        addCoursePointDialog(false);
+                        showAddCoursePointDialog(false);
                     }
                 });
-                builder.create().show();
+                noCoursesAlertDialogBuilder.create().show();
             }else{
-                final RecyclerView cardsRV = findViewById(R.id.cardsRecyclerView);
-                cardsRV.setVisibility(View.GONE);
-                cardsRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                CardCoursePointsAdapter cardsAdapter = new CardCoursePointsAdapter(points);
-                cardsRV.setAdapter(cardsAdapter);
+                final RecyclerView flashcardsRecyclerView = findViewById(R.id.cardsRecyclerView);
+                flashcardsRecyclerView.setVisibility(View.GONE);
+                flashcardsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
+                flashcardsRecyclerView.setAdapter(new CoursePointsScreenFlashcardAdapter(coursePoints));
 
-                editRV.setVisibility(View.GONE);
-                editRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                EditCoursePointsAdapter editAdapter = new EditCoursePointsAdapter(points, CoursePointsScreen.this);
-                editRV.setAdapter(editAdapter);
-                final FloatingActionButton fab = findViewById(R.id.addCoursePointButton);
-                fab.setOnClickListener(new View.OnClickListener() {
+                editPointsRecyclerView.setVisibility(View.GONE);
+                editPointsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
+                editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this));
+                final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);
+                addCoursePointButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        addCoursePointDialog(true);
+                        showAddCoursePointDialog(true);
                     }
                 });
-                fab.setVisibility(View.GONE);
+                addCoursePointButton.setVisibility(View.GONE);
 
-                final RecyclerView sentencesRV = findViewById(R.id.sentencesRecyclerView);
-                sentencesRV.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                SentencesCoursePointsAdapter sentencesAdapter = new SentencesCoursePointsAdapter(points);
-                sentencesRV.setAdapter(sentencesAdapter);//Starts in Sentence
+                final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView);
+                sentencesRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
+                CoursePointsScreenSentencesAdapter sentencesAdapter = new CoursePointsScreenSentencesAdapter(coursePoints);
+                sentencesRecyclerView.setAdapter(sentencesAdapter);//Starts in Sentence
 
-                BottomNavigationView navigation =  findViewById(R.id.navigation);
-                navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);
+                navigationForCoursePointsPerspective.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.sentenceListNav:
-                                sentencesRV.setVisibility(View.VISIBLE);
-                                cardsRV.setVisibility(View.GONE);
-                                editRV.setVisibility(View.GONE);
-                                fab.setVisibility(View.GONE);
+                                sentencesRecyclerView.setVisibility(View.VISIBLE);
+                                flashcardsRecyclerView.setVisibility(View.GONE);
+                                editPointsRecyclerView.setVisibility(View.GONE);
+                                addCoursePointButton.setVisibility(View.GONE);
                                 return true;
                             case R.id.cardListNav:
-                                sentencesRV.setVisibility(View.GONE);
-                                cardsRV.setVisibility(View.VISIBLE);
-                                editRV.setVisibility(View.GONE);
-                                fab.setVisibility(View.GONE);
+                                sentencesRecyclerView.setVisibility(View.GONE);
+                                flashcardsRecyclerView.setVisibility(View.VISIBLE);
+                                editPointsRecyclerView.setVisibility(View.GONE);
+                                addCoursePointButton.setVisibility(View.GONE);
                                 return true;
                             case R.id.editNav:
-                                sentencesRV.setVisibility(View.GONE);
-                                cardsRV.setVisibility(View.GONE);
-                                editRV.setVisibility(View.VISIBLE);
-                                fab.setVisibility(View.VISIBLE);
+                                sentencesRecyclerView.setVisibility(View.GONE);
+                                flashcardsRecyclerView.setVisibility(View.GONE);
+                                editPointsRecyclerView.setVisibility(View.VISIBLE);
+                                addCoursePointButton.setVisibility(View.VISIBLE);
                                 return true;
                         }
                         return false;
@@ -136,7 +134,7 @@ public class CoursePointsScreen extends AppCompatActivity {
                 builder.setView(textView);
                 builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        addCoursePointDialog(false);
+                        showAddCoursePointDialog(false);
                     }
                 });
                 builder.create().show();
@@ -144,7 +142,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         }
     }
 
-    public void addCoursePointDialog(boolean cancelable){
+    public void showAddCoursePointDialog(boolean cancelable){
         final AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
         builder.setTitle("Add New Course Point");
         LinearLayout layout = new LinearLayout(CoursePointsScreen.this);
@@ -163,7 +161,7 @@ public class CoursePointsScreen extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
-                new addCoursePoint().execute(textArray);
+                new addCoursePointToDatabase().execute(textArray);
             }
         });
         if(cancelable){
@@ -177,11 +175,11 @@ public class CoursePointsScreen extends AppCompatActivity {
         builder.create().show();
     }
 
-    private class addCoursePoint extends AsyncTask<String,Void,Void>{
+    private class addCoursePointToDatabase extends AsyncTask<String,Void,Void>{
         @Override
         protected Void doInBackground(String... strings) {
             MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            database.customDao().insertCoursePoint(new CoursePoints(CourseID,strings[0],strings[1],strings[2]));
+            database.customDao().insertCoursePoint(new CoursePoint(CourseID,strings[0],strings[1],strings[2]));
             return null;
         }
 

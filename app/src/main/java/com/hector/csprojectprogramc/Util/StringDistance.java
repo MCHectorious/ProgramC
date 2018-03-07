@@ -7,10 +7,10 @@ public class StringDistance {
         if(maxLength==0){
             return 1.0;
         }
-        return 1.0 - (getDistance(string1,string2)/maxLength);
+        return 1.0 - (getLevenshteinStringDistance(string1,string2)/maxLength);
     }
 
-    private static double getDistance(String string1, String string2){
+    private static double getLevenshteinStringDistance(String string1, String string2){
         if(string1.length()==string2.length()){
             if(string1.equals(string2)){
                 return 0.0;
@@ -38,7 +38,8 @@ public class StringDistance {
 
             for (int j = 0; j<string2.length();j++){
                 cost = (string1.charAt(i)==string2.charAt(j))? 0:1;
-                newCost[j+1] = min(newCost[j]+1,oldCost[j+1]+1, oldCost[j] +  cost);
+                newCost[j+1] = Math.min(newCost[j]+1,Math.min(oldCost[j+1]+1,oldCost[j] + cost));
+
 
             }
             tempCost = oldCost;
@@ -47,10 +48,6 @@ public class StringDistance {
         }
 
         return oldCost[string2.length()];
-    }
-
-    private static int min(int a, int b, int c){
-        return Math.min(a,Math.min(b,c));
     }
 
 }

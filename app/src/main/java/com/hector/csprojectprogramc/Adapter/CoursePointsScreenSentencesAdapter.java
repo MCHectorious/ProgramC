@@ -6,16 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<SentencesCoursePointsAdapter.ViewHolder> {
+public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<CoursePointsScreenSentencesAdapter.ViewHolder> {
 
-    private List<CoursePoints> dataSet;
+    private List<CoursePoint> dataSet;
 
-    public SentencesCoursePointsAdapter(List<CoursePoints> points){
+    public CoursePointsScreenSentencesAdapter(List<CoursePoint> points){
         dataSet = points;
     }
 
@@ -29,7 +29,7 @@ public class SentencesCoursePointsAdapter extends RecyclerView.Adapter<Sentences
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String sentence = dataSet.get(position).getSentence();
         holder.sentence.setText(sentence);
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(sentence));
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(sentence));
 
     }
 

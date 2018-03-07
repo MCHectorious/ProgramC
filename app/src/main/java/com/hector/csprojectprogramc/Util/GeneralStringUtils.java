@@ -1,8 +1,6 @@
 package com.hector.csprojectprogramc.Util;
 
-import android.util.Log;
-
-public class StringUtils {
+public class GeneralStringUtils {
 
     public static String convertSpacesToPluses(String string){
         StringBuilder builder = new StringBuilder();
@@ -12,7 +10,7 @@ public class StringUtils {
         return builder.toString();
     }
 
-    public static String convertOfficialToColloquial(String text){
+    public static String convertOfficialCoursenameToColloquialCourseName(String text){
         String[] prefixesToRemove = {"AS and A-level","A-level ", "GCSE", "GCSE ","AS","AS "};
         String[] phrasesToRemove = {"New ", "New"};
         for (String s:prefixesToRemove){
@@ -22,7 +20,6 @@ public class StringUtils {
         }
         for (String s:phrasesToRemove){
             if(text.contains(s)){
-                Log.i("Phrase to Remove", "True");
                 text = text.substring(0, text.indexOf(s)) + text.substring(text.indexOf(s)+s.length());
             }
         }

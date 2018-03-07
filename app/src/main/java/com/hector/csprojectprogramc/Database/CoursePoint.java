@@ -13,7 +13,7 @@ import android.arch.persistence.room.PrimaryKey;
                 onDelete = ForeignKey.CASCADE),
         indices = @Index("course_ID_foreign")
         )
-public class CoursePoints {
+public class CoursePoint {
     @PrimaryKey(autoGenerate=true)
     private int point_ID;
 
@@ -23,7 +23,7 @@ public class CoursePoints {
     private String flashcard_back;
     private String sentence;
 
-    public CoursePoints(int course_ID_foreign, String flashcard_front,  String flashcard_back, String sentence){
+    public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){
         this.course_ID_foreign = course_ID_foreign;
         this.flashcard_front = flashcard_front;
         this.flashcard_back = flashcard_back;

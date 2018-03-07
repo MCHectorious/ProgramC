@@ -14,18 +14,18 @@ import android.widget.TextView;
 import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRecyclerAdapter.ViewHolder> {
+public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeScreenCoursesRecyclerAdapter.ViewHolder> {
 
     private List<Course> dataset;
     private Context context;
 
-    public HomeScreenRecyclerAdapter(List<Course> courses, Context context){
+    public HomeScreenCoursesRecyclerAdapter(List<Course> courses, Context context){
         dataset = courses;
         this.context = context;
 
@@ -41,7 +41,7 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.courseNameView.setText(dataset.get(position).getColloquial_name());
-        holder.courseNameView.setBackgroundColor(CustomColourCreator.getColourFromString(dataset.get(position).getOfficial_name()));
+        holder.courseNameView.setBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataset.get(position).getOfficial_name()));
         holder.qualificationView.setText(dataset.get(position).getQualification());
         holder.examboardView.setText(dataset.get(position).getExamBoard());
         holder.dateView.setText(dataset.get(position).getNext_key_date());
@@ -90,19 +90,19 @@ public class HomeScreenRecyclerAdapter extends RecyclerView.Adapter<HomeScreenRe
                 @Override
                 public void onClick(View v) {
                     course = dataset.get(getAdapterPosition());
-                    new deleteCourse().execute();
+                    new deleteCourseFromDatabase().execute();
                 }
             });
         }
 
-        private class deleteCourse extends AsyncTask<Void,Void,Void>{
+        private class deleteCourseFromDatabase extends AsyncTask<Void,Void,Void>{
 
             @Override
             protected Void doInBackground(Void... voids) {
                 MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
                 database.customDao().deleteCourse(course);
-                List<CoursePoints> points = database.customDao().getPointsForCourse(course.getCourse_ID());
-                for(CoursePoints point:points){
+                List<CoursePoint> points = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
+                for(CoursePoint point:points){
                     database.customDao().deleteCoursePoint(point);
                 }
 

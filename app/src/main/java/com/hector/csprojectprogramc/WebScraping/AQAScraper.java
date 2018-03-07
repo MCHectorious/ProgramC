@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.MainDatabase;
-import com.hector.csprojectprogramc.Util.StringUtils;
+import com.hector.csprojectprogramc.Util.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,13 +25,13 @@ public class AQAScraper {
         this.appContext = appContext;
         this.qualification = genericQualification;
         this.officialName = officialName;
-        GetInformationFromOnlineAndAddCourse getInformation = new GetInformationFromOnlineAndAddCourse();
+        GetInformationFromCourseWebsiteAndAddCourseToDatabase getInformation = new GetInformationFromCourseWebsiteAndAddCourseToDatabase();
         getInformation.execute(url);
 
     }
 
 
-    private class GetInformationFromOnlineAndAddCourse extends AsyncTask<String,Void,Void>{
+    private class GetInformationFromCourseWebsiteAndAddCourseToDatabase extends AsyncTask<String,Void,Void>{
         ProgressDialog progressDialog;
         @Override
         protected void onPreExecute(){
@@ -50,7 +50,7 @@ public class AQAScraper {
                 try {
                     Document document = Jsoup.connect(string).timeout(100000).get();
                     Elements codesAndReferences = document.select("table[class=tableCodes]");
-                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): StringUtils.convertOfficialToColloquial(officialName);
+                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): GeneralStringUtils.convertOfficialCoursenameToColloquialCourseName(officialName);
                     if(codesAndReferences.select("tr").size()>0){
                         qualification = codesAndReferences.select("tr").get(0).select("td").text();
                     }
@@ -66,25 +66,13 @@ public class AQAScraper {
                 }
             }
             MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
-            List<Course> courses = database.customDao().getAllSavedCourses();
+            List<Course> courses = database.customDao().getAllCourses();
 
             course = new Course(courses.size()+1,colloquialName,
                     officialName,website,examBoard,
                     qualification,nextKeyDate,
                     nextKeyDateDetails);
             database.customDao().insertCourse(course);
-            //List<Course> newCourses = database.customDao().getAllSavedCourses();
-            //for (Course course1:newCourses){
-              //  Log.i("Course",course1.getOfficial_name());
-            //}
-            //Log.i("New Course ID", Integer.toString(course.getCourse_ID()));
-
-            //Log.i("CourseSize", Integer.toString(courses.size()) );
-
-            /*for(Course course:courses){
-                Log.i("Course ID", Integer.toString(course.getCourse_ID()) );
-            }*/
-
             database.close();
             return null;
         }
@@ -92,7 +80,7 @@ public class AQAScraper {
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            new MemRiseScraper().insertCoursePointsInDataBase(context, course,appContext);
+            new MemRiseScraper().insertCoursePointsToDataBase(context, course,appContext);
         }
     }
 

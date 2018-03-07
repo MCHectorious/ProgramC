@@ -13,7 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CommonWordsChecker;
@@ -28,7 +29,7 @@ public class RevisionScreen extends AppCompatActivity {
 
     private boolean includeQAQuestions, includeGapQuestions;
     private Random random = new Random();
-    private List<CoursePoints> points;
+    private List<CoursePoint> points;
     private String prompt, correctAnswer;
     private TextView promptView;
     private EditText answerView;
@@ -68,12 +69,12 @@ public class RevisionScreen extends AppCompatActivity {
     }
 
     private void generateGapQuestion(){
-        CoursePoints coursePoint = points.get(random.nextInt(points.size()));
+        CoursePoint coursePoint = points.get(random.nextInt(points.size()));
         String sentence = coursePoint.getSentence();
         String[] words = sentence.split(" ");
         int missingWordIndex = random.nextInt(words.length);
         String missingWord = words[missingWordIndex];
-        if (check.isACommonWord(missingWord)){
+        if (check.checkIfCommonWord(missingWord)){
             generateGapQuestion();
         }else {
             StringBuilder builder = new StringBuilder();
@@ -93,7 +94,7 @@ public class RevisionScreen extends AppCompatActivity {
     }
 
     private void generateQAQuestion(){
-        CoursePoints coursePoint = points.get(random.nextInt(points.size()));
+        CoursePoint coursePoint = points.get(random.nextInt(points.size()));
         prompt = coursePoint.getFlashcard_front();
         correctAnswer = coursePoint.getFlashcard_back();
     }
@@ -114,7 +115,7 @@ public class RevisionScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, "my-db").build();
-            points = database.customDao().getPointsForCourse(CourseID);
+            points = database.customDao().getCoursePointsForCourse(CourseID);
 
             return null;
         }
@@ -189,15 +190,10 @@ public class RevisionScreen extends AppCompatActivity {
                 }
             };
 
-            //ImageView QuestionAnswerImage = findViewById(R.id.QuestionAnswerIcon);
             QuestionAnswerIcon.setOnClickListener(QuestionAnswerOnClick);
-            //TextView QuestionAnswerText = findViewById(R.id.QuestionAnswerOption);
             QuestionAnswerOption.setOnClickListener(QuestionAnswerOnClick);
 
-
-            //ImageView GapImage = findViewById(R.id.FillInTheGapIcon);
             GapIcon.setOnClickListener(GapOnClick);
-            //TextView GapText = findViewById(R.id.FillInTheGapOption);
             GapOption.setOnClickListener(GapOnClick);
 
             generateQuestion();

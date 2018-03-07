@@ -16,48 +16,48 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
-import com.hector.csprojectprogramc.Database.CoursePoints;
+import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Util.CustomColourCreator;
 import java.util.List;
 
-public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePointsAdapter.ViewHolder> {
+public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePointsScreenEditAdapter.ViewHolder> {
 
-    private List<CoursePoints> dataset;
+    private List<CoursePoint> dataSet;
     private Context context;
-    private CoursePoints tempPoint;
+    private CoursePoint tempPoint;
 
-    public EditCoursePointsAdapter(List<CoursePoints> points, Context context){
-        dataset = points;
+    public CoursePointsScreenEditAdapter(List<CoursePoint> points, Context context){
+        dataSet = points;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);
-        return new ViewHolder(view,context,dataset);
+        return new ViewHolder(view,context, dataSet);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.cardFront.setText(dataset.get(position).getFlashcard_front());
-        holder.cardBack.setText(dataset.get(position).getFlashcard_back());
-        holder.sentence.setText(dataset.get(position).getSentence());
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(dataset.get(position).getSentence()));
+        holder.cardFront.setText(dataSet.get(position).getFlashcard_front());
+        holder.cardBack.setText(dataSet.get(position).getFlashcard_back());
+        holder.sentence.setText(dataSet.get(position).getSentence());
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataSet.get(position).getSentence()));
 
     }
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return dataSet.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView cardFront, cardBack, sentence;
         CardView cardView;
-        private ViewHolder (View v, final Context context, final List<CoursePoints> dataset){
+        private ViewHolder (View v, final Context context, final List<CoursePoint> dataset){
             super(v);
             sentence = v.findViewById(R.id.sentenceEdit);
             cardFront = v.findViewById(R.id.cardFrontEdit);
@@ -86,7 +86,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                         @Override
                         public void onClick(View v) {
                             tempPoint = dataset.get(getAdapterPosition());
-                            new deleteCoursePoint().execute();
+                            new deleteCoursePointFromDatabase().execute();
                         }
                     });
                     layout.addView(button);
@@ -96,7 +96,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
                         public void onClick(DialogInterface dialog, int which) {
                             String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
                             tempPoint = dataset.get(getAdapterPosition());
-                            new updateCoursePoint().execute(textArray);
+                            new updateCoursePointInDatabase().execute(textArray);
 
                         }
                     });
@@ -117,13 +117,13 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
     }
 
-    private class updateCoursePoint extends AsyncTask<String,Void,Void>{
+    private class updateCoursePointInDatabase extends AsyncTask<String,Void,Void>{
 
         @Override
         protected Void doInBackground(String... strings) {
             MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
             database.customDao().deleteCoursePoint(tempPoint);
-            database.customDao().insertCoursePoint(new CoursePoints(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
+            database.customDao().insertCoursePoint(new CoursePoint(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
             return null;
         }
 
@@ -136,7 +136,7 @@ public class EditCoursePointsAdapter extends RecyclerView.Adapter<EditCoursePoin
 
     }
 
-    private class deleteCoursePoint extends AsyncTask<Void,Void,Void>{
+    private class deleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {

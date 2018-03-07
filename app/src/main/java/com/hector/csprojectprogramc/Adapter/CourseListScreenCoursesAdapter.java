@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 
 
-public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder>{
+public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseListScreenCoursesAdapter.ViewHolder>{
 
     private static ArrayList<String> courseNames, courseWebsites;
     private Context context, appContext;
@@ -39,7 +39,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
 
     }
 
-    public CourseListAdapter(ArrayList<String> cNames, ArrayList<String> cWebsites, Context context, Context appContext, String qualification){
+    public CourseListScreenCoursesAdapter(ArrayList<String> cNames, ArrayList<String> cWebsites, Context context, Context appContext, String qualification){
         courseNames = cNames;
         courseWebsites = cWebsites;
         this.context = context;
@@ -56,7 +56,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText(courseNames.get(position));
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.getColourFromString(courseNames.get(position)));
+        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames.get(position)));
     }
 
     @Override

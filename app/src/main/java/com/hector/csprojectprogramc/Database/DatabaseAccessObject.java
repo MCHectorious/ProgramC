@@ -9,26 +9,26 @@ import java.util.List;
 
 
 @Dao
-public interface CustomDao {
+public interface DatabaseAccessObject {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCourse(Course course);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCoursePoint(CoursePoints point);
+    void insertCoursePoint(CoursePoint point);
 
     @Query("SELECT * FROM courses")
-    List<Course> getAllSavedCourses();
+    List<Course> getAllCourses();
 
 
-    @Query("SELECT * FROM course_points")
-    List<CoursePoints> getAllSavedCoursePoints();
+    @Query("SELECT * FROM CoursePoint")
+    List<CoursePoint> getAllCoursePoints();
 
-    @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
-    List<CoursePoints> getPointsForCourse(int id);
+    @Query("SELECT * FROM CoursePoint WHERE course_ID_foreign = :id")
+    List<CoursePoint> getCoursePointsForCourse(int id);
 
     @Delete
     void deleteCourse(Course course);
 
     @Delete
-    void deleteCoursePoint(CoursePoints points);
+    void deleteCoursePoint(CoursePoint points);
 }

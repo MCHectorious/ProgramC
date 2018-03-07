@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 public class CustomColourCreator {
 
-    public static int getColourFromString(String string){
+    public static int generateCustomColourFromString(String string){
         int red = 137 ;
         int green = 251;
         int blue = 77;

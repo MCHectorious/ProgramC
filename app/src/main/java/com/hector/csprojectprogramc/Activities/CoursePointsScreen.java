@@ -96,8 +96,7 @@ public class CoursePointsScreen extends AppCompatActivity {
 
                 final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView);
                 sentencesRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                CoursePointsScreenSentencesAdapter sentencesAdapter = new CoursePointsScreenSentencesAdapter(coursePoints);
-                sentencesRecyclerView.setAdapter(sentencesAdapter);//Starts in Sentence
+                sentencesRecyclerView.setAdapter(new CoursePointsScreenSentencesAdapter(coursePoints));//Starts in Sentence
 
                 BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);
                 navigationForCoursePointsPerspective.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -127,52 +126,52 @@ public class CoursePointsScreen extends AppCompatActivity {
                     }
                 });
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
-                TextView textView = new TextView(CoursePointsScreen.this);
-                String textViewText = R.string.machine_generated_sentences_warning+ System.getProperty("line.separator")+R.string.edit_tab_instructions;
-                textView.setText(textViewText);
-                builder.setView(textView);
-                builder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
+                TextView machineLearningWarningTextView = new TextView(CoursePointsScreen.this);
+                String machineLearningWarningText = R.string.machine_generated_sentences_warning+ System.getProperty("line.separator")+R.string.edit_tab_instructions;
+                machineLearningWarningTextView.setText(machineLearningWarningText);
+                machineLearningWarningAlertDialogBuilder.setView(machineLearningWarningTextView);
+                machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         showAddCoursePointDialog(false);
                     }
                 });
-                builder.create().show();
+                machineLearningWarningAlertDialogBuilder.create().show();
             }
         }
     }
 
     public void showAddCoursePointDialog(boolean cancelable){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
-        builder.setTitle("Add New Course Point");
-        LinearLayout layout = new LinearLayout(CoursePointsScreen.this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        final EditText cardFrontEdit = new EditText(CoursePointsScreen.this);
-        cardFrontEdit.setHint("Enter the front of the point's flashcard form" );
-        layout.addView(cardFrontEdit);
-        final EditText cardBackEdit = new EditText(CoursePointsScreen.this);
-        cardBackEdit.setHint("Enter the back of the point's flashcard form" );
-        layout.addView(cardBackEdit);
-        final EditText sentenceEdit = new EditText(CoursePointsScreen.this);
-        sentenceEdit.setHint("Enter the point's sentence form" );
-        layout.addView(sentenceEdit);
-        builder.setView(layout);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
+        AddCoursePointAlertDialogBuilder.setTitle("Add New Course Point");
+        LinearLayout layoutForAlertDialog = new LinearLayout(CoursePointsScreen.this);
+        layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
+        final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);
+        cardFrontEditableTextView.setHint("Enter the front of the point's flashcard form" );
+        layoutForAlertDialog.addView(cardFrontEditableTextView);
+        final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);
+        cardBackEditableTextView.setHint("Enter the back of the point's flashcard form" );
+        layoutForAlertDialog.addView(cardBackEditableTextView);
+        final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this);
+        sentenceEditableTextView.setHint("Enter the point's sentence form" );
+        layoutForAlertDialog.addView(sentenceEditableTextView);
+        AddCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
+        AddCoursePointAlertDialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
-                new addCoursePointToDatabase().execute(textArray);
+                String[] coursePointComponents = {cardFrontEditableTextView.getText().toString(),cardBackEditableTextView.getText().toString(),sentenceEditableTextView.getText().toString()};
+                new addCoursePointToDatabase().execute(coursePointComponents);
             }
         });
         if(cancelable){
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            AddCoursePointAlertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
             });
         }
-        builder.setCancelable(cancelable);
-        builder.create().show();
+        AddCoursePointAlertDialogBuilder.setCancelable(cancelable);
+        AddCoursePointAlertDialogBuilder.create().show();
     }
 
     private class addCoursePointToDatabase extends AsyncTask<String,Void,Void>{
@@ -185,9 +184,9 @@ public class CoursePointsScreen extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result){
-            Intent intent = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
-            intent.putExtra("course ID",CourseID);
-            startActivity(intent);
+            Intent refreshScreen = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
+            refreshScreen.putExtra("course ID",CourseID);
+            startActivity(refreshScreen);
         }
     }
 }

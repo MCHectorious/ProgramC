@@ -14,8 +14,8 @@ public class ExamBoardScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_board_screen);
-        CardView cardView =  findViewById(R.id.AQACard);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        CardView AQACardView =  findViewById(R.id.AQACard);
+        AQACardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toQualificationScreen = new Intent(ExamBoardScreen.this, QualificationScreen.class);

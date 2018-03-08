@@ -23,12 +23,12 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
     private String qualification;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView textView;
-        private CardView cardView;
+        private TextView courseNameTextView;
+        private CardView courseCardView;
         private ViewHolder(View view){
             super(view);
-            textView = view.findViewById(R.id.courseNameInList);
-            cardView = view.findViewById(R.id.courseListCard);
+            courseNameTextView = view.findViewById(R.id.courseNameInList);
+            courseCardView = view.findViewById(R.id.courseListCard);
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -39,9 +39,9 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     }
 
-    public CourseListScreenCoursesAdapter(ArrayList<String> cNames, ArrayList<String> cWebsites, Context context, Context appContext, String qualification){
-        courseNames = cNames;
-        courseWebsites = cWebsites;
+    public CourseListScreenCoursesAdapter(ArrayList<String> courseNames, ArrayList<String> courseWebsites, Context context, Context appContext, String qualification){
+        this.courseNames = courseNames;
+        this.courseWebsites = courseWebsites;
         this.context = context;
         this.appContext = appContext;
         this.qualification = qualification;
@@ -49,14 +49,13 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list_card,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder( LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list_card,parent,false) );
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(courseNames.get(position));
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames.get(position)));
+        holder.courseNameTextView.setText(courseNames.get(position));
+        holder.courseCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames.get(position)));
     }
 
     @Override

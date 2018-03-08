@@ -23,8 +23,8 @@ import com.hector.csprojectprogramc.R;
 import java.util.List;
 
 public class HomeScreen extends AppCompatActivity {
-    private boolean haveSubjects;
-    private List<Course> savedCourses;
+    private boolean hasCourses;
+    private List<Course> courses;
 
 
     @Override
@@ -39,20 +39,18 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void showNoCoursesAlertDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        TextView textView = new TextView(this);
-        String textViewText = R.string.you_have_no_courses+ System.getProperty("line.separator")+R.string.no_courses_instructions;
-        textView.setText(textViewText);
-        alertDialogBuilder.setView(textView);
-        alertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(this);
+        TextView noCoursesWarningTextView = new TextView(this);
+        String noCoursesWarningText = R.string.you_have_no_courses+ System.getProperty("line.separator")+R.string.no_courses_instructions;
+        noCoursesWarningTextView.setText(noCoursesWarningText);
+        noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
+        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
                 startActivity(toExamBoardScreen);
             }
         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-
+        noCoursesAlertDialogBuilder.create().show();
     }
 
 
@@ -60,12 +58,12 @@ public class HomeScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, "my-db").build();
-            List<Course> courses = database.customDao().getAllCourses();
-            for (Course course:courses){
+            List<Course> coursesFromDatabase = database.customDao().getAllCourses();
+            for (Course course:coursesFromDatabase){
                 database.customDao().deleteCourse(course);
             }
-            List<CoursePoint> points = database.customDao().getAllCoursePoints();
-            for (CoursePoint point:points) {
+            List<CoursePoint> coursePoints = database.customDao().getAllCoursePoints();//TODO: Check whether any remaining at this point
+            for (CoursePoint point:coursePoints) {
                 database.customDao().deleteCoursePoint(point);
             }
             return null;
@@ -89,8 +87,8 @@ public class HomeScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, "my-db").build();
-            savedCourses = database.customDao().getAllCourses();
-            haveSubjects = savedCourses.size()>0;
+            courses = database.customDao().getAllCourses();
+            hasCourses = courses.size()>0;
             return null;
 
         }
@@ -98,9 +96,9 @@ public class HomeScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
            progressDialog.dismiss();
-            if(haveSubjects){
-                FloatingActionButton fab =  findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
+            if(hasCourses){
+                FloatingActionButton toExamBoardScreenButton =  findViewById(R.id.fab);
+                toExamBoardScreenButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
@@ -108,11 +106,9 @@ public class HomeScreen extends AppCompatActivity {
                     }
                 });
 
-                RecyclerView recyclerView = findViewById(R.id.cardList);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeScreen.this);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                HomeScreenCoursesRecyclerAdapter adapter = new HomeScreenCoursesRecyclerAdapter(savedCourses, HomeScreen.this);
-                recyclerView.setAdapter(adapter);
+                RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
+                CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));
+                CoursesRecyclerView.setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, HomeScreen.this));
             }else{
                 showNoCoursesAlertDialog();
             }

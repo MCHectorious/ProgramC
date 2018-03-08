@@ -13,45 +13,45 @@ import java.util.List;
 
 public class CoursePointsScreenFlashcardAdapter extends RecyclerView.Adapter<CoursePointsScreenFlashcardAdapter.ViewHolder> {
 
-    private List<CoursePoint> dataSet;
+    private List<CoursePoint> coursePoints;
 
     public CoursePointsScreenFlashcardAdapter(List<CoursePoint> points){
-        dataSet = points;
+        coursePoints = points;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_flashcard_card,parent,false);
-        return new ViewHolder(view, dataSet);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_flashcard_card,parent,false);//TODO: think of better name
+        return new ViewHolder(view, coursePoints);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.cardSide.setText(dataSet.get(position).getFlashcard_front());
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataSet.get(position).getSentence()));
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        viewHolder.flashcardFormSideTextView.setText(coursePoints.get(position).getFlashcard_front());
+        viewHolder.flashcardCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(coursePoints.get(position).getSentence()));
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        return coursePoints.size();
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView cardSide;
-        CardView cardView;
+        TextView flashcardFormSideTextView;
+        CardView flashcardCardView;
         boolean showFront = true;
 
         private ViewHolder (View v, final List<CoursePoint> dataset){
             super(v);
-            cardSide = v.findViewById(R.id.cardSide);
-            cardView = v.findViewById(R.id.cardViewCoursePointsFlashcard);
+            flashcardFormSideTextView = v.findViewById(R.id.cardSide);
+            flashcardCardView = v.findViewById(R.id.cardViewCoursePointsFlashcard);
 
-            cardSide.setOnClickListener(new View.OnClickListener() {
+            flashcardFormSideTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showFront = !showFront;
-                    cardSide.setText( (showFront)? dataset.get(getAdapterPosition()).getFlashcard_front() : dataset.get(getAdapterPosition()).getFlashcard_back()  );
+                    flashcardFormSideTextView.setText( (showFront)? dataset.get(getAdapterPosition()).getFlashcard_front() : dataset.get(getAdapterPosition()).getFlashcard_back()  );
                 }
             });
 

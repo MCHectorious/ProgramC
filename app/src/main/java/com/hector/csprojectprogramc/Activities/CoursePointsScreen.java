@@ -29,7 +29,7 @@ import java.util.List;
 public class CoursePointsScreen extends AppCompatActivity {
 
     private List<CoursePoint> coursePoints;
-    private int CourseID;
+    private int courseID;
     private RecyclerView editPointsRecyclerView;
 
     @Override
@@ -38,7 +38,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         setContentView(R.layout.activity_course_points);
         editPointsRecyclerView = findViewById(R.id.editsRecyclerView);
         Bundle bundle = getIntent().getExtras();
-        CourseID = bundle.getInt("course ID",0);
+        courseID = bundle.getInt("course ID",0);
         new getCoursePointsFromDatabase().execute();
     }
 
@@ -57,7 +57,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
+            coursePoints = database.customDao().getCoursePointsForCourse(courseID);
             return null;
         }
 
@@ -84,7 +84,7 @@ public class CoursePointsScreen extends AppCompatActivity {
 
                 editPointsRecyclerView.setVisibility(View.GONE);
                 editPointsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this));
+                editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this, courseID));
                 final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);
                 addCoursePointButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -178,14 +178,14 @@ public class CoursePointsScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
             MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            database.customDao().insertCoursePoint(new CoursePoint(CourseID,strings[0],strings[1],strings[2]));
+            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
             Intent refreshScreen = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
-            refreshScreen.putExtra("course ID",CourseID);
+            refreshScreen.putExtra("course ID", courseID);
             startActivity(refreshScreen);
         }
     }

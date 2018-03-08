@@ -22,57 +22,57 @@ import java.util.List;
 
 public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeScreenCoursesRecyclerAdapter.ViewHolder> {
 
-    private List<Course> dataset;
+    private List<Course> courses;
     private Context context;
 
     public HomeScreenCoursesRecyclerAdapter(List<Course> courses, Context context){
-        dataset = courses;
+        this.courses = courses;
         this.context = context;
 
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
-        return new ViewHolder(view, dataset, context);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);// TODO: think of better name
+        return new ViewHolder(view, courses, context);
 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.courseNameView.setText(dataset.get(position).getColloquial_name());
-        holder.courseNameView.setBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataset.get(position).getOfficial_name()));
-        holder.qualificationView.setText(dataset.get(position).getQualification());
-        holder.examboardView.setText(dataset.get(position).getExamBoard());
-        holder.dateView.setText(dataset.get(position).getNext_key_date());
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        viewHolder.courseNameTextView.setText(courses.get(position).getColloquial_name());
+        viewHolder.courseNameTextView.setBackgroundColor(CustomColourCreator.generateCustomColourFromString(courses.get(position).getOfficial_name()));
+        viewHolder.qualificationTextView.setText(courses.get(position).getQualification());
+        viewHolder.examBoardTextView.setText(courses.get(position).getExamBoard());
+        viewHolder.nextKeyDateTextView.setText(courses.get(position).getNext_key_date());
     }
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return courses.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView courseNameView, qualificationView, examboardView,  dateView;
+        private TextView courseNameTextView, qualificationTextView, examBoardTextView,  nextKeyDateTextView;
         private ImageView deleteButton;
-        private CardView cardView;
+        private CardView courseCardView;
         public Context context;
         public Course course;
 
 
-        public ViewHolder(View cv, final List<Course> dataset, final Context context){
+        public ViewHolder(View cv, final List<Course> courses, final Context context){
             super(cv);
             this.context = context;
 
-            cardView = cv.findViewById(R.id.homeScreenCardView);
-            cardView.setOnClickListener(new View.OnClickListener() {
+            courseCardView = cv.findViewById(R.id.homeScreenCardView);
+            courseCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    course = dataset.get(getAdapterPosition());
+                    course = courses.get(getAdapterPosition());
                     Intent intent = new Intent(context, CourseScreen.class);
                     intent.putExtra("Course ID",course.getCourse_ID() );
                     intent.putExtra("Official Name",course.getOfficial_name() );
-                    intent.putExtra("Colloqial Name",course.getColloquial_name() );
+                    intent.putExtra("Colloquial Name",course.getColloquial_name() );
                     intent.putExtra("Exam Board",course.getExamBoard() );
                     intent.putExtra("Qualification",course.getQualification() );
                     intent.putExtra("Key Date",course.getNext_key_date() );
@@ -80,16 +80,16 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                     context.startActivity(intent);
                 }
             });
-            courseNameView =  cv.findViewById(R.id.courseName);
-            qualificationView =  cv.findViewById(R.id.qualification);
-            examboardView =  cv.findViewById(R.id.examBoard);
-            dateView =  cv.findViewById(R.id.date);
+            courseNameTextView =  cv.findViewById(R.id.courseName);
+            qualificationTextView =  cv.findViewById(R.id.qualification);
+            examBoardTextView =  cv.findViewById(R.id.examBoard);
+            nextKeyDateTextView =  cv.findViewById(R.id.date);
             deleteButton =  cv.findViewById(R.id.deleteCourseButton);
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    course = dataset.get(getAdapterPosition());
+                    course = courses.get(getAdapterPosition());
                     new deleteCourseFromDatabase().execute();
                 }
             });
@@ -101,8 +101,8 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
             protected Void doInBackground(Void... voids) {
                 MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
                 database.customDao().deleteCourse(course);
-                List<CoursePoint> points = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
-                for(CoursePoint point:points){
+                List<CoursePoint> coursePoints = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
+                for(CoursePoint point:coursePoints){
                     database.customDao().deleteCoursePoint(point);
                 }
 
@@ -111,8 +111,8 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
 
             @Override
             protected void onPostExecute(Void result){
-                Intent intent = new Intent(context,HomeScreen.class);
-                context.startActivity(intent);
+                Intent refreshHomeScreen = new Intent(context,HomeScreen.class);
+                context.startActivity(refreshHomeScreen);
             }
         }
 

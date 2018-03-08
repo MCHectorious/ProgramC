@@ -13,40 +13,40 @@ import java.util.List;
 
 public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<CoursePointsScreenSentencesAdapter.ViewHolder> {
 
-    private List<CoursePoint> dataSet;
+    private List<CoursePoint> coursePoints;
 
-    public CoursePointsScreenSentencesAdapter(List<CoursePoint> points){
-        dataSet = points;
+    public CoursePointsScreenSentencesAdapter(List<CoursePoint> coursePoints){
+        this.coursePoints = coursePoints;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);//TODO: think of better name
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        String sentence = dataSet.get(position).getSentence();
-        holder.sentence.setText(sentence);
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(sentence));
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        String sentenceForm = coursePoints.get(position).getSentence();
+        viewHolder.sentenceFormTextView.setText(sentenceForm);
+        viewHolder.sentenceFormCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(sentenceForm));
 
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        return coursePoints.size();
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView sentence;
-        CardView cardView;
+        TextView sentenceFormTextView;
+        CardView sentenceFormCardView;
 
         private ViewHolder (View v){
             super(v);
-            sentence = v.findViewById(R.id.sentenceSentence);
-            cardView = v.findViewById(R.id.cardViewCoursePointsSentence);
+            sentenceFormTextView = v.findViewById(R.id.sentenceSentence);
+            sentenceFormCardView = v.findViewById(R.id.cardViewCoursePointsSentence);
 
         }
     }

@@ -15,8 +15,8 @@ public class QualificationScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qualifications_screen);
 
-        CardView GCSECard = findViewById(R.id.GCSECard);
-        GCSECard.setOnClickListener(new View.OnClickListener() {
+        CardView GCSECardView = findViewById(R.id.GCSECard);
+        GCSECardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toCourseListScreen = new Intent(QualificationScreen.this, CourseListScreen.class);
@@ -25,8 +25,8 @@ public class QualificationScreen extends AppCompatActivity {
             }
         });
 
-        CardView ALevelCard =  findViewById(R.id.ALevelCard);
-        ALevelCard.setOnClickListener(new View.OnClickListener() {
+        CardView ALevelCardView =  findViewById(R.id.ALevelCard);
+        ALevelCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toCourseListScreen = new Intent(QualificationScreen.this, CourseListScreen.class);

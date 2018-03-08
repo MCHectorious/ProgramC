@@ -24,94 +24,97 @@ import java.util.List;
 
 public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePointsScreenEditAdapter.ViewHolder> {
 
-    private List<CoursePoint> dataSet;
+    private List<CoursePoint> coursePoints;
     private Context context;
-    private CoursePoint tempPoint;
+    private CoursePoint temporaryCoursePoint;
+    private int courseID;
 
-    public CoursePointsScreenEditAdapter(List<CoursePoint> points, Context context){
-        dataSet = points;
+    public CoursePointsScreenEditAdapter(List<CoursePoint> coursePoints, Context context, int courseID){
+        this.coursePoints = coursePoints;
         this.context = context;
+        this.courseID = courseID;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);
-        return new ViewHolder(view,context, dataSet);
+        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);//TODO: think of appropriate name
+        return new ViewHolder(view,context, coursePoints);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.cardFront.setText(dataSet.get(position).getFlashcard_front());
-        holder.cardBack.setText(dataSet.get(position).getFlashcard_back());
-        holder.sentence.setText(dataSet.get(position).getSentence());
-        holder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(dataSet.get(position).getSentence()));
-
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        temporaryCoursePoint = coursePoints.get(position);
+        viewHolder.flashcardFormFrontTextView.setText(temporaryCoursePoint.getFlashcard_front());
+        viewHolder.flashcardFormBackTextView.setText(temporaryCoursePoint.getFlashcard_back());
+        viewHolder.sentenceFormTextView.setText(temporaryCoursePoint.getSentence());
+        viewHolder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(temporaryCoursePoint.getSentence()));
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        return coursePoints.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView cardFront, cardBack, sentence;
+        TextView flashcardFormFrontTextView, flashcardFormBackTextView, sentenceFormTextView;
         CardView cardView;
-        private ViewHolder (View v, final Context context, final List<CoursePoint> dataset){
+        private ViewHolder (View v, final Context context, final List<CoursePoint> coursePoints){
             super(v);
-            sentence = v.findViewById(R.id.sentenceEdit);
-            cardFront = v.findViewById(R.id.cardFrontEdit);
-            cardBack = v.findViewById(R.id.cardBackEdit);
+            sentenceFormTextView = v.findViewById(R.id.sentenceEdit);
+            flashcardFormFrontTextView = v.findViewById(R.id.cardFrontEdit);
+            flashcardFormBackTextView = v.findViewById(R.id.cardBackEdit);
             cardView = v.findViewById(R.id.cardViewCoursePointsEdit);
-            View.OnClickListener onClickListener = new View.OnClickListener() {
+            View.OnClickListener showCoursePointAlertDialog = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Edit This Course Point As You Wish");
-                    LinearLayout layout = new LinearLayout(context);
-                    layout.setOrientation(LinearLayout.VERTICAL);
+                    final AlertDialog.Builder editCoursePointAlertDialogBuilder = new AlertDialog.Builder(context);
+                    editCoursePointAlertDialogBuilder.setTitle("Edit This Course Point As You Wish");
+                    LinearLayout layoutForAlertDialog = new LinearLayout(context);
+                    layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
                     final EditText cardFrontEdit = new EditText(context);
-                    cardFrontEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_front() );
-                    layout.addView(cardFrontEdit);
+                    temporaryCoursePoint = coursePoints.get(getAdapterPosition());
+                    cardFrontEdit.setText(temporaryCoursePoint.getFlashcard_front());
+                    layoutForAlertDialog.addView(cardFrontEdit);
                     final EditText cardBackEdit = new EditText(context);
-                    cardBackEdit.setText(dataset.get(getAdapterPosition()).getFlashcard_back() );
-                    layout.addView(cardBackEdit);
+                    cardBackEdit.setText(temporaryCoursePoint.getFlashcard_back() );
+                    layoutForAlertDialog.addView(cardBackEdit);
                     final EditText sentenceEdit = new EditText(context);
-                    sentenceEdit.setText(dataset.get(getAdapterPosition()).getSentence() );
-                    layout.addView(sentenceEdit);
+                    sentenceEdit.setText(temporaryCoursePoint.getSentence() );
+                    layoutForAlertDialog.addView(sentenceEdit);
 
-                    Button button = new Button(context);
-                    button.setText(R.string.delete);
-                    button.setOnClickListener(new View.OnClickListener() {
+                    Button deleteButton = new Button(context);
+                    deleteButton.setText(R.string.delete);
+                    deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            tempPoint = dataset.get(getAdapterPosition());
+                            temporaryCoursePoint = coursePoints.get(getAdapterPosition());
                             new deleteCoursePointFromDatabase().execute();
                         }
                     });
-                    layout.addView(button);
-                    builder.setView(layout);
-                    builder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
+                    layoutForAlertDialog.addView(deleteButton);
+                    editCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
+                    editCoursePointAlertDialogBuilder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String[] textArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
-                            tempPoint = dataset.get(getAdapterPosition());
-                            new updateCoursePointInDatabase().execute(textArray);
+                            String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
+                            temporaryCoursePoint = coursePoints.get(getAdapterPosition());
+                            new updateCoursePointInDatabase().execute(coursePointComponentsArray);
 
                         }
                     });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    editCoursePointAlertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     });
-                    builder.create().show();
+                    editCoursePointAlertDialogBuilder.create().show();
                 }
             };
-            sentence.setOnClickListener(onClickListener);
-            cardFront.setOnClickListener(onClickListener);
-            cardBack.setOnClickListener(onClickListener);
+            sentenceFormTextView.setOnClickListener(showCoursePointAlertDialog);
+            flashcardFormFrontTextView.setOnClickListener(showCoursePointAlertDialog);
+            flashcardFormBackTextView.setOnClickListener(showCoursePointAlertDialog);
         }
 
 
@@ -122,16 +125,16 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         @Override
         protected Void doInBackground(String... strings) {
             MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
-            database.customDao().deleteCoursePoint(tempPoint);
-            database.customDao().insertCoursePoint(new CoursePoint(tempPoint.getCourse_ID_foreign(),strings[0],strings[1],strings[2]));
+            database.customDao().deleteCoursePoint(temporaryCoursePoint);
+            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
-            Intent intent = new Intent(context, CoursePointsScreen.class);
-            intent.putExtra("course ID",tempPoint.getCourse_ID_foreign());
-            context.startActivity(intent);
+            Intent refreshCoursePointsScreen = new Intent(context, CoursePointsScreen.class);
+            refreshCoursePointsScreen.putExtra("course ID", courseID);
+            context.startActivity(refreshCoursePointsScreen);
         }
 
     }
@@ -141,14 +144,14 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
-            database.customDao().deleteCoursePoint(tempPoint);
+            database.customDao().deleteCoursePoint(temporaryCoursePoint);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
             Intent intent = new Intent(context, CoursePointsScreen.class);
-            intent.putExtra("course ID",tempPoint.getCourse_ID_foreign());
+            intent.putExtra("course ID", courseID);
             context.startActivity(intent);
         }
     }

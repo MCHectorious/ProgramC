@@ -25,78 +25,76 @@ import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
-    private CommonWordsChecker check;
+    private CommonWordsChecker commonWordsChecker;
 
     private boolean includeQAQuestions, includeGapQuestions;
     private Random random = new Random();
-    private List<CoursePoint> points;
+    private List<CoursePoint> coursePoints;
     private String prompt, correctAnswer;
-    private TextView promptView;
-    private EditText answerView;
+    private TextView promptTextView;
+    private EditText userAnswerEditableTextView;
     private int CourseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revision_screen);
-        //Toolbar toolbar =  findViewById(R.id.toolbar);
 
-        check = new CommonWordsChecker();
+        commonWordsChecker = new CommonWordsChecker();
 
-        promptView =  findViewById(R.id.questionText);
-        answerView =  findViewById(R.id.answerText);
+        promptTextView =  findViewById(R.id.questionText);
+        userAnswerEditableTextView =  findViewById(R.id.answerText);
 
-        Bundle bundle = getIntent().getExtras();
-        CourseID = bundle.getInt("course ID",0);
+        Bundle IntentsBundle = getIntent().getExtras();
+        CourseID = IntentsBundle.getInt("course ID",0);
 
         new getPoints().execute();
     }
 
     private void generateQuestion(){
+        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePoints.size()));
         if (includeGapQuestions&&includeQAQuestions){
             if(random.nextBoolean()){
-                generateGapQuestion();
+                generateGapQuestion(chosenCoursePoint);
             }else {
-                generateQAQuestion();
+                generateQAQuestion(chosenCoursePoint);
             }
         }else if (includeGapQuestions){
-            generateGapQuestion();
+            generateGapQuestion(chosenCoursePoint);
         }else{
-            generateQAQuestion();
+            generateQAQuestion(chosenCoursePoint);
         }
-        promptView.setText(prompt);
+        promptTextView.setText(prompt);
 
     }
 
-    private void generateGapQuestion(){
-        CoursePoint coursePoint = points.get(random.nextInt(points.size()));
-        String sentence = coursePoint.getSentence();
-        String[] words = sentence.split(" ");
-        int missingWordIndex = random.nextInt(words.length);
-        String missingWord = words[missingWordIndex];
-        if (check.checkIfCommonWord(missingWord)){
-            generateGapQuestion();
+    private void generateGapQuestion(CoursePoint chosenCoursePoint){
+        String sentenceFormOfChosenCoursePoint = chosenCoursePoint.getSentence();
+        String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split(" ");
+        int hiddenWordIndex = random.nextInt(wordsFromSentenceFormOfChosenCoursePoint.length);
+        String hiddenWord = wordsFromSentenceFormOfChosenCoursePoint[hiddenWordIndex];
+        if (commonWordsChecker.checkIfCommonWord(hiddenWord)){
+            generateGapQuestion(coursePoints.get(random.nextInt(coursePoints.size())));
         }else {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < words.length; i++) {
-                if (i == missingWordIndex) {
-                    for (int j = 0; j < missingWord.length(); j++) {
-                        builder.append("_");
+            StringBuilder promptStringBuilder = new StringBuilder();
+            for (int wordIndex = 0; wordIndex < wordsFromSentenceFormOfChosenCoursePoint.length; wordIndex++) {
+                if (wordIndex == hiddenWordIndex) {
+                    for (int hiddenWordCharacterIndex = 0; hiddenWordCharacterIndex < hiddenWord.length(); hiddenWordCharacterIndex++) {
+                        promptStringBuilder.append("_");
                     }
                 } else {
-                    builder.append(words[i]);
+                    promptStringBuilder.append(wordsFromSentenceFormOfChosenCoursePoint[wordIndex]);
                 }
-                builder.append(" ");
+                promptStringBuilder.append(" ");
             }
-            prompt = builder.toString();
-            correctAnswer = missingWord;
+            prompt = promptStringBuilder.toString();
+            correctAnswer = hiddenWord;
         }
     }
 
-    private void generateQAQuestion(){
-        CoursePoint coursePoint = points.get(random.nextInt(points.size()));
-        prompt = coursePoint.getFlashcard_front();
-        correctAnswer = coursePoint.getFlashcard_back();
+    private void generateQAQuestion(CoursePoint chosenCoursePoint){
+        prompt = chosenCoursePoint.getFlashcard_front();
+        correctAnswer = chosenCoursePoint.getFlashcard_back();
     }
 
     private class getPoints extends AsyncTask<Void,Void,Void>{
@@ -115,7 +113,7 @@ public class RevisionScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, "my-db").build();
-            points = database.customDao().getCoursePointsForCourse(CourseID);
+            coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
 
             return null;
         }
@@ -123,40 +121,36 @@ public class RevisionScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-
-            Log.i("Got this far","Finished Revision Screen Background");
-
-            FloatingActionButton fab = findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
+            FloatingActionButton submitAnswerButton = findViewById(R.id.fab);
+            submitAnswerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
+                    AlertDialog.Builder answerReviewAlertDialogBuilder = new AlertDialog.Builder(RevisionScreen.this);
 
-                    TextView textView = new TextView(RevisionScreen.this);
+                    double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(userAnswerEditableTextView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
 
-                    double similarity = 100*StringDistance.getNormalisedSimilarity(answerView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
+                    if(answerAccuracy>90){
+                        answerReviewAlertDialogBuilder.setTitle("Well Done - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + "% Similar!");
 
-                    if(similarity>90){
-                        builder.setTitle("Well Done - "+ String.format(Locale.UK,"%.2f",similarity)  + "% Similar!");
-
-                    } else if(similarity>50){
-                        builder.setTitle("Almost - "+ String.format(Locale.UK,"%.2f",similarity) + "% Similar");
+                    } else if(answerAccuracy>50){
+                        answerReviewAlertDialogBuilder.setTitle("Almost - "+ String.format(Locale.UK,"%.2f",answerAccuracy) + "% Similar");
                     }else{
-                        builder.setTitle("Wrong - Only "+ String.format(Locale.UK,"%.2f",similarity) + "% Similar");
+                        answerReviewAlertDialogBuilder.setTitle("Wrong - Only "+ String.format(Locale.UK,"%.2f",answerAccuracy) + "% Similar");
 
                     }
 
-                    String textViewText = R.string.the_answer_is+correctAnswer+"\".";
-                    textView.setText(textViewText);
+                    TextView answerReviewTextView = new TextView(RevisionScreen.this);
+                    String answerReviewText = R.string.the_answer_is+correctAnswer+"\".";
+                    answerReviewTextView.setText(answerReviewText);
 
-                    builder.setView(textView);
-                    builder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {
+                    answerReviewAlertDialogBuilder.setView(answerReviewTextView);
+                    answerReviewAlertDialogBuilder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             generateQuestion();
                         }
                     });
-                    builder.create().show();
+                    answerReviewAlertDialogBuilder.create().show();
                 }
             });
             includeGapQuestions = true;

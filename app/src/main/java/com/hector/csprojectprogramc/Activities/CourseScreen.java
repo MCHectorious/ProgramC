@@ -22,17 +22,17 @@ public class CourseScreen extends AppCompatActivity {
         toolbar.setTitle(bundle.getString("Colloquial Name"));
         setSupportActionBar(toolbar);
 
-        TextView qualificationTV =  findViewById(R.id.qualificationSpecificNameInCourse);
-        qualificationTV.setText(bundle.getString("Qualification"));
+        TextView qualificationTextView =  findViewById(R.id.qualificationSpecificNameInCourse);
+        qualificationTextView.setText(bundle.getString("Qualification"));
 
-        TextView examBoardTV =  findViewById(R.id.examboardSpecificNameInCourse);
-        examBoardTV.setText(bundle.getString("Exam Board"));
+        TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
+        examBoardTextView.setText(bundle.getString("Exam Board"));
 
-        TextView nextKeyDate =  findViewById(R.id.dateCardInCourse);
-        nextKeyDate.setText(bundle.getString("Key Date"));
+        TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);
+        nextKeyDateTextView.setText(bundle.getString("Key Date"));
 
-        TextView nextKeyDateDetail =  findViewById(R.id.dateSpecificCardInCourse);
-        nextKeyDateDetail.setText(bundle.getString("Key Date Details"));
+        TextView nextKeyDateDetailTextView =  findViewById(R.id.dateSpecificCardInCourse);
+        nextKeyDateDetailTextView.setText(bundle.getString("Key Date Details"));
 
         CardView coursePointsCard =  findViewById(R.id.coursePoints);
         coursePointsCard.setOnClickListener(new View.OnClickListener() {
@@ -44,8 +44,8 @@ public class CourseScreen extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab =  findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton goToRevisionScreenButton =  findViewById(R.id.fab);
+        goToRevisionScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toRevisionScreen = new Intent(CourseScreen.this, RevisionScreen.class);

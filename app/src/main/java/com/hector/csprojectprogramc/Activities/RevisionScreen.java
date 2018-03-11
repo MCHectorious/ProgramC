@@ -140,7 +140,7 @@ public class RevisionScreen extends AppCompatActivity {
                     }
 
                     TextView answerReviewTextView = new TextView(RevisionScreen.this);
-                    String answerReviewText = R.string.the_answer_is+correctAnswer+"\".";
+                    String answerReviewText = getString(R.string.the_answer_is)+correctAnswer+"\".";
                     answerReviewTextView.setText(answerReviewText);
 
                     answerReviewAlertDialogBuilder.setView(answerReviewTextView);

@@ -20,10 +20,10 @@ public interface DatabaseAccessObject {
     List<Course> getAllCourses();
 
 
-    @Query("SELECT * FROM CoursePoint")
+    @Query("SELECT * FROM course_points")
     List<CoursePoint> getAllCoursePoints();
 
-    @Query("SELECT * FROM CoursePoint WHERE course_ID_foreign = :id")
+    @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
     List<CoursePoint> getCoursePointsForCourse(int id);
 
     @Delete

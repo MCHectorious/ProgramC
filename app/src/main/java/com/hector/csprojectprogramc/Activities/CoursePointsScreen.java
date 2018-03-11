@@ -67,7 +67,7 @@ public class CoursePointsScreen extends AppCompatActivity {
             if(coursePoints.size()==0){
                 AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
                 TextView noCoursesWarningTextView = new TextView(CoursePointsScreen.this);
-                String noCoursesWarning = R.string.you_have_no_courses_points+ System.getProperty("line.separator")+R.string.no_courses_points_instructions;
+                String noCoursesWarning = getString(R.string.you_have_no_courses_points)+ System.getProperty("line.separator")+getString(R.string.no_courses_points_instructions);
                 noCoursesWarningTextView.setText(noCoursesWarning);
                 noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
                 noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -128,12 +128,11 @@ public class CoursePointsScreen extends AppCompatActivity {
 
                 AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
                 TextView machineLearningWarningTextView = new TextView(CoursePointsScreen.this);
-                String machineLearningWarningText = R.string.machine_generated_sentences_warning+ System.getProperty("line.separator")+R.string.edit_tab_instructions;
+                String machineLearningWarningText = getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+getString(R.string.edit_tab_instructions);
                 machineLearningWarningTextView.setText(machineLearningWarningText);
                 machineLearningWarningAlertDialogBuilder.setView(machineLearningWarningTextView);
                 machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        showAddCoursePointDialog(false);
                     }
                 });
                 machineLearningWarningAlertDialogBuilder.create().show();

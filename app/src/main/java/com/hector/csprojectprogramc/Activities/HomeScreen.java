@@ -41,7 +41,7 @@ public class HomeScreen extends AppCompatActivity {
     public void showNoCoursesAlertDialog(){
         AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(this);
         TextView noCoursesWarningTextView = new TextView(this);
-        String noCoursesWarningText = R.string.you_have_no_courses+ System.getProperty("line.separator")+R.string.no_courses_instructions;
+        String noCoursesWarningText = getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+getString(R.string.no_courses_instructions);
         noCoursesWarningTextView.setText(noCoursesWarningText);
         noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
         noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {

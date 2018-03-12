@@ -25,66 +25,66 @@ import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import java.util.List;
-
+//TODO: implement string resources
 public class CoursePointsScreen extends AppCompatActivity {
 
-    private List<CoursePoint> coursePoints;
-    private int courseID;
-    private RecyclerView editPointsRecyclerView;
+    private List<CoursePoint> coursePoints;// Stores the course points that will be displayed //TODO: remove as field
+    private int courseID;// Stores the ID of the course in the database
+    private RecyclerView editPointsRecyclerView;// Stores the recycler view which allows the courses points to be edited
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_points);
-        editPointsRecyclerView = findViewById(R.id.editsRecyclerView);
-        Bundle bundle = getIntent().getExtras();
-        courseID = bundle.getInt("course ID",0);
-        new getCoursePointsFromDatabase().execute();
+    protected void onCreate(Bundle savedInstanceState) { // Runs when the screen is created
+        super.onCreate(savedInstanceState);// TODO: research what this does
+        setContentView(R.layout.activity_course_points);// Links the XML file which defines the layout of the screen
+        editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
+        courseID = getIntent().getExtras().getInt("course ID",0); //gets the course ID from the previous screen //TODO: make sure it handles null
+        new getCoursePointsFromDatabase().execute();// Gets the course points for the course and then after displays them
     }
 
-    private class getCoursePointsFromDatabase extends AsyncTask<Void, Void, Void> {
-        ProgressDialog progressDialog;
+    private class getCoursePointsFromDatabase extends AsyncTask<Void, Void, Void> {// gets the course points for the course from the database in a background thread //TODO: make static
+        ProgressDialog progressDialog;// Stores the dialog which shows the user that a background task is running
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(CoursePointsScreen.this);
-            progressDialog.setTitle("Loading Testable Material ");
-            progressDialog.setMessage("This should only take a moment");
-            progressDialog.setIndeterminate(false);
-            progressDialog.show();
+        protected void onPreExecute() {//Shows the user that a long-running background task is running
+            super.onPreExecute();// TODO: research what this does
+            progressDialog = new ProgressDialog(CoursePointsScreen.this);//Idealises the dialog
+            progressDialog.setTitle("Loading Testable Material ");// Explains what this task is doing
+            progressDialog.setMessage("This should only take a moment");// TODO: change and then explain
+            progressDialog.setIndeterminate(false);// The dialog shows an animation which doesn't represent how far throught the task is //TODO: improve description
+            progressDialog.show();//Shows the dialog on the screen
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            coursePoints = database.customDao().getCoursePointsForCourse(courseID);
-            return null;
+            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();//Accesses the database
+            coursePoints = database.customDao().getCoursePointsForCourse(courseID);//Gets the course
+            return null;//In order to fulfil the implementation
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            progressDialog.dismiss();
-            if(coursePoints.size()==0){
-                AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
-                TextView noCoursesWarningTextView = new TextView(CoursePointsScreen.this);
-                String noCoursesWarning = getString(R.string.you_have_no_courses_points)+ System.getProperty("line.separator")+getString(R.string.no_courses_points_instructions);
-                noCoursesWarningTextView.setText(noCoursesWarning);
-                noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
+            progressDialog.dismiss();//hides the alert to the user
+            if(coursePoints.size()==0){// Checks whether there are any course points available
+                AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);//Initialises the builder that will create a warning to the user
+                TextView noCoursesWarningTextView = new TextView(CoursePointsScreen.this); // Initialises the text view which contains the warning to screen //TODO: do i need a text view
+                String noCoursesWarning = getString(R.string.you_have_no_courses_points)+ System.getProperty("line.separator")+getString(R.string.no_courses_points_instructions); //Gets the warning
+                noCoursesWarningTextView.setText(noCoursesWarning); // Sets the text of the text view to the warning
+                noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView); // adds the text view to the alert dialog
                 noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        showAddCoursePointDialog(false);
+                    public void onClick(DialogInterface dialog, int id) { //Adds an action button which the user can be pressed to add a course point
+                        showAddCoursePointDialog(false);//Shows a dialog which forces the user to add a course point
                     }
                 });
-                noCoursesAlertDialogBuilder.create().show();
+                noCoursesAlertDialogBuilder.create().show();// Shows the alert dialog
             }else{
-                final RecyclerView flashcardsRecyclerView = findViewById(R.id.cardsRecyclerView);
-                flashcardsRecyclerView.setVisibility(View.GONE);
-                flashcardsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                flashcardsRecyclerView.setAdapter(new CoursePointsScreenFlashcardAdapter(coursePoints));
+                final RecyclerView flashcardsRecyclerView = findViewById(R.id.cardsRecyclerView);// Initialises recycler view which contains the course points in their flashcard form
+                flashcardsRecyclerView.setVisibility(View.GONE);//Hides the recycler view with shows the flashcard form of the course points at the start
+                flashcardsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this)); // Shows the course points in a vertical list
+                flashcardsRecyclerView.setAdapter(new CoursePointsScreenFlashcardAdapter(coursePoints));//TODO: add description
 
-                editPointsRecyclerView.setVisibility(View.GONE);
-                editPointsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this, courseID));
+                editPointsRecyclerView.setVisibility(View.GONE);// Hides the recycler view with shows course points and allows them to be edited
+                editPointsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this)); // Shows the course points in a vertical list
+                editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this, courseID)); //TODO: add description
+
                 final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);
                 addCoursePointButton.setOnClickListener(new View.OnClickListener() {
                     @Override

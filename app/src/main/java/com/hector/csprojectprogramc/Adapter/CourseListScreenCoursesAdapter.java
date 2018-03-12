@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Util.CustomColourCreator;
+import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
 import com.hector.csprojectprogramc.WebScraping.AQAScraper;
 
 

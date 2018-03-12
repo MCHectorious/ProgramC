@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Util.CustomColourCreator;
+import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
 import java.util.List;
 
 public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<CoursePointsScreenSentencesAdapter.ViewHolder> {

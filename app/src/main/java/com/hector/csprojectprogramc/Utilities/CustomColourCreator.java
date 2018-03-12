@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Util;
+package com.hector.csprojectprogramc.Utilities;
 
 import android.graphics.Color;
 

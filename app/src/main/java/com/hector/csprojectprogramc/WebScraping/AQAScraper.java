@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.MainDatabase;
-import com.hector.csprojectprogramc.Util.GeneralStringUtils;
+import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

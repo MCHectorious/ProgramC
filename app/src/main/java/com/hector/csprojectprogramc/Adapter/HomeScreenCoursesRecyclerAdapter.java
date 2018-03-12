@@ -17,7 +17,7 @@ import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Util.CustomColourCreator;
+import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
 import java.util.List;
 
 public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeScreenCoursesRecyclerAdapter.ViewHolder> {

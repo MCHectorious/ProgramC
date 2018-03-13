@@ -35,7 +35,7 @@ public class CoursePointsScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) { // Runs when the screen is created
         super.onCreate(savedInstanceState);// TODO: research what this does
-        setContentView(R.layout.activity_course_points);// Links the XML file which defines the layout of the screen
+        setContentView(R.layout.course_points_screen);// Links the XML file which defines the layout of the screen
         editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
         courseID = getIntent().getExtras().getInt("course ID",0); //gets the course ID from the previous screen //TODO: make sure it handles null
         new getCoursePointsFromDatabase().execute();// Gets the course points for the course and then after displays them

@@ -5,14 +5,14 @@
 
     <item
         android:id="@+id/sentenceListNav"
-        android:icon="@drawable/sentence_list"
+        android:icon="@drawable/sentence_list_icon"
         android:title="Sentences"
 
         />
 
     <item
     android:id="@+id/cardListNav"
-    android:icon="@drawable/card_list"
+    android:icon="@drawable/flashcard_list_icon"
     android:title="Cards" />
 
     <item

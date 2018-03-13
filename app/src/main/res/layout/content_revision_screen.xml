@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    app:srcCompat="@drawable/question_answer_icon_accent" />
+                    app:srcCompat="@drawable/question_answer_icon_selected" />
 
                 <TextView
                     android:id="@+id/QuestionAnswerOption"
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    app:srcCompat="@drawable/fill_in_the_gap_icon_accent" />
+                    app:srcCompat="@drawable/fill_in_the_gap_icon_selected" />
 
                 <TextView
                     android:id="@+id/FillInTheGapOption"

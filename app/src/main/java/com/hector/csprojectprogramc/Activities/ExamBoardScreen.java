@@ -13,7 +13,7 @@ public class ExamBoardScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exam_board_screen);
+        setContentView(R.layout.exam_board_screen);
         CardView AQACardView =  findViewById(R.id.AQACard);
         AQACardView.setOnClickListener(new View.OnClickListener() {
             @Override

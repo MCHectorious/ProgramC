@@ -29,7 +29,7 @@ public class CourseListScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Runs when the screen starts
         super.onCreate(savedInstanceState); //TODO: research what this does
-        setContentView(R.layout.activity_course_list_screen); //Links the XML file that defines the layout of the screen
+        setContentView(R.layout.course_list_screen); //Links the XML file that defines the layout of the screen
         qualification = getIntent().getStringExtra("Qualification"); //Gets the qualification of the courses to show from the previous screen //TODO: Prepare for null
         if(qualification.equals("GCSE")){
             HTMLDividerClassForQualification = "panelInner gcse-header"; //Sets the divider to the name of the section which includes the GCSE courses

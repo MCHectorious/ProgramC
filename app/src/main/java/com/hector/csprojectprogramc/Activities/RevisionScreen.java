@@ -166,7 +166,7 @@ public class RevisionScreen extends AppCompatActivity {
                     if (includeGapQuestions){
                         includeQAQuestions = !includeQAQuestions;
                         QuestionAnswerOption.setTextColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
-                        QuestionAnswerIcon.setImageResource((includeQAQuestions)? R.drawable.question_answer_icon_accent:R.drawable.question_answer_icon_black);
+                        QuestionAnswerIcon.setImageResource((includeQAQuestions)? R.drawable.question_answer_icon_selected :R.drawable.question_answer_icon_unselected);
                     }
                 }
             };
@@ -177,7 +177,7 @@ public class RevisionScreen extends AppCompatActivity {
                     if (includeQAQuestions){
                         includeGapQuestions = !includeGapQuestions;
                         GapOption.setTextColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
-                        GapIcon.setImageResource((includeGapQuestions)? R.drawable.fill_in_the_gap_icon_accent:R.drawable.fill_in_the_gap_icon_black);
+                        GapIcon.setImageResource((includeGapQuestions)? R.drawable.fill_in_the_gap_icon_selected :R.drawable.fill_in_the_gap_icon_unselected);
 
                     }
                 }

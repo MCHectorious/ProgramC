@@ -13,7 +13,7 @@ public class QualificationScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qualifications_screen);
+        setContentView(R.layout.qualification_list_screen);
 
         CardView GCSECardView = findViewById(R.id.GCSECard);
         GCSECardView.setOnClickListener(new View.OnClickListener() {

@@ -24,56 +24,55 @@ import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
-    private CommonWordsChecker commonWordsChecker;
+    private CommonWordsChecker commonWordsChecker;//Used to check where the word should be allowed to be a hidden word
 
-    private boolean includeQAQuestions, includeGapQuestions;
-    private Random random = new Random();
-    private List<CoursePoint> coursePoints;
-    private String prompt, correctAnswer;
+    private boolean includeQAQuestions, includeGapQuestions;// Booleans used to decide what type of question to ask
+    private Random random = new Random(); // Used to randomly choose which type of question to ask and to randomly choose which course point ot test on
+    private List<CoursePoint> coursePoints;// The aspects of the course which can be tested on
+    private String prompt, correctAnswer; //The question to be showed to user and the actual answer to that question
     private TextView promptTextView;
-    private EditText userAnswerEditableTextView;
-    private int CourseID;
+    private EditText userAnswerEditableTextView; //Where the user inputs their answer
+    private int CourseID; // The id of the course the user is being test on
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_revision_screen);
+        super.onCreate(savedInstanceState); //TODO: research what this does
+        setContentView(R.layout.revision_screen_layout);
 
-        commonWordsChecker = new CommonWordsChecker();
+        commonWordsChecker = new CommonWordsChecker(); //TODO: make this static
 
         promptTextView =  findViewById(R.id.questionText);
         userAnswerEditableTextView =  findViewById(R.id.answerText);
 
-        Bundle IntentsBundle = getIntent().getExtras();
-        CourseID = IntentsBundle.getInt("course ID",0);
+        CourseID = getIntent().getExtras().getInt("course ID",0);//TODO: change to just get int
 
-        new getPoints().execute();
+        new getCoursePoints().execute();
     }
 
     private void generateQuestion(){
-        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePoints.size()));
+        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePoints.size()));// Gets a randomly chosen course point //TODO: cache coursePointsSize
         if (includeGapQuestions&&includeQAQuestions){
-            if(random.nextBoolean()){
+            if(random.nextBoolean()){//If both are available it chooses randomly
                 generateGapQuestion(chosenCoursePoint);
             }else {
                 generateQAQuestion(chosenCoursePoint);
             }
-        }else if (includeGapQuestions){
+        }else if (includeGapQuestions){ //If only gap questions are available
             generateGapQuestion(chosenCoursePoint);
         }else{
-            generateQAQuestion(chosenCoursePoint);
+            generateQAQuestion(chosenCoursePoint);//If only QA questions are available
         }
-        promptTextView.setText(prompt);
+        promptTextView.setText(prompt);//Shows the question on the screen
 
     }
 
     private void generateGapQuestion(CoursePoint chosenCoursePoint){
         String sentenceFormOfChosenCoursePoint = chosenCoursePoint.getSentence();
-        String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split(" ");
-        int hiddenWordIndex = random.nextInt(wordsFromSentenceFormOfChosenCoursePoint.length);
-        String hiddenWord = wordsFromSentenceFormOfChosenCoursePoint[hiddenWordIndex];
+        String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split(" "); //Generates an array of each word in the sentence form of the course point
+        int hiddenWordIndex = random.nextInt(wordsFromSentenceFormOfChosenCoursePoint.length);//Randomly decides the index of the word to be hidden
+        String hiddenWord = wordsFromSentenceFormOfChosenCoursePoint[hiddenWordIndex];//The hidden word
         if (commonWordsChecker.checkIfCommonWord(hiddenWord)){
-            generateGapQuestion(coursePoints.get(random.nextInt(coursePoints.size())));
+            generateQuestion(); //If the word shouldn't be chosen then it generates a new question
         }else {
             StringBuilder promptStringBuilder = new StringBuilder();
             for (int wordIndex = 0; wordIndex < wordsFromSentenceFormOfChosenCoursePoint.length; wordIndex++) {
@@ -96,12 +95,12 @@ public class RevisionScreen extends AppCompatActivity {
         correctAnswer = chosenCoursePoint.getFlashcard_back();
     }
 
-    private class getPoints extends AsyncTask<Void,Void,Void>{
-        private ProgressDialog progressDialog;
+    private class getCoursePoints extends AsyncTask<Void,Void,Void>{
+        private ProgressDialog progressDialog;//Shows the user that a long-running background task is running
 
         @Override
         protected void onPreExecute(){
-            super.onPreExecute();
+            super.onPreExecute();//TODO: research what this does
             progressDialog = new ProgressDialog(RevisionScreen.this);
             progressDialog.setTitle("Loading Testable Material ");
             progressDialog.setMessage("This should only take a moment");

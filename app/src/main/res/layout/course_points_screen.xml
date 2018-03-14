@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lightLightGrey"
-        app:menu="@menu/navigation" >
+        app:menu="@menu/course_point_screen_navigation" >
 
 
     </android.support.design.widget.BottomNavigationView>

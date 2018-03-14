@@ -18,8 +18,8 @@ public class ExamBoardScreen extends AppCompatActivity {
         AQACardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toQualificationScreen = new Intent(ExamBoardScreen.this, QualificationScreen.class);
-                startActivity(toQualificationScreen);
+                Intent toQualificationScreen = new Intent(ExamBoardScreen.this, QualificationListScreen.class);
+                startActivity(toQualificationScreen);//Goes the Qualification List Screen
             }
         });
 

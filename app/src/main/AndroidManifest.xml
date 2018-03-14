@@ -25,7 +25,7 @@
             android:label="@string/title_activity_exam_board_screen"
             />
         <activity
-            android:name=".Activities.QualificationScreen"
+            android:name=".Activities.QualificationListScreen"
             android:label="@string/title_activity_qualification_screen"
             />
         <activity

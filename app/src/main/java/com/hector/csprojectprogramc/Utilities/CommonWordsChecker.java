@@ -9,7 +9,7 @@ public class CommonWordsChecker {
     private int maxStringLength = 0;
     private int wordsSize;
 
-    public CommonWordsChecker(){
+    public CommonWordsChecker(){//TODO: make this static
         words.add("to");
         words.add("of");
         words.add("in");

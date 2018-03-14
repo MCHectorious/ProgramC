@@ -25,7 +25,7 @@
     <include
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        layout="@layout/content_course_screen"
+        layout="@layout/course_screen_body"
         android:layout_below="@+id/appBar"
 
         tools:layout_editor_absoluteY="111dp" />

@@ -7,7 +7,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import com.hector.csprojectprogramc.R;
 
-public class QualificationScreen extends AppCompatActivity {
+public class QualificationListScreen extends AppCompatActivity {
     public final String qualificationExtraName = "Qualification";
 
     @Override
@@ -19,7 +19,7 @@ public class QualificationScreen extends AppCompatActivity {
         GCSECardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toCourseListScreen = new Intent(QualificationScreen.this, CourseListScreen.class);
+                Intent toCourseListScreen = new Intent(QualificationListScreen.this, CourseListScreen.class);
                 toCourseListScreen.putExtra(qualificationExtraName, "GCSE");
                 startActivity(toCourseListScreen);
             }
@@ -29,7 +29,7 @@ public class QualificationScreen extends AppCompatActivity {
         ALevelCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toCourseListScreen = new Intent(QualificationScreen.this, CourseListScreen.class);
+                Intent toCourseListScreen = new Intent(QualificationListScreen.this, CourseListScreen.class);
                 toCourseListScreen.putExtra(qualificationExtraName, "AS and A-Level");
                 startActivity(toCourseListScreen);
             }

@@ -85,20 +85,20 @@ public class CoursePointsScreen extends AppCompatActivity {
                 editPointsRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this)); // Shows the course points in a vertical list
                 editPointsRecyclerView.setAdapter(new CoursePointsScreenEditAdapter(coursePoints, CoursePointsScreen.this, courseID)); //TODO: add description
 
-                final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);
+                final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);//Initialises the button which allows the user to add a course point
                 addCoursePointButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showAddCoursePointDialog(true);
+                        showAddCoursePointDialog(true);//Because the action was optional, the user can cancel it
                     }
                 });
-                addCoursePointButton.setVisibility(View.GONE);
+                addCoursePointButton.setVisibility(View.GONE);//TODO: should I always show this?
 
-                final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView);
-                sentencesRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this));
-                sentencesRecyclerView.setAdapter(new CoursePointsScreenSentencesAdapter(coursePoints));//Starts in Sentence
+                final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView); //Initialises recycler view which contains the course points in their sentence form
+                sentencesRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this)); // Shows the course points in a vertical list
+                sentencesRecyclerView.setAdapter(new CoursePointsScreenSentencesAdapter(coursePoints));//Starts the activity by showing the sentence form of the course points
 
-                BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);
+                BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);//Intialises the navigation which allows the user to pick which form of course points to show  //TODO: bottom navigation?
                 navigationForCoursePointsPerspective.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -107,51 +107,54 @@ public class CoursePointsScreen extends AppCompatActivity {
                                 sentencesRecyclerView.setVisibility(View.VISIBLE);
                                 flashcardsRecyclerView.setVisibility(View.GONE);
                                 editPointsRecyclerView.setVisibility(View.GONE);
-                                addCoursePointButton.setVisibility(View.GONE);
+                                addCoursePointButton.setVisibility(View.GONE); //TODO: should I always show this?
+                                //Only shows the course points in their sentence form
                                 return true;
                             case R.id.cardListNav:
                                 sentencesRecyclerView.setVisibility(View.GONE);
                                 flashcardsRecyclerView.setVisibility(View.VISIBLE);
                                 editPointsRecyclerView.setVisibility(View.GONE);
                                 addCoursePointButton.setVisibility(View.GONE);
+                                //Only shows the course points in their flashcard form
                                 return true;
                             case R.id.editNav:
                                 sentencesRecyclerView.setVisibility(View.GONE);
                                 flashcardsRecyclerView.setVisibility(View.GONE);
                                 editPointsRecyclerView.setVisibility(View.VISIBLE);
                                 addCoursePointButton.setVisibility(View.VISIBLE);
+                                //Only shows the course points in the form which allows editing
                                 return true;
                         }
                         return false;
                     }
                 });
 
-                AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
-                TextView machineLearningWarningTextView = new TextView(CoursePointsScreen.this);
-                String machineLearningWarningText = getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+getString(R.string.edit_tab_instructions);
+                AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);// Initialises the alert dialog which will warn the user that some sentences may be machine generated
+                TextView machineLearningWarningTextView = new TextView(CoursePointsScreen.this); //TODO: Do i need a separate text view
+                String machineLearningWarningText = getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
                 machineLearningWarningTextView.setText(machineLearningWarningText);
                 machineLearningWarningAlertDialogBuilder.setView(machineLearningWarningTextView);
                 machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
                     }
                 });
-                machineLearningWarningAlertDialogBuilder.create().show();
+                machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen
             }
         }
     }
 
     public void showAddCoursePointDialog(boolean cancelable){
-        final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);
+        final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);//Initialises the alert dialog which will allow the user to add a new course point
         AddCoursePointAlertDialogBuilder.setTitle("Add New Course Point");
         LinearLayout layoutForAlertDialog = new LinearLayout(CoursePointsScreen.this);
-        layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
-        final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);
-        cardFrontEditableTextView.setHint("Enter the front of the point's flashcard form" );
+        layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL); //TODO: do i need to do this
+        final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the front of the flashcard form of the course point
+        cardFrontEditableTextView.setHint("Enter the front of the course point's flashcard form" );
         layoutForAlertDialog.addView(cardFrontEditableTextView);
-        final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);
-        cardBackEditableTextView.setHint("Enter the back of the point's flashcard form" );
+        final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the back of the flashcard form of the course point
+        cardBackEditableTextView.setHint("Enter the back of the course point's flashcard form" );
         layoutForAlertDialog.addView(cardBackEditableTextView);
-        final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this);
+        final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this); // Initialises the area where the user can add the sentence form of the course point
         sentenceEditableTextView.setHint("Enter the point's sentence form" );
         layoutForAlertDialog.addView(sentenceEditableTextView);
         AddCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
@@ -165,7 +168,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         if(cancelable){
             AddCoursePointAlertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {//Just closes the dialog if it is cancelled
                 }
             });
         }
@@ -173,19 +176,19 @@ public class CoursePointsScreen extends AppCompatActivity {
         AddCoursePointAlertDialogBuilder.create().show();
     }
 
-    private class addCoursePointToDatabase extends AsyncTask<String,Void,Void>{
+    private class addCoursePointToDatabase extends AsyncTask<String,Void,Void>{ //Adds the course point to the database
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();
-            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
-            return null;
+            MainDatabase database = Room.databaseBuilder(CoursePointsScreen.this, MainDatabase.class, "my-db").build();//Accesses the database
+            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));//inserts the course point via an SQL statement
+            return null;//In order to override the method correctly
         }
 
         @Override
         protected void onPostExecute(Void result){
             Intent refreshScreen = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
             refreshScreen.putExtra("course ID", courseID);
-            startActivity(refreshScreen);
+            startActivity(refreshScreen);//Refreshes the screen to include te newly created course point
         }
     }
 }

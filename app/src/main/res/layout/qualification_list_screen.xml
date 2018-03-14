@@ -37,7 +37,7 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="GCSE"
+                android:text="@string/gcse"
                 android:textColor="@color/black"
                 android:textSize="50sp"
                 android:textStyle="bold" />
@@ -74,7 +74,7 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="AS and A-Level"
+                android:text="@string/as_and_a_level"
                 android:textColor="@color/black"
                 android:textSize="50sp"
                 android:textStyle="bold"

@@ -30,7 +30,7 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="AQA"
+                android:text="@string/aqa"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="50sp" />

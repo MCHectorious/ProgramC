@@ -19,27 +19,27 @@ public class CourseScreen extends AppCompatActivity {
         final Bundle bundle = getIntent().getExtras();
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
-        toolbar.setTitle(bundle.getString("Colloquial Name"));//Changes the title opf the screen to the colloquial name of the course //TODO: handle nulls
+        toolbar.setTitle(bundle.getString(getString(R.string.colloquial_name)));//Changes the title opf the screen to the colloquial name of the course //TODO: handle nulls
         setSupportActionBar(toolbar);
 
         TextView qualificationTextView =  findViewById(R.id.qualificationSpecificNameInCourse);
-        qualificationTextView.setText(bundle.getString("Qualification")); // Shows the qualification
+        qualificationTextView.setText(bundle.getString(getString(R.string.qualification))); // Shows the qualification
 
         TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
-        examBoardTextView.setText(bundle.getString("Exam Board")); //Shows the exam board
+        examBoardTextView.setText(bundle.getString(getString(R.string.exam_board))); //Shows the exam board
 
         TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);
-        nextKeyDateTextView.setText(bundle.getString("Key Date")); //Shows the date of the next key date
+        nextKeyDateTextView.setText(bundle.getString(getString(R.string.key_date))); //Shows the date of the next key date
 
         TextView nextKeyDateDetailTextView =  findViewById(R.id.dateSpecificCardInCourse);
-        nextKeyDateDetailTextView.setText(bundle.getString("Key Date Details")); //Shows what is happening on the next key date
+        nextKeyDateDetailTextView.setText(bundle.getString(getString(R.string.key_date_details))); //Shows what is happening on the next key date
 
         CardView coursePointsButton =  findViewById(R.id.coursePoints);
         coursePointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent toCoursePoints = new Intent(CourseScreen.this, CoursePointsScreen.class);
-                toCoursePoints.putExtra("course ID",bundle.getInt("Course ID"));
+                toCoursePoints.putExtra(getString(R.string.course_id),bundle.getInt(getString(R.string.course_id)));
                 startActivity(toCoursePoints);//Opens the course points screen for this course
             }
         });
@@ -49,7 +49,7 @@ public class CourseScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toRevisionScreen = new Intent(CourseScreen.this, RevisionScreen.class);
-                toRevisionScreen.putExtra("course ID",bundle.getInt("Course ID"));
+                toRevisionScreen.putExtra(getString(R.string.course_id),bundle.getInt(getString(R.string.course_id)));
                 startActivity(toRevisionScreen);// Goes to the revision screen for the course
             }
         });

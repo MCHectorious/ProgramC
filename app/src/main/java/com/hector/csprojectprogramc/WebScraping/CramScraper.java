@@ -11,6 +11,7 @@ import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,8 +46,8 @@ public class CramScraper{
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Getting Cram Courses Related to This Course");
-            progressDialog.setMessage("This should only take a moment");
+            progressDialog.setTitle(context.getString(R.string.get_cram_courses));
+            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
@@ -99,15 +100,15 @@ public class CramScraper{
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Getting Information From These Cram Courses");
-            progressDialog.setMessage("Please wait");
+            progressDialog.setTitle(context.getString(R.string.get_information_from_cram_courses));
+            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,context.getString(R.string.database_location)).build();
 
             boolean foundCard = false;
 

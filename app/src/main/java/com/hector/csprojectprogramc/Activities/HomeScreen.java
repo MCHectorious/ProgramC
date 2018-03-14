@@ -44,7 +44,7 @@ public class HomeScreen extends AppCompatActivity {
         String noCoursesWarningText = getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+getString(R.string.no_courses_instructions);
         noCoursesWarningTextView.setText(noCoursesWarningText);
         noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
-        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
                 startActivity(toExamBoardScreen);
@@ -78,8 +78,8 @@ public class HomeScreen extends AppCompatActivity {
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(HomeScreen.this);
-            progressDialog.setTitle("Initialising App");
-            progressDialog.setMessage("This should only take a moment");
+            progressDialog.setTitle(getString(R.string.initialising_app));
+            progressDialog.setMessage(getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }

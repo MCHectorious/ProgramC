@@ -70,13 +70,13 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                 public void onClick(View v) {
                     course = courses.get(getAdapterPosition());
                     Intent intent = new Intent(context, CourseScreen.class);
-                    intent.putExtra("Course ID",course.getCourse_ID() );
-                    intent.putExtra("Official Name",course.getOfficial_name() );
-                    intent.putExtra("Colloquial Name",course.getColloquial_name() );
-                    intent.putExtra("Exam Board",course.getExamBoard() );
-                    intent.putExtra("Qualification",course.getQualification() );
-                    intent.putExtra("Key Date",course.getNext_key_date() );
-                    intent.putExtra("Key Date Details", course.getNext_key_date_detail());
+                    intent.putExtra(context.getString(R.string.course_id),course.getCourse_ID() );
+                    intent.putExtra(context.getString(R.string.official_name),course.getOfficial_name() );
+                    intent.putExtra(context.getString(R.string.colloquial_name),course.getColloquial_name() );
+                    intent.putExtra(context.getString(R.string.exam_board),course.getExamBoard() );
+                    intent.putExtra(context.getString(R.string.qualification),course.getQualification() );
+                    intent.putExtra(context.getString(R.string.key_date),course.getNext_key_date() );
+                    intent.putExtra(context.getString(R.string.key_date_details), course.getNext_key_date_detail());
                     context.startActivity(intent);
                 }
             });

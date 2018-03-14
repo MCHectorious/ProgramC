@@ -44,7 +44,7 @@ public class RevisionScreen extends AppCompatActivity {
         promptTextView =  findViewById(R.id.questionText);
         userAnswerEditableTextView =  findViewById(R.id.answerText);
 
-        CourseID = getIntent().getExtras().getInt("course ID",0);//TODO: change to just get int
+        CourseID = getIntent().getExtras().getInt(getString(R.string.course_id),0);//TODO: change to just get int
 
         new getCoursePoints().execute();
     }
@@ -102,15 +102,15 @@ public class RevisionScreen extends AppCompatActivity {
         protected void onPreExecute(){
             super.onPreExecute();//TODO: research what this does
             progressDialog = new ProgressDialog(RevisionScreen.this);
-            progressDialog.setTitle("Loading Testable Material ");
-            progressDialog.setMessage("This should only take a moment");
+            progressDialog.setTitle(getString(R.string.loading_course_points));
+            progressDialog.setMessage(getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, getString(R.string.database_location)).build();
             coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
 
             return null;
@@ -128,12 +128,12 @@ public class RevisionScreen extends AppCompatActivity {
                     double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(userAnswerEditableTextView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
 
                     if(answerAccuracy>90){
-                        answerReviewAlertDialogBuilder.setTitle("Well Done - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + "% Similar!");
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.well_done)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + getString(R.string.percentage_similar)+"!");
 
                     } else if(answerAccuracy>50){
-                        answerReviewAlertDialogBuilder.setTitle("Almost - "+ String.format(Locale.UK,"%.2f",answerAccuracy) + "% Similar");
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.almost)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
                     }else{
-                        answerReviewAlertDialogBuilder.setTitle("Wrong - Only "+ String.format(Locale.UK,"%.2f",answerAccuracy) + "% Similar");
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
 
                     }
 
@@ -142,7 +142,7 @@ public class RevisionScreen extends AppCompatActivity {
                     answerReviewTextView.setText(answerReviewText);
 
                     answerReviewAlertDialogBuilder.setView(answerReviewTextView);
-                    answerReviewAlertDialogBuilder.setPositiveButton("Generate New Question", new DialogInterface.OnClickListener() {
+                    answerReviewAlertDialogBuilder.setPositiveButton(R.string.generate_new_question, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             generateQuestion();

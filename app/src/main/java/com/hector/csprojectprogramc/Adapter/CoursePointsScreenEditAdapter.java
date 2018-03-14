@@ -69,7 +69,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                 @Override
                 public void onClick(View v) {
                     final AlertDialog.Builder editCoursePointAlertDialogBuilder = new AlertDialog.Builder(context);
-                    editCoursePointAlertDialogBuilder.setTitle("Edit This Course Point As You Wish");
+                    editCoursePointAlertDialogBuilder.setTitle(R.string.edit_course_points);
                     LinearLayout layoutForAlertDialog = new LinearLayout(context);
                     layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
                     final EditText cardFrontEdit = new EditText(context);
@@ -94,7 +94,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     });
                     layoutForAlertDialog.addView(deleteButton);
                     editCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
-                    editCoursePointAlertDialogBuilder.setPositiveButton("Make These Changes", new DialogInterface.OnClickListener() {
+                    editCoursePointAlertDialogBuilder.setPositiveButton(R.string.make_these_changes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
@@ -103,7 +103,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
                         }
                     });
-                    editCoursePointAlertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    editCoursePointAlertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -133,7 +133,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         @Override
         protected void onPostExecute(Void result){
             Intent refreshCoursePointsScreen = new Intent(context, CoursePointsScreen.class);
-            refreshCoursePointsScreen.putExtra("course ID", courseID);
+            refreshCoursePointsScreen.putExtra( context.getString(R.string.course_id) , courseID);
             context.startActivity(refreshCoursePointsScreen);
         }
 
@@ -151,7 +151,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         @Override
         protected void onPostExecute(Void result){
             Intent intent = new Intent(context, CoursePointsScreen.class);
-            intent.putExtra("course ID", courseID);
+            intent.putExtra( context.getString(R.string.course_id) , courseID);
             context.startActivity(intent);
         }
     }

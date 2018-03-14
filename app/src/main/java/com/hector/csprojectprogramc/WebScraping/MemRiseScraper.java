@@ -9,6 +9,7 @@ import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -42,8 +43,8 @@ public class MemRiseScraper{
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Getting MemRise Courses Related to This Course");
-            progressDialog.setMessage("This should only take a moment");
+            progressDialog.setTitle(context.getString(R.string.get_memrise_courses));
+            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
@@ -98,8 +99,8 @@ public class MemRiseScraper{
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Getting Information From These MemRise Courses");
-            progressDialog.setMessage("Please wait");
+            progressDialog.setTitle(context.getString(R.string.getting_information_from_memrise_courses));
+            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }

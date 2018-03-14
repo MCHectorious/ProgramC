@@ -42,7 +42,7 @@ public class CoursePointsScreenFlashcardAdapter extends RecyclerView.Adapter<Cou
         CardView flashcardCardView;
         boolean showFront = true;
 
-        private ViewHolder (View v, final List<CoursePoint> dataset){
+        private ViewHolder (View v, final List<CoursePoint> dataSet){
             super(v);
             flashcardFormSideTextView = v.findViewById(R.id.cardSide);
             flashcardCardView = v.findViewById(R.id.cardViewCoursePointsFlashcard);
@@ -51,7 +51,7 @@ public class CoursePointsScreenFlashcardAdapter extends RecyclerView.Adapter<Cou
                 @Override
                 public void onClick(View v) {
                     showFront = !showFront;
-                    flashcardFormSideTextView.setText( (showFront)? dataset.get(getAdapterPosition()).getFlashcard_front() : dataset.get(getAdapterPosition()).getFlashcard_back()  );
+                    flashcardFormSideTextView.setText( (showFront)? dataSet.get(getAdapterPosition()).getFlashcard_front() : dataSet.get(getAdapterPosition()).getFlashcard_back()  );
                 }
             });
 

@@ -37,7 +37,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);// TODO: research what this does
         setContentView(R.layout.course_points_screen);// Links the XML file which defines the layout of the screen
         editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
-        courseID = getIntent().getExtras().getInt("course ID",0); //gets the course ID from the previous screen //TODO: make sure it handles null
+        courseID = getIntent().getExtras().getInt(getString(R.string.course_id),0); //gets the course ID from the previous screen //TODO: make sure it handles null
         new getCoursePointsFromDatabase().execute();// Gets the course points for the course and then after displays them
     }
 
@@ -47,8 +47,8 @@ public class CoursePointsScreen extends AppCompatActivity {
         protected void onPreExecute() {//Shows the user that a long-running background task is running
             super.onPreExecute();// TODO: research what this does
             progressDialog = new ProgressDialog(CoursePointsScreen.this);//Idealises the dialog
-            progressDialog.setTitle("Loading Testable Material ");// Explains what this task is doing
-            progressDialog.setMessage("This should only take a moment");// TODO: change and then explain
+            progressDialog.setTitle(getString(R.string.loading_course_points));// Explains what this task is doing
+            progressDialog.setMessage(getString(R.string.this_should_be_quick));// TODO: change and then explain
             progressDialog.setIndeterminate(false);// The dialog shows an animation which doesn't represent how far throught the task is //TODO: improve description
             progressDialog.show();//Shows the dialog on the screen
         }
@@ -145,20 +145,20 @@ public class CoursePointsScreen extends AppCompatActivity {
 
     public void showAddCoursePointDialog(boolean cancelable){
         final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);//Initialises the alert dialog which will allow the user to add a new course point
-        AddCoursePointAlertDialogBuilder.setTitle("Add New Course Point");
+        AddCoursePointAlertDialogBuilder.setTitle(R.string.add_new_course_point);
         LinearLayout layoutForAlertDialog = new LinearLayout(CoursePointsScreen.this);
         layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL); //TODO: do i need to do this
         final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the front of the flashcard form of the course point
-        cardFrontEditableTextView.setHint("Enter the front of the course point's flashcard form" );
+        cardFrontEditableTextView.setHint(R.string.enter_flashcard_front );
         layoutForAlertDialog.addView(cardFrontEditableTextView);
         final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the back of the flashcard form of the course point
-        cardBackEditableTextView.setHint("Enter the back of the course point's flashcard form" );
+        cardBackEditableTextView.setHint(R.string.enter_flashcard_back );
         layoutForAlertDialog.addView(cardBackEditableTextView);
         final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this); // Initialises the area where the user can add the sentence form of the course point
-        sentenceEditableTextView.setHint("Enter the point's sentence form" );
+        sentenceEditableTextView.setHint(R.string.enter_sentence );
         layoutForAlertDialog.addView(sentenceEditableTextView);
         AddCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
-        AddCoursePointAlertDialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        AddCoursePointAlertDialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String[] coursePointComponents = {cardFrontEditableTextView.getText().toString(),cardBackEditableTextView.getText().toString(),sentenceEditableTextView.getText().toString()};
@@ -166,7 +166,7 @@ public class CoursePointsScreen extends AppCompatActivity {
             }
         });
         if(cancelable){
-            AddCoursePointAlertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            AddCoursePointAlertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {//Just closes the dialog if it is cancelled
                 }
@@ -187,7 +187,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
             Intent refreshScreen = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
-            refreshScreen.putExtra("course ID", courseID);
+            refreshScreen.putExtra(getString(R.string.course_id), courseID);
             startActivity(refreshScreen);//Refreshes the screen to include te newly created course point
         }
     }

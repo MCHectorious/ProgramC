@@ -31,10 +31,10 @@ public class CourseListScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState); //TODO: research what this does
         setContentView(R.layout.course_list_screen); //Links the XML file that defines the layout of the screen
         qualification = getIntent().getStringExtra("Qualification"); //Gets the qualification of the courses to show from the previous screen //TODO: Prepare for null
-        if(qualification.equals("GCSE")){
+        if(qualification.equals(getString(R.string.gcse))){//TODO:Change to int
             HTMLDividerClassForQualification = "panelInner gcse-header"; //Sets the divider to the name of the section which includes the GCSE courses
         }
-        if (qualification.equals("AS and A-Level")){
+        if (qualification.equals(getString(R.string.as_and_a_level))){ //TODO: Change to int
             HTMLDividerClassForQualification = "panelInner as_and_a-level-header"; //Sets the divider to the name of the section which includes the A-Level courses
         }
         new getCoursesAndTheirWebsites().execute();//Gets the list of courses from the AQA website and then afterwards it displays them
@@ -46,8 +46,8 @@ public class CourseListScreen extends AppCompatActivity {
         protected void onPreExecute(){//Shows the user the dialog
             super.onPreExecute(); //TODO: research what this does
             progressDialog = new ProgressDialog(CourseListScreen.this); // Initialises the variable
-            progressDialog.setTitle("Getting the Latest List of "+qualification+" courses"); // Sets the title of the dialog shown to the user
-            progressDialog.setMessage("This should only take a moment"); //Sets the message of dialog to an instruction for the user to follow
+            progressDialog.setTitle(getString(R.string.getting_latest_list)+qualification+" "+getString(R.string.courses)); // Sets the title of the dialog shown to the user
+            progressDialog.setMessage(getString(R.string.this_should_be_quick)); //Sets the message of dialog to an instruction for the user to follow
             progressDialog.setIndeterminate(false); //Shows an animation while the dialog is displayed but this animation doesn't represent how far though the process is
             progressDialog.show();//Shows the dialog on the screen
         }

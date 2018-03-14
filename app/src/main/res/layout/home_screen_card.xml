@@ -31,7 +31,7 @@
                 android:layout_toStartOf="@+id/deleteCourseButton"
                 android:background="@color/red"
                 android:padding="1sp"
-                android:text="Accounting"
+                android:text="@string/temp_course"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -58,7 +58,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/courseName"
                 android:textColor="@color/darkDarkGrey"
-                android:text="GCSE"
+                android:text="@string/gcse"
                 android:layout_margin="5dp"
                 />
 
@@ -69,7 +69,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/courseName"
                 android:textColor="@color/darkDarkGrey"
-                android:text="28th June"
+                android:text="@string/temp_date"
                 android:layout_margin="5dp"
                 />
 
@@ -84,7 +84,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_toLeftOf="@+id/date"
                 android:layout_toRightOf="@+id/qualification"
-                android:text="AQA"
+                android:text="@string/aqa"
                 android:textAlignment="center"
                 android:textColor="@color/darkDarkGrey" />
 

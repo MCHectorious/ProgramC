@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,8 +38,8 @@ public class AQAScraper {
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Getting Additional Information From AQA");
-            progressDialog.setMessage("Please wait");
+            progressDialog.setTitle(context.getString(R.string.get_information_from_aqa));
+            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }

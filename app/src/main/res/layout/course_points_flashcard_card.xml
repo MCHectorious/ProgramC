@@ -25,7 +25,7 @@
                 android:layout_centerVertical="true"
 
                 android:textAlignment="center"
-                android:text="Card Side"
+                android:text="@string/card_side"
                 android:textColor="@color/black"
                 android:layout_margin="5dp"
                 android:background="@color/white"

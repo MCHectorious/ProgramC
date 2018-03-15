@@ -145,20 +145,20 @@ public class CoursePointsScreen extends AppCompatActivity {
 
     public void showAddCoursePointDialog(boolean cancelable){
         final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);//Initialises the alert dialog which will allow the user to add a new course point
-        AddCoursePointAlertDialogBuilder.setTitle(R.string.add_new_course_point);
+        AddCoursePointAlertDialogBuilder.setTitle(getString(R.string.add_new_course_point));
         LinearLayout layoutForAlertDialog = new LinearLayout(CoursePointsScreen.this);
         layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL); //TODO: do i need to do this
         final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the front of the flashcard form of the course point
-        cardFrontEditableTextView.setHint(R.string.enter_flashcard_front );
+        cardFrontEditableTextView.setHint( getString(R.string.enter_flashcard_front) );
         layoutForAlertDialog.addView(cardFrontEditableTextView);
         final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the back of the flashcard form of the course point
-        cardBackEditableTextView.setHint(R.string.enter_flashcard_back );
+        cardBackEditableTextView.setHint(getString(R.string.enter_flashcard_back) );
         layoutForAlertDialog.addView(cardBackEditableTextView);
         final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this); // Initialises the area where the user can add the sentence form of the course point
-        sentenceEditableTextView.setHint(R.string.enter_sentence );
+        sentenceEditableTextView.setHint(getString(R.string.enter_sentence) );
         layoutForAlertDialog.addView(sentenceEditableTextView);
         AddCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
-        AddCoursePointAlertDialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+        AddCoursePointAlertDialogBuilder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String[] coursePointComponents = {cardFrontEditableTextView.getText().toString(),cardBackEditableTextView.getText().toString(),sentenceEditableTextView.getText().toString()};
@@ -166,7 +166,7 @@ public class CoursePointsScreen extends AppCompatActivity {
             }
         });
         if(cancelable){
-            AddCoursePointAlertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            AddCoursePointAlertDialogBuilder.setNegativeButton( getString(R.string.cancel) , new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {//Just closes the dialog if it is cancelled
                 }

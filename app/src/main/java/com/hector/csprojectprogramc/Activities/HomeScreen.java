@@ -32,7 +32,17 @@ public class HomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen_layout);
         Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.home);//TODO: Do i need get string
         setSupportActionBar(toolbar);
+
+        FloatingActionButton toExamBoardScreenButton =  findViewById(R.id.fab);
+        toExamBoardScreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
+                startActivity(toExamBoardScreen);
+            }
+        });
 
         new getAllCoursesFromDatabase().execute();
 
@@ -44,7 +54,7 @@ public class HomeScreen extends AppCompatActivity {
         String noCoursesWarningText = getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+getString(R.string.no_courses_instructions);
         noCoursesWarningTextView.setText(noCoursesWarningText);
         noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
-        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton( getString(R.string.okay) , new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
                 startActivity(toExamBoardScreen);
@@ -97,14 +107,7 @@ public class HomeScreen extends AppCompatActivity {
         protected void onPostExecute(Void result){
            progressDialog.dismiss();
             if(hasCourses){
-                FloatingActionButton toExamBoardScreenButton =  findViewById(R.id.fab);
-                toExamBoardScreenButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
-                        startActivity(toExamBoardScreen);
-                    }
-                });
+
 
                 RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
                 CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));

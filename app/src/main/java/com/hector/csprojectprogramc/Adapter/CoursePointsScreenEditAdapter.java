@@ -69,7 +69,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                 @Override
                 public void onClick(View v) {
                     final AlertDialog.Builder editCoursePointAlertDialogBuilder = new AlertDialog.Builder(context);
-                    editCoursePointAlertDialogBuilder.setTitle(R.string.edit_course_points);
+                    editCoursePointAlertDialogBuilder.setTitle( context.getString(R.string.edit_course_points) );
                     LinearLayout layoutForAlertDialog = new LinearLayout(context);
                     layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
                     final EditText cardFrontEdit = new EditText(context);
@@ -84,7 +84,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     layoutForAlertDialog.addView(sentenceEdit);
 
                     Button deleteButton = new Button(context);
-                    deleteButton.setText(R.string.delete);
+                    deleteButton.setText( context.getString(R.string.delete) );
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -94,7 +94,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     });
                     layoutForAlertDialog.addView(deleteButton);
                     editCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);
-                    editCoursePointAlertDialogBuilder.setPositiveButton(R.string.make_these_changes, new DialogInterface.OnClickListener() {
+                    editCoursePointAlertDialogBuilder.setPositiveButton( context.getString(R.string.make_these_changes) , new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
@@ -103,7 +103,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
                         }
                     });
-                    editCoursePointAlertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    editCoursePointAlertDialogBuilder.setNegativeButton( context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 

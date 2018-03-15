@@ -12,16 +12,16 @@
     <string name="no_courses_points_instructions">To add course points and continue click Continue</string>
     <string name="machine_generated_sentences_warning">These sentences may be machine generated and thus can be inaccurate.</string>
     <string name="edit_tab_instructions">You can edit these sentences in the Edit Tab (as well as making further edits such as adding your own Course Points).</string>
-    <string name="you_have_no_courses">You currently have no courses</string>
+    <string name="you_have_no_courses">You currently have no courses.</string>
     <string name="no_courses_instructions">To add courses and continue click OKAY</string>
-    <string name="the_answer_is">The correct answer is: "</string>
+    <string name="the_answer_is">The correct answer is: </string>
     <string name="delete">Delete</string>
     <string name="gcse">GCSE</string>
     <string name="as_and_a_level">AS and A-Level</string>
     <string name="getting_latest_list">Getting the Latest List of</string>
     <string name="courses">courses</string>
     <string name="this_should_be_quick">This should only take a moment</string>
-    <string name="course_id">course ID</string>
+    <string name="course_id">Course ID</string>
     <string name="loading_course_points">Loading Testable Material</string>
     <string name="add_new_course_point">Add New Course Point</string>
     <string name="enter_flashcard_front">Enter the front of the course point\'s flashcard form</string>
@@ -34,7 +34,7 @@
     <string name="exam_board">Exam Board</string>
     <string name="key_date">Key Date</string>
     <string name="key_date_details">Key Date Details</string>
-    <string name="okay">OKAY</string>
+    <string name="okay">Continue</string>
     <string name="initialising_app">Initialising App</string>
     <string name="database_location">my-db</string>
     <string name="well_done">Well Done</string>
@@ -44,7 +44,6 @@
     <string name="generate_new_question">Generate New Question</string>
     <string name="edit_course_points">Edit This Course Point As You Wish</string>
     <string name="make_these_changes">Make These Changes</string>
-    <string name="cancel">Cancel</string>
     <string name="official_name">Official Name</string>
     <string name="get_information_from_aqa">Getting Additional Information From AQA</string>
     <string name="get_cram_courses">Getting Cram Courses Related to This Course</string>
@@ -66,5 +65,7 @@
     <string name="fill_in_the_gap">Fill in the Gap</string>
     <string name="temp_question">This is a question</string>
     <string name="temp_answer">Please Enter Your Answer Here</string>
+    <string name="home">Home</string>
+    <string name="completely_wrong">Completely Wrong</string>
 
 </resources>

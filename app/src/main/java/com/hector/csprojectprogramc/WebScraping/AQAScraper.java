@@ -55,7 +55,7 @@ public class AQAScraper {
                     if(codesAndReferences.select("tr").size()>0){
                         qualification = codesAndReferences.select("tr").get(0).select("td").text();
                     }
-                    examBoard = "AQA";
+                    examBoard = context.getString(R.string.aqa);
                     Element keyDateSection = document.select("ul[class=listEvents]").select("li").first();
                     if(keyDateSection != null){
                         nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
@@ -66,7 +66,7 @@ public class AQAScraper {
                     Log.e("Error",e.getMessage());
                 }
             }
-            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,context.getString(R.string.database_location)).build();
             List<Course> courses = database.customDao().getAllCourses();
 
             course = new Course(courses.size()+1,colloquialName,

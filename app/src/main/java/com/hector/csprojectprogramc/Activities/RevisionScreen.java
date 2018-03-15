@@ -4,10 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -130,19 +134,27 @@ public class RevisionScreen extends AppCompatActivity {
                     if(answerAccuracy>90){
                         answerReviewAlertDialogBuilder.setTitle(getString(R.string.well_done)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + getString(R.string.percentage_similar)+"!");
 
-                    } else if(answerAccuracy>50){
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.almost)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
+                    } else if(answerAccuracy>50) {
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.almost) + " - " + String.format(Locale.UK, "%.2f", answerAccuracy) + getString(R.string.percentage_similar));
+                    } else if(answerAccuracy==0){
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.completely_wrong));
+
                     }else{
                         answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
 
                     }
 
                     TextView answerReviewTextView = new TextView(RevisionScreen.this);
-                    String answerReviewText = getString(R.string.the_answer_is)+correctAnswer+"\".";
-                    answerReviewTextView.setText(answerReviewText);
+
+                    //String answerReviewText = getString(R.string.th e_answer_is)+correctAnswer;
+                    SpannableStringBuilder answerReviewTextBuilder = new SpannableStringBuilder();
+                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(correctAnswer);
+                    answerReviewTextBuilder.setSpan(new StyleSpan(Typeface.BOLD),getString(R.string.the_answer_is).length(),answerReviewTextBuilder.length(),0);
+
+                    answerReviewTextView.setText(answerReviewTextBuilder);
 
                     answerReviewAlertDialogBuilder.setView(answerReviewTextView);
-                    answerReviewAlertDialogBuilder.setPositiveButton(R.string.generate_new_question, new DialogInterface.OnClickListener() {
+                    answerReviewAlertDialogBuilder.setPositiveButton( getString(R.string.generate_new_question), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             generateQuestion();

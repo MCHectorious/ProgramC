@@ -47,7 +47,10 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/QuestionAnswerIcon"
                     android:text="@string/question_answer"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    />
 
             </RelativeLayout>
 
@@ -75,7 +78,10 @@
                     android:layout_marginStart="5dp"
                     android:layout_toEndOf="@+id/FillInTheGapIcon"
                     android:text="@string/fill_in_the_gap"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    />
 
             </RelativeLayout>
 

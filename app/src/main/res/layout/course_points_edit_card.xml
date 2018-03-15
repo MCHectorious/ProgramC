@@ -30,6 +30,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
                 android:background="@color/white"
+                android:ellipsize="end"
                 />
 
 
@@ -46,7 +47,7 @@
                 android:layout_marginTop="2dp"
                 android:textAlignment="center"
                 android:background="@color/white"
-
+                android:ellipsize="end"
                 />
 
 
@@ -65,6 +66,7 @@
                 android:layout_alignBottom="@+id/cardBackEdit"
                 android:layout_alignParentRight="true"
                 android:background="@color/white"
+                android:ellipsize="end"
                 />
 
 

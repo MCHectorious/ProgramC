@@ -6,6 +6,7 @@ import java.util.Collections;
 public class CommonWordsChecker {
 
     private ArrayList<String> words = new ArrayList<>();
+    //private ArrayList<String> words = new ArrayList<String>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
     private int maxStringLength = 0;
     private int wordsSize;
 

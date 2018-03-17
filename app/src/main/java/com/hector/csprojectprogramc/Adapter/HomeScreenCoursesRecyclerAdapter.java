@@ -1,7 +1,9 @@
 package com.hector.csprojectprogramc.Adapter;
 
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
@@ -89,8 +91,26 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    course = courses.get(getAdapterPosition());
-                    new deleteCourseFromDatabase().execute();
+
+                    AlertDialog.Builder warningBuilder = new AlertDialog.Builder(context);
+                    warningBuilder.setTitle(R.string.warning);
+                    warningBuilder.setMessage(R.string.deleting_course_warning);
+                    warningBuilder.setCancelable(true).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            course = courses.get(getAdapterPosition());
+                            new deleteCourseFromDatabase().execute();
+                        }
+                    });
+                    warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    warningBuilder.create().show();
+
                 }
             });
         }

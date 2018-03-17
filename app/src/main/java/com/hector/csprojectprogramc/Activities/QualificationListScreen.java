@@ -8,11 +8,11 @@ import android.view.View;
 import com.hector.csprojectprogramc.R;
 
 public class QualificationListScreen extends AppCompatActivity {
-    public final String qualificationExtraName = getString(R.string.qualification);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.qualification_list_screen);
 
         CardView GCSECardView = findViewById(R.id.GCSECard);
@@ -20,7 +20,7 @@ public class QualificationListScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toCourseListScreen = new Intent(QualificationListScreen.this, CourseListScreen.class);
-                toCourseListScreen.putExtra(qualificationExtraName, getString(R.string.gcse));
+                toCourseListScreen.putExtra(getString(R.string.qualification), getString(R.string.gcse));
                 startActivity(toCourseListScreen);
             }
         });
@@ -30,7 +30,7 @@ public class QualificationListScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toCourseListScreen = new Intent(QualificationListScreen.this, CourseListScreen.class);
-                toCourseListScreen.putExtra(qualificationExtraName, getString(R.string.as_and_a_level));
+                toCourseListScreen.putExtra(getString(R.string.qualification), getString(R.string.as_and_a_level));
                 startActivity(toCourseListScreen);
             }
         });

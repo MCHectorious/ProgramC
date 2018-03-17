@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -48,7 +50,8 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         viewHolder.flashcardFormBackTextView.setText(temporaryCoursePoint.getFlashcard_back());
         viewHolder.sentenceFormTextView.setText(temporaryCoursePoint.getSentence());
         viewHolder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(temporaryCoursePoint.getSentence()));
-    }
+
+        }
 
     @Override
     public int getItemCount() {
@@ -72,13 +75,22 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     editCoursePointAlertDialogBuilder.setTitle( context.getString(R.string.edit_course_points) );
                     LinearLayout layoutForAlertDialog = new LinearLayout(context);
                     layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
+                    final TextView cardFront = new TextView(context);
+                    cardFront.setText(R.string.flashcard_front);
+                    layoutForAlertDialog.addView(cardFront);
                     final EditText cardFrontEdit = new EditText(context);
                     temporaryCoursePoint = coursePoints.get(getAdapterPosition());
                     cardFrontEdit.setText(temporaryCoursePoint.getFlashcard_front());
                     layoutForAlertDialog.addView(cardFrontEdit);
+                    final TextView cardBack = new TextView(context);
+                    cardBack.setText(R.string.flashcard_back);
+                    layoutForAlertDialog.addView(cardBack);
                     final EditText cardBackEdit = new EditText(context);
                     cardBackEdit.setText(temporaryCoursePoint.getFlashcard_back() );
                     layoutForAlertDialog.addView(cardBackEdit);
+                    final TextView sentence = new TextView(context);
+                    sentence.setText(R.string.sentence);
+                    layoutForAlertDialog.addView(sentence);
                     final EditText sentenceEdit = new EditText(context);
                     sentenceEdit.setText(temporaryCoursePoint.getSentence() );
                     layoutForAlertDialog.addView(sentenceEdit);
@@ -88,8 +100,25 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                            new deleteCoursePointFromDatabase().execute();
+                            AlertDialog.Builder warningBuilder = new AlertDialog.Builder(context);
+                            warningBuilder.setTitle(R.string.warning);
+                            warningBuilder.setMessage(R.string.deleting_course_point_warning);
+                            warningBuilder.setCancelable(true).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    temporaryCoursePoint = coursePoints.get(getAdapterPosition());
+                                    new deleteCoursePointFromDatabase().execute();
+                                }
+                            });
+                            warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                            warningBuilder.create().show();
+
                         }
                     });
                     layoutForAlertDialog.addView(deleteButton);
@@ -118,6 +147,8 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         }
 
 
+
+
     }
 
     private class updateCoursePointInDatabase extends AsyncTask<String,Void,Void>{
@@ -134,6 +165,8 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         protected void onPostExecute(Void result){
             Intent refreshCoursePointsScreen = new Intent(context, CoursePointsScreen.class);
             refreshCoursePointsScreen.putExtra( context.getString(R.string.course_id) , courseID);
+            refreshCoursePointsScreen.putExtra(context.getString(R.string.perspective), 2);
+
             context.startActivity(refreshCoursePointsScreen);
         }
 
@@ -155,5 +188,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
             context.startActivity(intent);
         }
     }
+
+
 
 }

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
@@ -28,8 +29,6 @@ import java.util.Random;
 
 public class RevisionScreen extends AppCompatActivity {
 
-    private CommonWordsChecker commonWordsChecker;//Used to check where the word should be allowed to be a hidden word
-
     private boolean includeQAQuestions, includeGapQuestions;// Booleans used to decide what type of question to ask
     private Random random = new Random(); // Used to randomly choose which type of question to ask and to randomly choose which course point ot test on
     private List<CoursePoint> coursePoints;// The aspects of the course which can be tested on
@@ -42,8 +41,10 @@ public class RevisionScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //TODO: research what this does
         setContentView(R.layout.revision_screen_layout);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.revision);
+        setSupportActionBar(toolbar);
 
-        commonWordsChecker = new CommonWordsChecker(); //TODO: make this static
 
         promptTextView =  findViewById(R.id.questionText);
         userAnswerEditableTextView =  findViewById(R.id.answerText);
@@ -72,23 +73,21 @@ public class RevisionScreen extends AppCompatActivity {
 
     private void generateGapQuestion(CoursePoint chosenCoursePoint){
         String sentenceFormOfChosenCoursePoint = chosenCoursePoint.getSentence();
-        String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split(" "); //Generates an array of each word in the sentence form of the course point
+        String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split("[\\p{Punct}\\s]+"); //Generates an array of each word in the sentence form of the course point
         int hiddenWordIndex = random.nextInt(wordsFromSentenceFormOfChosenCoursePoint.length);//Randomly decides the index of the word to be hidden
         String hiddenWord = wordsFromSentenceFormOfChosenCoursePoint[hiddenWordIndex];//The hidden word
-        if (commonWordsChecker.checkIfCommonWord(hiddenWord)){
+        if (CommonWordsChecker.checkIfCommonWord(hiddenWord)){
             generateQuestion(); //If the word shouldn't be chosen then it generates a new question
         }else {
+
+            int index = sentenceFormOfChosenCoursePoint.indexOf(hiddenWord);
             StringBuilder promptStringBuilder = new StringBuilder();
-            for (int wordIndex = 0; wordIndex < wordsFromSentenceFormOfChosenCoursePoint.length; wordIndex++) {
-                if (wordIndex == hiddenWordIndex) {
-                    for (int hiddenWordCharacterIndex = 0; hiddenWordCharacterIndex < hiddenWord.length(); hiddenWordCharacterIndex++) {
-                        promptStringBuilder.append("_");
-                    }
-                } else {
-                    promptStringBuilder.append(wordsFromSentenceFormOfChosenCoursePoint[wordIndex]);
-                }
-                promptStringBuilder.append(" ");
+            promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(0,index));
+            for (int hiddenWordCharacterIndex = 0; hiddenWordCharacterIndex < hiddenWord.length(); hiddenWordCharacterIndex++) {
+                promptStringBuilder.append("_");
             }
+            promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(index+hiddenWord.length(), sentenceFormOfChosenCoursePoint.length()));
+
             prompt = promptStringBuilder.toString();
             correctAnswer = hiddenWord;
         }

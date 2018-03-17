@@ -40,6 +40,8 @@ public class CourseScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent toCoursePoints = new Intent(CourseScreen.this, CoursePointsScreen.class);
                 toCoursePoints.putExtra(getString(R.string.course_id),bundle.getInt(getString(R.string.course_id)));
+                toCoursePoints.putExtra(getString(R.string.perspective), 0);
+
                 startActivity(toCoursePoints);//Opens the course points screen for this course
             }
         });

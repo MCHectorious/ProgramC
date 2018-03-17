@@ -9,18 +9,18 @@
     <string name="title_activity_course_points">Course Points</string>
     <string name="title_activity_revision_screen">Revision</string>
     <string name="you_have_no_courses_points">You currently have no courses points</string>
-    <string name="no_courses_points_instructions">To add course points and continue click Continue</string>
-    <string name="machine_generated_sentences_warning">These sentences may be machine generated and thus can be inaccurate.</string>
-    <string name="edit_tab_instructions">You can edit these sentences in the Edit Tab (as well as making further edits such as adding your own Course Points).</string>
+    <string name="no_courses_points_instructions">To add course points and continue press Continue.</string>
+    <string name="machine_generated_sentences_warning">The sentence form of these course point may be machine generated and thus can be inaccurate.</string>
+    <string name="edit_tab_instructions">You can edit these sentences in the Edit tab (as well as making further edits such as adding your own course points).</string>
     <string name="you_have_no_courses">You currently have no courses.</string>
-    <string name="no_courses_instructions">To add courses and continue click OKAY</string>
+    <string name="no_courses_instructions">To add courses and continue click Continue</string>
     <string name="the_answer_is">The correct answer is: </string>
     <string name="delete">Delete</string>
     <string name="gcse">GCSE</string>
     <string name="as_and_a_level">AS and A-Level</string>
-    <string name="getting_latest_list">Getting the Latest List of</string>
+    <string name="getting_latest_list">Getting the Latest List of </string>
     <string name="courses">courses</string>
-    <string name="this_should_be_quick">This should only take a moment</string>
+    <string name="this_should_be_quick">Please wait: this should only take a moment</string>
     <string name="course_id">Course ID</string>
     <string name="loading_course_points">Loading Testable Material</string>
     <string name="add_new_course_point">Add New Course Point</string>
@@ -46,10 +46,10 @@
     <string name="make_these_changes">Make These Changes</string>
     <string name="official_name">Official Name</string>
     <string name="get_information_from_aqa">Getting Additional Information From AQA</string>
-    <string name="get_cram_courses">Getting Cram Courses Related to This Course</string>
-    <string name="get_information_from_cram_courses">Getting Information From These Cram Courses</string>
-    <string name="get_memrise_courses">Getting MemRise Courses Related to This Course</string>
-    <string name="getting_information_from_memrise_courses">Getting Information From These MemRise Courses</string>
+    <string name="get_cram_courses">Finding Cram Courses Related to This Course</string>
+    <string name="get_information_from_cram_courses">Getting Flashcards From Related Cram Courses</string>
+    <string name="get_memrise_courses">Finding MemRise Courses Related to This Course</string>
+    <string name="getting_information_from_memrise_courses">Getting Flashcards From Related MemRise Courses</string>
     <string name="subject">Subject</string>
     <string name="flashcard_front">Flashcard Front</string>
     <string name="flashcard_back">Flashcard Back</string>
@@ -67,5 +67,11 @@
     <string name="temp_answer">Please Enter Your Answer Here</string>
     <string name="home">Home</string>
     <string name="completely_wrong">Completely Wrong</string>
+    <string name="warning">Warning</string>
+    <string name="deleting_course_point_warning">Are you sure you want to delete this course point?</string>
+    <string name="deleting_course_warning">Are you sure you want to delete this course?</string>
+    <string name="perspective">Perspective</string>
+    <string name="revision">Revision</string>
+    <string name="you_can_view_course_points">You can view course points for this course in both their sentence and flashcard form.</string>
 
 </resources>

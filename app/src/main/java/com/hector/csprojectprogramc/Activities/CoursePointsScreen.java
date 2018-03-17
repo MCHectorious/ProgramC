@@ -31,13 +31,18 @@ public class CoursePointsScreen extends AppCompatActivity {
     private List<CoursePoint> coursePoints;// Stores the course points that will be displayed //TODO: remove as field
     private int courseID;// Stores the ID of the course in the database
     private RecyclerView editPointsRecyclerView;// Stores the recycler view which allows the courses points to be edited
+    private int perspective;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // Runs when the screen is created
         super.onCreate(savedInstanceState);// TODO: research what this does
         setContentView(R.layout.course_points_screen);// Links the XML file which defines the layout of the screen
         editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
-        courseID = getIntent().getExtras().getInt(getString(R.string.course_id),0); //gets the course ID from the previous screen //TODO: make sure it handles null
+
+        Bundle intentsBundle = getIntent().getExtras();
+
+        courseID = intentsBundle.getInt(getString(R.string.course_id),0); //gets the course ID from the previous screen //TODO: make sure it handles null
+        perspective = intentsBundle.getInt(getString(R.string.perspective),0);
         new getCoursePointsFromDatabase().execute();// Gets the course points for the course and then after displays them
     }
 
@@ -97,6 +102,19 @@ public class CoursePointsScreen extends AppCompatActivity {
                 final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView); //Initialises recycler view which contains the course points in their sentence form
                 sentencesRecyclerView.setLayoutManager(new LinearLayoutManager(CoursePointsScreen.this)); // Shows the course points in a vertical list
                 sentencesRecyclerView.setAdapter(new CoursePointsScreenSentencesAdapter(coursePoints));//Starts the activity by showing the sentence form of the course points
+                sentencesRecyclerView.setVisibility(View.GONE);
+
+                switch (perspective){
+                    case 0:
+                        sentencesRecyclerView.setVisibility(View.VISIBLE);
+                        break;
+                    case 1:
+                        flashcardsRecyclerView.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        editPointsRecyclerView.setVisibility(View.VISIBLE);
+                        break;
+                }
 
                 BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);//Intialises the navigation which allows the user to pick which form of course points to show  //TODO: bottom navigation?
                 navigationForCoursePointsPerspective.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -109,6 +127,8 @@ public class CoursePointsScreen extends AppCompatActivity {
                                 editPointsRecyclerView.setVisibility(View.GONE);
                                 addCoursePointButton.setVisibility(View.GONE); //TODO: should I always show this?
                                 //Only shows the course points in their sentence form
+
+                                perspective = 0;
                                 return true;
                             case R.id.cardListNav:
                                 sentencesRecyclerView.setVisibility(View.GONE);
@@ -116,6 +136,8 @@ public class CoursePointsScreen extends AppCompatActivity {
                                 editPointsRecyclerView.setVisibility(View.GONE);
                                 addCoursePointButton.setVisibility(View.GONE);
                                 //Only shows the course points in their flashcard form
+
+                                perspective = 1;
                                 return true;
                             case R.id.editNav:
                                 sentencesRecyclerView.setVisibility(View.GONE);
@@ -123,22 +145,15 @@ public class CoursePointsScreen extends AppCompatActivity {
                                 editPointsRecyclerView.setVisibility(View.VISIBLE);
                                 addCoursePointButton.setVisibility(View.VISIBLE);
                                 //Only shows the course points in the form which allows editing
+
+                                perspective = 2;
                                 return true;
                         }
                         return false;
                     }
                 });
 
-                AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);// Initialises the alert dialog which will warn the user that some sentences may be machine generated
-                TextView machineLearningWarningTextView = new TextView(CoursePointsScreen.this); //TODO: Do i need a separate text view
-                String machineLearningWarningText = getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
-                machineLearningWarningTextView.setText(machineLearningWarningText);
-                machineLearningWarningAlertDialogBuilder.setView(machineLearningWarningTextView);
-                machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
-                    }
-                });
-                machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen
+
             }
         }
     }
@@ -188,6 +203,7 @@ public class CoursePointsScreen extends AppCompatActivity {
         protected void onPostExecute(Void result){
             Intent refreshScreen = new Intent(CoursePointsScreen.this, CoursePointsScreen.class);
             refreshScreen.putExtra(getString(R.string.course_id), courseID);
+            refreshScreen.putExtra(getString(R.string.perspective), perspective);
             startActivity(refreshScreen);//Refreshes the screen to include te newly created course point
         }
     }

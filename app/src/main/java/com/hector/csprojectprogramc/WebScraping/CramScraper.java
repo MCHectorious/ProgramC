@@ -1,11 +1,15 @@
 package com.hector.csprojectprogramc.WebScraping;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
+
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
 import com.hector.csprojectprogramc.Database.CoursePoint;
@@ -138,8 +142,21 @@ public class CramScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            Intent intent = new Intent(context, HomeScreen.class);
-            context.startActivity(intent);
+
+            AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(context);// Initialises the alert dialog which will warn the user that some sentences may be machine generated
+            TextView machineLearningWarningTextView = new TextView(context); //TODO: Do i need a separate text view
+            String machineLearningWarningText =  context.getString(R.string.you_can_view_course_points)+ System.getProperty("line.separator")+ context.getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+context.getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
+            machineLearningWarningTextView.setText(machineLearningWarningText);
+            machineLearningWarningAlertDialogBuilder.setView(machineLearningWarningTextView);
+            machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
+                    Intent intent = new Intent(context, HomeScreen.class);
+                    context.startActivity(intent);
+                }
+            });
+            machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen
+
+
         }
     }
 }

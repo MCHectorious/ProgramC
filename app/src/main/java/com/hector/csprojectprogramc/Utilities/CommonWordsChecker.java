@@ -1,122 +1,60 @@
 package com.hector.csprojectprogramc.Utilities;
 
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class CommonWordsChecker {
 
-    private ArrayList<String> words = new ArrayList<>();
-    //private ArrayList<String> words = new ArrayList<String>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
-    private int maxStringLength = 0;
-    private int wordsSize;
+    private static String[] TwoCharWords = {"an","as","at","be","by","do","if","in","is","it","of","on","or","so","to","we"};
+    private static String[] ThreeCharWords = {"and","are","but","can","due","for","had","how","its","may","out","the","why","you"};
+    private static String[] FourCharWords = {"also","come","does","e.g.","form","from","have","into","made","make","part","such","take","that","then","they","this","type","what","when","with","your"};
+    private static String[] FiveCharWords = {"about","bring","carry","cause","means","takes","their","there","these","thing","where","which"};
+    private static String[] SixCharWords = {"amount","things"};
+    private static String[] SevenCharWords = {"because"};
 
-    public CommonWordsChecker(){//TODO: make this static
-        words.add("to");
-        words.add("of");
-        words.add("in");
-        words.add("for");
-        words.add("the");
-        words.add("on");
-        words.add("with");
-        words.add("at");
-        words.add("by");
-        words.add("from");
-        words.add("about");
-        words.add("into");
-        words.add("and");
-        words.add("a");
-        words.add("that");
-        words.add("it");
-        words.add("as");
-        words.add("this");
-        words.add("but");
-        words.add("they");
-        words.add("or");
-        words.add("an");
-        words.add("there");
-        words.add("what");
-        words.add("are");
-        words.add("their");
-        words.add("where");
-        words.add("take");
-        words.add("is");
-        words.add("takes");
-        words.add("make");
-        words.add("do");
-        words.add("so");
-        words.add("can");
-        words.add("carry");
-        words.add("out");
-        words.add("bring");
-        words.add("such");
-        words.add("these");
-        words.add("part");
-        words.add("if");
-        words.add("then");
-        words.add("also");
-        words.add("due");
-        words.add("be");
-        words.add("had");
-        words.add("when");
-        words.add("does");
-        words.add("have");
-        words.add("-");
-        words.add("how");
-        words.add("may");
-        words.add("thing");
-        words.add("things");
-        words.add("form");
-        words.add("amount");
-        words.add("cause");
-        words.add("made");
-        words.add("your");
-        words.add("you");
-        words.add("we");
-        words.add("means");
-        words.add("come");
-        words.add("which");
-        words.add("e.g.");
-        words.add("type");
-        words.add("why");
-        words.add("?");
-        words.add("its");
-        words.add("because");
+    public static boolean checkIfCommonWord(String input){
+        String wordToTest = input.toLowerCase();
 
-        Collections.sort(words);
-
-        for (String string: words) {
-            maxStringLength = Math.max(string.length(),maxStringLength);
+        switch (input.length()){
+            case 1:
+                return true;
+            case 2:
+                return isInArray(wordToTest,TwoCharWords);
+            case 3:
+                return isInArray(wordToTest,ThreeCharWords);
+            case 4:
+                return isInArray(wordToTest,FourCharWords);
+            case 5:
+                return isInArray(wordToTest,FiveCharWords);
+            case 6:
+                return isInArray(wordToTest,SixCharWords);
+            case 7:
+                return isInArray(wordToTest,SevenCharWords);
+            default:
+                return false;
         }
-        wordsSize = words.size()-1;
 
     }
 
-    public boolean checkIfCommonWord(String input){
-        String wordToTest = input.toLowerCase();
+    private static boolean isInArray(String string, String[] array){
+        int low = 0;
+        int high = array.length;
+        int mid;
+        int compare;
 
-        if (wordToTest.length()<maxStringLength){
-            int low = 0;
-            int high = wordsSize;
-            int mid;
-            int compare;
-
-            while (low <= high) {
-                mid = (low + high) >> 1;
+        while (low <= high) {
+            mid = (low + high) >> 1;
 
 
-                compare = words.get(mid).compareTo(wordToTest);
-                if (compare < 0) {
-                    low = mid + 1;
-                } else if (compare > 0) {
-                    high = mid - 1;
-                } else {
-                    return true;
-                }
+            compare = array[mid].compareTo(string);
+            if (compare < 0) {
+                low = mid + 1;
+            } else if (compare > 0) {
+                high = mid - 1;
+            } else {
+                return true;
             }
         }
         return false;
     }
-
 
 
 }

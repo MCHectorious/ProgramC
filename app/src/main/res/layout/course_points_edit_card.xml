@@ -66,6 +66,7 @@
                 android:layout_alignBottom="@+id/cardBackEdit"
                 android:layout_alignParentRight="true"
                 android:background="@color/white"
+                android:maxLines="2"
                 android:ellipsize="end"
                 />
 

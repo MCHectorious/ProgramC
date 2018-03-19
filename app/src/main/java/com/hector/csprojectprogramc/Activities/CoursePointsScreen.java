@@ -107,12 +107,15 @@ public class CoursePointsScreen extends AppCompatActivity {
                 switch (perspective){
                     case 0:
                         sentencesRecyclerView.setVisibility(View.VISIBLE);
+                        findViewById(R.id.sentenceListNav).setSelected(true);
                         break;
                     case 1:
                         flashcardsRecyclerView.setVisibility(View.VISIBLE);
+                        findViewById(R.id.cardListNav).setSelected(true);
                         break;
                     case 2:
                         editPointsRecyclerView.setVisibility(View.VISIBLE);
+                        findViewById(R.id.editNav).setSelected(true);
                         break;
                 }
 

@@ -20,7 +20,7 @@
     <string name="as_and_a_level">AS and A-Level</string>
     <string name="getting_latest_list">Getting the Latest List of </string>
     <string name="courses">courses</string>
-    <string name="this_should_be_quick">Please wait: this should only take a moment</string>
+    <string name="this_should_be_quick">Please wait: this should be brief</string>
     <string name="course_id">Course ID</string>
     <string name="loading_course_points">Loading Testable Material</string>
     <string name="add_new_course_point">Add New Course Point</string>

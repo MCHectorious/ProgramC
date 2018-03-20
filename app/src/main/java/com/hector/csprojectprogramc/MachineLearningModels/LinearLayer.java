@@ -1,5 +1,7 @@
 package com.hector.csprojectprogramc.MachineLearningModels;
 
+import android.util.Log;
+
 public class LinearLayer {
 
     public static double[] forward(double[] input) {
@@ -104,6 +106,9 @@ public class LinearLayer {
         output[2] = getOutputAtPosition2(input);
         output[1] = getOutputAtPosition1(input);
         output[0] = getOutputAtPosition0(input);
+        for (int i = 0; i < 100; i++) {
+            Log.w("Output",Double.toString(output[i]));
+        }
         return output;
     }
 

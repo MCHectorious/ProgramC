@@ -116,6 +116,8 @@ public class CramScraper{
 
             boolean foundCard = false;
 
+            //Log.w("Got this far","yes");
+
             for (String url: strings) {
                 try {
                     Document courseWebsite = Jsoup.connect("http://www.cram.com"+url).get();
@@ -123,7 +125,12 @@ public class CramScraper{
                     for (Element e: FlashCardSection){
                         String front = e.select("div[class=front_text card_text]").text();
                         String back = e.select("div[class=back_text card_text]").text();
+
+                        Log.w( (front.length()>10)? front.substring(0,10):front,(back.length()>10)? back.substring(0,10):back);
                         String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
+                        //Log.w("Sentence","Yes");
+
+                        //Log.w("Sentence", (sentence.length()>30)? sentence.substring(0,30):sentence);
                         foundCard = true;
                         database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));
                     }

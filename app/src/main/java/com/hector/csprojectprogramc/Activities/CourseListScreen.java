@@ -46,7 +46,7 @@ public class CourseListScreen extends AppCompatActivity {
         protected void onPreExecute(){//Shows the user the dialog
             super.onPreExecute(); //TODO: research what this does
             progressDialog = new ProgressDialog(CourseListScreen.this); // Initialises the variable
-            progressDialog.setTitle(getString(R.string.getting_latest_list)+qualification+" "+getString(R.string.courses)); // Sets the title of the dialog shown to the user
+            progressDialog.setTitle(getString(R.string.getting_latest_list)+" "+qualification+" "+getString(R.string.courses)); // Sets the title of the dialog shown to the user
             progressDialog.setMessage(getString(R.string.this_should_be_quick)); //Sets the message of dialog to an instruction for the user to follow
             progressDialog.setIndeterminate(false); //Shows an animation while the dialog is displayed but this animation doesn't represent how far though the process is
             progressDialog.show();//Shows the dialog on the screen

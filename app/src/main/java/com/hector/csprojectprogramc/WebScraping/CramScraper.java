@@ -21,6 +21,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CramScraper{
@@ -126,7 +128,7 @@ public class CramScraper{
                         String front = e.select("div[class=front_text card_text]").text();
                         String back = e.select("div[class=back_text card_text]").text();
 
-                        Log.w( (front.length()>10)? front.substring(0,10):front,(back.length()>10)? back.substring(0,10):back);
+                        //Log.w( (front.length()>10)? front.substring(0,10):front,(back.length()>10)? back.substring(0,10):back);
                         String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
                         //Log.w("Sentence","Yes");
 
@@ -134,9 +136,11 @@ public class CramScraper{
                         foundCard = true;
                         database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));
                     }
-                } catch (Exception e) {
+                } catch (IOException e) {
                     Log.e("Issue with Cram",course.getOfficial_name());
                     Log.e("Error",e.getMessage());
+
+
                 }
 
             }

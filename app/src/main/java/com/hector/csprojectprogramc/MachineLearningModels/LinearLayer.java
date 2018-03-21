@@ -106,9 +106,10 @@ public class LinearLayer {
         output[2] = getOutputAtPosition2(input);
         output[1] = getOutputAtPosition1(input);
         output[0] = getOutputAtPosition0(input);
-        for (int i = 0; i < 100; i++) {
-            Log.w("Output",Double.toString(output[i]));
-        }
+        //for (int i = 0; i < 100; i++) {
+          //  Log.w("Output"+i,Double.toString(output[i]));
+        //}
+        //Log.w("Got this far","finished linear layer");
         return output;
     }
 

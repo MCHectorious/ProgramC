@@ -19,6 +19,18 @@ public class CoursePoint {
 
     private int course_ID_foreign;
 
+    public void setFlashcard_front(String flashcard_front) {
+        this.flashcard_front = flashcard_front;
+    }
+
+    public void setFlashcard_back(String flashcard_back) {
+        this.flashcard_back = flashcard_back;
+    }
+
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
+    }
+
     private String flashcard_front;
     private String flashcard_back;
     private String sentence;

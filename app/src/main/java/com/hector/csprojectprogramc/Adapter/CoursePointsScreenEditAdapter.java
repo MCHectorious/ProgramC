@@ -126,9 +126,12 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     editCoursePointAlertDialogBuilder.setPositiveButton( context.getString(R.string.make_these_changes) , new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
+                            //String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
                             temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                            new updateCoursePointInDatabase().execute(coursePointComponentsArray);
+                            temporaryCoursePoint.setFlashcard_front(cardFrontEdit.getText().toString());
+                            temporaryCoursePoint.setFlashcard_back(cardBackEdit.getText().toString());
+                            temporaryCoursePoint.setSentence(sentenceEdit.getText().toString());
+                            new updateCoursePointInDatabase().execute();
 
                         }
                     });
@@ -156,8 +159,9 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         @Override
         protected Void doInBackground(String... strings) {
             MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
-            database.customDao().deleteCoursePoint(temporaryCoursePoint);
-            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
+            //database.customDao().deleteCoursePoint(temporaryCoursePoint);
+            //database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
+            database.customDao().updateCoursePoint(temporaryCoursePoint);
             return null;
         }
 

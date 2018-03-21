@@ -173,7 +173,7 @@ public class FlashcardToSentenceModel {
             }
 
             if(start.equals("why is ")){
-                return Character.toUpperCase(front.charAt(8))+front.substring(9,front.lastIndexOf(" "))+" is "+front.substring(front.lastIndexOf(" "))+" because "+back;
+                return Character.toUpperCase(front.charAt(7))+front.substring(8,front.lastIndexOf(" "))+" is "+front.substring(front.lastIndexOf(" "))+" because "+back;
             }
         }
 
@@ -202,17 +202,17 @@ public class FlashcardToSentenceModel {
             }
         }
 
-        Log.w("Warning","Using ML model");
+        //Log.w("Warning","Using ML model");
 
         String input = flashcardFront+"<F_B_S>"+flashcardBack;
 
         String extra= (input.length()>100)? input.substring(100):"";
 
         double[] inputArray = DataPreparation.stringToDoubleArray(input);
-        Log.w("Got this far","Converted message");
+        //Log.w("Got this far","Converted message");
         double[] outputArray = LinearLayer.forward(inputArray);
 
-        Log.i("Got this far","Ran Model");
+        //Log.w("Got this far","Ran Model");
         return DataPreparation.doubleArrayToString(outputArray)+extra;
 
     }

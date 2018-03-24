@@ -60,7 +60,7 @@ public class MemRiseScraper{
                 try {
                     Document document = Jsoup.connect(url).get();
                     Elements section = document.select("div[class=row]").select("div[class=course-box-wrapper col-xs-12 col-sm-6 col-md-4]");
-                    //Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
+                    //Elements section  = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
                     Log.w("section no", Integer.toString(section.size() ));
                     for (Element element:section ) {
                         Element courseNameElement = element.select("a[class=inner]").first();

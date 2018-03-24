@@ -56,13 +56,19 @@ public class MemRiseScraper{
                 builder.append("https://www.memrise.com/courses/english/?q=");
                 builder.append(GeneralStringUtils.convertSpacesToPluses(string));
                 String url = builder.toString();
+                Log.w("URL",url);
                 try {
                     Document document = Jsoup.connect(url).get();
-                    Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
+                    Elements section = document.select("div[class=row]").select("div[class=course-box-wrapper col-xs-12 col-sm-6 col-md-4]");
+                    //Elements section = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
+                    Log.w("section no", Integer.toString(section.size() ));
                     for (Element element:section ) {
                         Element courseNameElement = element.select("a[class=inner]").first();
                         String courseName = courseNameElement.text().toLowerCase();
+                        Log.w("course name", courseName);
                         String categoryName = element.select("a[class=category]").first().text().toLowerCase();
+                        Log.w("category name", categoryName);
+                        Log.w("colloquial name", course.getColloquial_name().toLowerCase());
 
                         if (courseName.contains(course.getColloquial_name().toLowerCase()) ||
                                 categoryName.contains(course.getColloquial_name().toLowerCase())){
@@ -71,6 +77,7 @@ public class MemRiseScraper{
                             if(website.length()>8){
                                 if(website.substring(0,8).equals("/course/")){
                                     relatedWebsites.add(website);
+                                    Log.w("Website",website);
                                     if (relatedWebsites.size()==5){
                                         return null;
                                     }

@@ -96,7 +96,7 @@ public class HomeScreen extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, getString(R.string.database_location)).build();
             courses = database.customDao().getAllCourses();
             hasCourses = courses.size()>0;
             return null;

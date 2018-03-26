@@ -28,7 +28,7 @@ public class CourseScreen extends AppCompatActivity {
         TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
         examBoardTextView.setText(bundle.getString(getString(R.string.exam_board))); //Shows the exam board
 
-        TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);
+        TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);//TODO: hide if not avaialble
         nextKeyDateTextView.setText(bundle.getString(getString(R.string.key_date))); //Shows the date of the next key date
 
         TextView nextKeyDateDetailTextView =  findViewById(R.id.dateSpecificCardInCourse);

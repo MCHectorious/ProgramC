@@ -139,7 +139,7 @@ public class RevisionScreen extends AppCompatActivity {
                         answerReviewAlertDialogBuilder.setTitle(getString(R.string.completely_wrong));
 
                     }else{
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+" "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
 
                     }
 
@@ -147,7 +147,7 @@ public class RevisionScreen extends AppCompatActivity {
 
                     //String answerReviewText = getString(R.string.th e_answer_is)+correctAnswer;
                     SpannableStringBuilder answerReviewTextBuilder = new SpannableStringBuilder();
-                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(correctAnswer);
+                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(" ").append(correctAnswer);
                     answerReviewTextBuilder.setSpan(new StyleSpan(Typeface.BOLD),getString(R.string.the_answer_is).length(),answerReviewTextBuilder.length(),0);
 
                     answerReviewTextView.setText(answerReviewTextBuilder);

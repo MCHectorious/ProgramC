@@ -35,8 +35,8 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);// TODO: think of better name
-        return new ViewHolder(view, courses, context);
+        View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
+        return new ViewHolder(card, courses, context);
 
     }
 

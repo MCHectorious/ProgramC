@@ -129,7 +129,7 @@ public class MemRiseScraper{
                             String back = div.select("div[class=col_b col text]").select("div[class=text]").first().text();
                             String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
                             foundCard = true;
-                            database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));//TODO:Change Back
+                            database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));
                         }
 
                     }

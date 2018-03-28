@@ -32,7 +32,7 @@ public class HomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen_layout);
         Toolbar toolbar =  findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.home);//TODO: Do i need get string
+        toolbar.setTitle(R.string.home);
         setSupportActionBar(toolbar);
 
         FloatingActionButton toExamBoardScreenButton =  findViewById(R.id.fab);

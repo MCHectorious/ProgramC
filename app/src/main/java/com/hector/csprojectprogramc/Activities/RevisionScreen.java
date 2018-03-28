@@ -35,7 +35,7 @@ public class RevisionScreen extends AppCompatActivity {
     private String prompt, correctAnswer; //The question to be showed to user and the actual answer to that question
     private TextView promptTextView;
     private EditText userAnswerEditableTextView; //Where the user inputs their answer
-    private int CourseID; // The id of the course the user is being test on
+    private int CourseID, coursePointsSize; // The id of the course the user is being test on
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class RevisionScreen extends AppCompatActivity {
     }
 
     private void generateQuestion(){
-        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePoints.size()));// Gets a randomly chosen course point //TODO: cache coursePointsSize
+        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePointsSize));// Gets a randomly chosen course point
         if (includeGapQuestions&&includeQAQuestions){
             if(random.nextBoolean()){//If both are available it chooses randomly
                 generateGapQuestion(chosenCoursePoint);
@@ -115,7 +115,7 @@ public class RevisionScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, getString(R.string.database_location)).build();
             coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
-
+            coursePointsSize = coursePoints.size();
             return null;
         }
 

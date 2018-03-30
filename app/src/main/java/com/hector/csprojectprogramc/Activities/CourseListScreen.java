@@ -52,17 +52,17 @@ public class CourseListScreen extends AppCompatActivity {
         }
         final RecyclerView recyclerViewForCourses =  findViewById(R.id.courseListScreenRecyclerView); //Initialises the recycler view which shows the courses
 
-        new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()).execute();//Gets the list of courses from the AQA website and then afterwards it displays them
+        //new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()).execute();//Gets the list of courses from the AQA website and then afterwards it displays them
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        getCoursesIfConnectedToWifi();
+        getCoursesIfConnectedToWifi(new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()));
 
     }
 
-    private void getCoursesIfConnectedToWifi(){
+    private void getCoursesIfConnectedToWifi(final getCoursesAndTheirWebsites getCourses){
         if (wifi.isConnected()) {
-            new getCoursesAndTheirWebsites().execute();//Gets the list of courses from the AQA website and then afterwards it displays them
+            getCourses.execute();//Gets the list of courses from the AQA website and then afterwards it displays them
         }else{
             AlertDialog.Builder noWiFiAlertDialogBuilder = new AlertDialog.Builder(CourseListScreen.this);
             noWiFiAlertDialogBuilder.setTitle(R.string.no_wifi_available);
@@ -71,7 +71,7 @@ public class CourseListScreen extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    getCoursesIfConnectedToWifi();
+                    getCoursesIfConnectedToWifi(getCourses);
                 }
             });
             noWiFiAlertDialogBuilder.create().show();

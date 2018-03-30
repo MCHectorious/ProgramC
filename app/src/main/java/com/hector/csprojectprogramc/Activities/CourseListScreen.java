@@ -1,6 +1,11 @@
 package com.hector.csprojectprogramc.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +30,7 @@ public class CourseListScreen extends AppCompatActivity {
     private String HTMLDividerClassForQualification; //Where to search for courses on the AQA website to find either GCSE or A-Level courses
     private ArrayList<String> courseNames = new ArrayList<>(); //Stores the names of all of the relevant courses
     private ArrayList<String> courseWebsites = new ArrayList<>(); //Stores the URLs of the websites for the courses
+    private NetworkInfo wifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Runs when the screen starts
@@ -37,7 +43,29 @@ public class CourseListScreen extends AppCompatActivity {
         if (qualification.equals(getString(R.string.as_and_a_level))){ //TODO: Change to int
             HTMLDividerClassForQualification = "panelInner as_and_a-level-header"; //Sets the divider to the name of the section which includes the A-Level courses
         }
-        new getCoursesAndTheirWebsites().execute();//Gets the list of courses from the AQA website and then afterwards it displays them
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        getCoursesIfConnectedToWifi();
+
+    }
+
+    private void getCoursesIfConnectedToWifi(){
+        if (wifi.isConnected()) {
+            new getCoursesAndTheirWebsites().execute();//Gets the list of courses from the AQA website and then afterwards it displays them
+        }else{
+            AlertDialog.Builder noWiFiAlertDialogBuilder = new AlertDialog.Builder(CourseListScreen.this);
+            noWiFiAlertDialogBuilder.setTitle(R.string.no_wifi_available);
+            noWiFiAlertDialogBuilder.setMessage(R.string.no_wifi_message);
+            noWiFiAlertDialogBuilder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getCoursesIfConnectedToWifi();
+                }
+            });
+            noWiFiAlertDialogBuilder.create().show();
+        }
     }
 
     private class getCoursesAndTheirWebsites extends AsyncTask<Void,Void,Void>{ //Gets the list of courses from the AQA website
@@ -54,6 +82,7 @@ public class CourseListScreen extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             try{
                 Document document = Jsoup.connect("http://www.aqa.org.uk/qualifications").timeout(1000000).get();//Loads the aqa website
                 Elements links = document.select("div[class="+ HTMLDividerClassForQualification +"]").select("a[href]");// Gets all the hyperlinks of the relevant courses

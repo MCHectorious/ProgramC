@@ -21,8 +21,8 @@ public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<Cou
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);//TODO: think of better name
-        return new ViewHolder(view);
+        View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_sentence_card,parent,false);
+        return new ViewHolder(card);
     }
 
     @Override

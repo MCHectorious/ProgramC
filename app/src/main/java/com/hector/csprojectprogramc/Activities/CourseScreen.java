@@ -28,11 +28,19 @@ public class CourseScreen extends AppCompatActivity {
         TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
         examBoardTextView.setText(bundle.getString(getString(R.string.exam_board))); //Shows the exam board
 
-        TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);
-        nextKeyDateTextView.setText(bundle.getString(getString(R.string.key_date))); //Shows the date of the next key date
 
-        TextView nextKeyDateDetailTextView =  findViewById(R.id.dateSpecificCardInCourse);
-        nextKeyDateDetailTextView.setText(bundle.getString(getString(R.string.key_date_details))); //Shows what is happening on the next key date
+        String keyDate = bundle.getString(getString(R.string.key_date));
+        if(keyDate.equals("")){
+            findViewById(R.id.dateCard).setVisibility(View.GONE);
+        }else{
+            TextView nextKeyDateTextView =  findViewById(R.id.dateCardInCourse);
+            nextKeyDateTextView.setText(keyDate); //Shows the date of the next key date
+            TextView nextKeyDateDetailTextView =  findViewById(R.id.dateSpecificCardInCourse);
+            nextKeyDateDetailTextView.setText(bundle.getString(getString(R.string.key_date_details))); //Shows what is happening on the next key date
+        }
+
+
+
 
         CardView coursePointsButton =  findViewById(R.id.coursePoints);
         coursePointsButton.setOnClickListener(new View.OnClickListener() {

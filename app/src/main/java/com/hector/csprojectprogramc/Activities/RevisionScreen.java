@@ -35,7 +35,7 @@ public class RevisionScreen extends AppCompatActivity {
     private String prompt, correctAnswer; //The question to be showed to user and the actual answer to that question
     private TextView promptTextView;
     private EditText userAnswerEditableTextView; //Where the user inputs their answer
-    private int CourseID; // The id of the course the user is being test on
+    private int CourseID, coursePointsSize; // The id of the course the user is being test on
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class RevisionScreen extends AppCompatActivity {
     }
 
     private void generateQuestion(){
-        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePoints.size()));// Gets a randomly chosen course point //TODO: cache coursePointsSize
+        CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePointsSize));// Gets a randomly chosen course point
         if (includeGapQuestions&&includeQAQuestions){
             if(random.nextBoolean()){//If both are available it chooses randomly
                 generateGapQuestion(chosenCoursePoint);
@@ -115,7 +115,7 @@ public class RevisionScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             MainDatabase database = Room.databaseBuilder(RevisionScreen.this, MainDatabase.class, getString(R.string.database_location)).build();
             coursePoints = database.customDao().getCoursePointsForCourse(CourseID);
-
+            coursePointsSize = coursePoints.size();
             return null;
         }
 
@@ -139,7 +139,7 @@ public class RevisionScreen extends AppCompatActivity {
                         answerReviewAlertDialogBuilder.setTitle(getString(R.string.completely_wrong));
 
                     }else{
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
+                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+" "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
 
                     }
 
@@ -147,7 +147,7 @@ public class RevisionScreen extends AppCompatActivity {
 
                     //String answerReviewText = getString(R.string.th e_answer_is)+correctAnswer;
                     SpannableStringBuilder answerReviewTextBuilder = new SpannableStringBuilder();
-                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(correctAnswer);
+                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(" ").append(correctAnswer);
                     answerReviewTextBuilder.setSpan(new StyleSpan(Typeface.BOLD),getString(R.string.the_answer_is).length(),answerReviewTextBuilder.length(),0);
 
                     answerReviewTextView.setText(answerReviewTextBuilder);

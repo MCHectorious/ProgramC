@@ -7,8 +7,6 @@ import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 public class FlashcardToSentenceModel {
 
     public static String convertFlashcardToSentence(String flashcardFront, String flashcardBack){
-        //TODO: Fix capitililsation
-        //TODO: optimise
 
         String front = flashcardFront.trim();
         if(front.contains("(") && front.contains(")")) {

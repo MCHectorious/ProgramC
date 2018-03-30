@@ -1,6 +1,5 @@
 package com.hector.csprojectprogramc.MachineLearningModels;
 
-import android.util.Log;
 
 public class LinearLayer {
 

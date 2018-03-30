@@ -39,8 +39,8 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);//TODO: think of appropriate name
-        return new ViewHolder(view,context, coursePoints);
+        View viewHolder =  LayoutInflater.from(parent.getContext()).inflate(R.layout.course_points_edit_card,parent,false);
+        return new ViewHolder(viewHolder,context, coursePoints);
     }
 
     @Override

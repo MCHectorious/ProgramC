@@ -36,11 +36,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignBottom="@+id/cardSide"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
+                android:contentDescription="@string/arrow_pointing_left"
                 app:srcCompat="@drawable/double_left_chevron" />
 
 
@@ -49,11 +50,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignBottom="@+id/cardSide"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
-
-                android:layout_marginRight="5dp"
+                android:contentDescription="@string/arrow_pointing_right"
+                android:layout_marginEnd="5dp"
                 android:layout_marginTop="5dp"
                 app:srcCompat="@drawable/double_right_chevron" />
         </RelativeLayout>

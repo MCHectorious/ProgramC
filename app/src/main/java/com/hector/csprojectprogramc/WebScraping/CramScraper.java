@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.Database.Course;
@@ -23,51 +22,43 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class CramScraper{
-    private Context context, appContext;
-    private ArrayList<String> relatedWebsites = new ArrayList<>();
-    private GetFlashcardsFromRelatedCramCourses getFlashcardsFromWebsite = new GetFlashcardsFromRelatedCramCourses();
-    private Course course;
-    private int courseID;
-
 
     public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
-        this.context = context;
-        this.appContext = appContext;
-        this.course = course;
-        courseID = course.getCourse_ID();
-        StringBuilder builder = new StringBuilder();
-        builder.append(course.getExamBoard()).append(" ");
-        builder.append(course.getQualification()).append(" ");
-        builder.append(course.getColloquial_name());
-        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards();
-        getRelatedFlashcards.execute(builder.toString());
+        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards(context, course, appContext);
+        getRelatedFlashcards.execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
     }
 
-    private class GetRelatedFlashcards extends AsyncTask<String,Void,Void> {
-        ProgressDialog progressDialog;
+    private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>> {
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context, appContext;
+        private Course course;
+
+        private GetRelatedFlashcards(Context context, Course course, Context appContext){
+            this.context = new WeakReference<>(context);
+            this.course = course;
+            this.appContext = new WeakReference<>(appContext);
+        }
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle(context.getString(R.string.get_cram_courses));
-            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.get_cram_courses));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
+        protected ArrayList<String> doInBackground(String... strings) {
+            ArrayList<String> relatedWebsites = new ArrayList<>();
             for ( String string: strings) {
 
-                StringBuilder builder = new StringBuilder();
-                builder.append("http://www.cram.com/search?query=");
-                builder.append(GeneralStringUtils.convertSpacesToPluses(string));
-                builder.append("&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any");
-
-                String url = builder.toString();
+                String url = "http://www.cram.com/search?query="+GeneralStringUtils.convertSpacesToPluses(string)+"&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any";
                 try {
                     Log.i("Overall Cram Website",url);
                     Document document = Jsoup.connect(url).get();
@@ -90,31 +81,41 @@ public class CramScraper{
                     Log.e("Error",e.getMessage());
                 }
             }
-            return null;
+            return relatedWebsites;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
+            new GetFlashcardsFromRelatedCramCourses(context.get(), course, appContext.get()).execute(relatedWebsites.toArray(new String[0]));
         }
     }
 
-    private class GetFlashcardsFromRelatedCramCourses extends AsyncTask<String,Void,Void>{
-        ProgressDialog progressDialog;
+    private static class GetFlashcardsFromRelatedCramCourses extends AsyncTask<String,Void,Void>{
+
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context, appContext;
+        private Course course;
+
+        private GetFlashcardsFromRelatedCramCourses(Context context, Course course, Context appContext){
+            this.context = new WeakReference<>(context);
+            this.course = course;
+            this.appContext = new WeakReference<>(appContext);
+        }
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle(context.getString(R.string.get_information_from_cram_courses));
-            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.get_information_from_cram_courses));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,context.getString(R.string.database_location)).build();
+            MainDatabase database = Room.databaseBuilder(appContext.get(),MainDatabase.class,context.get().getString(R.string.database_location)).build();
 
             boolean foundCard = false;
 
@@ -134,7 +135,7 @@ public class CramScraper{
 
                         //Log.w("Sentence", (sentence.length()>30)? sentence.substring(0,30):sentence);
                         foundCard = true;
-                        database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));
+                        database.customDao().insertCoursePoint(new CoursePoint(course.getCourse_ID(),front,back,sentence));
                     }
                 } catch (IOException e) {
                     Log.e("Issue with Cram",course.getOfficial_name());
@@ -154,13 +155,13 @@ public class CramScraper{
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
 
-            AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(context);// Initialises the alert dialog which will warn the user that some sentences may be machine generated
-            String machineLearningWarningText =  context.getString(R.string.you_can_view_course_points)+ System.getProperty("line.separator")+ context.getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+context.getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
+            AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(context.get());// Initialises the alert dialog which will warn the user that some sentences may be machine generated
+            String machineLearningWarningText =  context.get().getString(R.string.you_can_view_course_points)+ System.getProperty("line.separator")+ context.get().getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+context.get().getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
             machineLearningWarningAlertDialogBuilder.setMessage(machineLearningWarningText);
-            machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
+            machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.get().getString(R.string.okay), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
-                    Intent intent = new Intent(context, HomeScreen.class);
-                    context.startActivity(intent);
+                    Intent intent = new Intent(context.get(), HomeScreen.class);
+                    context.get().startActivity(intent);
                 }
             });
             machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen

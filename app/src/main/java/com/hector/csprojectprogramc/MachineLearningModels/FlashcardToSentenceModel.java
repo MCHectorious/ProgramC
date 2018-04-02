@@ -1,6 +1,5 @@
 package com.hector.csprojectprogramc.MachineLearningModels;
 
-import android.util.Log;
 
 import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
 
@@ -10,7 +9,6 @@ public class FlashcardToSentenceModel {
 
         String front = flashcardFront.trim();
         if(front.contains("(") && front.contains(")")) {
-            System.out.println(front.substring(front.lastIndexOf("(")+1, front.lastIndexOf(")")));
             if ( front.substring(front.lastIndexOf("(")+1, front.lastIndexOf(")")).matches("[0-9]+") ){
                 front = front.substring(0,front.length()-3).trim();
 
@@ -18,7 +16,6 @@ public class FlashcardToSentenceModel {
         }
         if (front.charAt(front.length()-1)=='?'){
             front = front.substring(0,front.length()-1);
-            System.out.println(front);
         }
 
         String back = Character.toLowerCase(flashcardBack.charAt(0)) +flashcardBack.trim().substring(1);
@@ -35,7 +32,7 @@ public class FlashcardToSentenceModel {
 
         if(!frontToTest.contains(" ")){
             return front+" means "+back;
-        }else if(GeneralStringUtils.countOfCarInString(' ',frontToTest)==1){
+        }else if(GeneralStringUtils.countOfCharInString(' ',frontToTest)==1){
             return front+" means "+back;
         }
 

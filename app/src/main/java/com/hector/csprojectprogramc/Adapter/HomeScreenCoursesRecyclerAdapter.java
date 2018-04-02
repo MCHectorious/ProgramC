@@ -20,6 +20,8 @@ import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeScreenCoursesRecyclerAdapter.ViewHolder> {
@@ -61,7 +63,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
         public Context context;
         public Course course;
 
-
+        @SuppressWarnings("WeakerAccess")
         public ViewHolder(View cv, final List<Course> courses, final Context context){
             super(cv);
             this.context = context;
@@ -99,7 +101,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             course = courses.get(getAdapterPosition());
-                            new deleteCourseFromDatabase().execute();
+                            new deleteCourseFromDatabase(context,course).execute();
                         }
                     });
                     warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -115,11 +117,19 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
             });
         }
 
-        private class deleteCourseFromDatabase extends AsyncTask<Void,Void,Void>{
+        private static class deleteCourseFromDatabase extends AsyncTask<Void,Void,Void>{
+
+            private WeakReference<Context> context;
+            private Course course;
+
+            private deleteCourseFromDatabase(Context context, Course course){
+                this.context = new WeakReference<>(context);
+                this.course = course;
+            }
 
             @Override
             protected Void doInBackground(Void... voids) {
-                MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
+                MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
                 database.customDao().deleteCourse(course);
                 List<CoursePoint> coursePoints = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
                 for(CoursePoint point:coursePoints){
@@ -131,8 +141,8 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
 
             @Override
             protected void onPostExecute(Void result){
-                Intent refreshHomeScreen = new Intent(context,HomeScreen.class);
-                context.startActivity(refreshHomeScreen);
+                Intent refreshHomeScreen = new Intent(context.get(),HomeScreen.class);
+                context.get().startActivity(refreshHomeScreen);
             }
         }
 

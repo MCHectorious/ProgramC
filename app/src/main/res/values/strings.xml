@@ -76,5 +76,15 @@
     <string name="no_wifi_available">No WiFi Available</string>
     <string name="no_wifi_message">To try again press Try Again</string>
     <string name="try_again">Try Again</string>
+    <string name="arrow_pointing_left">Arrow pointing left</string>
+    <string name="arrow_pointing_right">Arrow pointing right</string>
+    <string name="delete_course_button">Delete Course Button</string>
+    <string name="toggle_question_answer_format">Toggle Question Answer Format</string>
+    <string name="toggle_fill_in_the_gap_format">Toggle Fill in the Gap Format</string>
+    <string name="sentences">Sentences</string>
+    <string name="flashcards">Flashcards</string>
+    <string name="edit">Edit</string>
+    <string name="fill_in_the_gap_title">Fill In The Gap</string>
+    <string name="question_answer_title">Question-Answer</string>
 
 </resources>

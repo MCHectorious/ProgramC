@@ -13,49 +13,58 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class AQAScraper {
 
-    private String colloquialName, officialName, website, examBoard, qualification, nextKeyDate, nextKeyDateDetails;
-    private Context context,appContext;
-    private Course course;
+    //private String colloquialName, officialName, website, examBoard, qualification, nextKeyDate, nextKeyDateDetails;
+    //private Context context,appContext;
+    //private Course course;
 
     public AQAScraper(String url, Context currentContext, Context appContext, String genericQualification, String officialName){
-        context = currentContext;
-        this.appContext = appContext;
-        this.qualification = genericQualification;
-        this.officialName = officialName;
-        GetInformationFromCourseWebsiteAndAddCourseToDatabase getInformation = new GetInformationFromCourseWebsiteAndAddCourseToDatabase();
+        GetInformationFromCourseWebsiteAndAddCourseToDatabase getInformation = new GetInformationFromCourseWebsiteAndAddCourseToDatabase(currentContext, officialName, appContext,genericQualification);
         getInformation.execute(url);
 
     }
 
 
-    private class GetInformationFromCourseWebsiteAndAddCourseToDatabase extends AsyncTask<String,Void,Void>{
-        ProgressDialog progressDialog;
+    private static class GetInformationFromCourseWebsiteAndAddCourseToDatabase extends AsyncTask<String,Void,Course>{
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context,appContext;
+        private String officialName, qualification;
+
+        private GetInformationFromCourseWebsiteAndAddCourseToDatabase(Context context, String officialName, Context appContext, String qualification){
+            this.context = new WeakReference<>(context);
+            this.officialName = officialName;
+            this.appContext = new WeakReference<>(appContext);
+            this.qualification = qualification;
+        }
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle(context.getString(R.string.get_information_from_aqa));
-            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.get_information_from_aqa));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
+        protected Course doInBackground(String... strings) {
+            String website="", colloquialName="",examBoard="",nextKeyDate="",nextKeyDateDetails="";
             for (String string: strings) {
                 website = string;
                 try {
                     Document document = Jsoup.connect(string).timeout(100000).get();
                     Elements codesAndReferences = document.select("table[class=tableCodes]");
-                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): GeneralStringUtils.convertOfficialCoursenameToColloquialCourseName(officialName);
+                    colloquialName = (codesAndReferences.select("tr").size()>1)? codesAndReferences.select("tr").get(1).select("td").text(): GeneralStringUtils.convertOfficialCourseNameToColloquialCourseName(officialName);
                     if(codesAndReferences.select("tr").size()>0){
                         qualification = codesAndReferences.select("tr").get(0).select("td").text();
                     }
-                    examBoard = context.getString(R.string.aqa);
+                    examBoard = context.get().getString(R.string.aqa);
                     Element keyDateSection = document.select("ul[class=listEvents]").select("li").first();
                     if(keyDateSection != null){
                         nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
@@ -66,22 +75,22 @@ public class AQAScraper {
                     Log.e("Error",e.getMessage());
                 }
             }
-            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,context.getString(R.string.database_location)).build();
+            MainDatabase database = Room.databaseBuilder(appContext.get(),MainDatabase.class,context.get().getString(R.string.database_location)).build();
             List<Course> courses = database.customDao().getAllCourses();
 
-            course = new Course(courses.size()+1,colloquialName,
+            Course course = new Course(courses.size()+1,colloquialName,
                     officialName,website,examBoard,
                     qualification,nextKeyDate,
                     nextKeyDateDetails);
             database.customDao().insertCourse(course);
             database.close();
-            return null;
+            return course;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Course course){
             progressDialog.dismiss();
-            new MemRiseScraper().insertCoursePointsToDataBase(context, course,appContext);
+            new MemRiseScraper().insertCoursePointsToDataBase(context.get(), course,appContext.get());
         }
     }
 

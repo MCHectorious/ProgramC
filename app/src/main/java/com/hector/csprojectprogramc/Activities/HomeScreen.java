@@ -2,6 +2,7 @@ package com.hector.csprojectprogramc.Activities;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,15 +17,13 @@ import android.view.View;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Adapter.HomeScreenCoursesRecyclerAdapter;
 import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeScreen extends AppCompatActivity {
-    private boolean hasCourses;
-    private List<Course> courses;
 
 
     @Override
@@ -44,76 +43,65 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        new getAllCoursesFromDatabase().execute();
+        RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
+        new getAllCoursesFromDatabase(HomeScreen.this,CoursesRecyclerView).execute();
 
     }
 
-    public void showNoCoursesAlertDialog(){
-        AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(this);
-        TextView noCoursesWarningTextView = new TextView(this);
-        String noCoursesWarningText = getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+getString(R.string.no_courses_instructions);
+    public static void showNoCoursesAlertDialog(final Context context){
+        AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(context);
+        TextView noCoursesWarningTextView = new TextView(context);
+        String noCoursesWarningText = context.getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+context.getString(R.string.no_courses_instructions);
         noCoursesWarningTextView.setText(noCoursesWarningText);
         noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
-        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton( getString(R.string.okay) , new DialogInterface.OnClickListener() {
+        noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton( context.getString(R.string.okay) , new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent toExamBoardScreen = new Intent(HomeScreen.this, ExamBoardScreen.class);
-                startActivity(toExamBoardScreen);
+                Intent toExamBoardScreen = new Intent(context, ExamBoardScreen.class);
+                context.startActivity(toExamBoardScreen);
             }
         });
         noCoursesAlertDialogBuilder.create().show();
     }
 
 
-    private class clearDatabase extends AsyncTask<Void,Void,Void>{
-        @Override
-        protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, "my-db").build();
-            List<Course> coursesFromDatabase = database.customDao().getAllCourses();
-            for (Course course:coursesFromDatabase){
-                database.customDao().deleteCourse(course);
-            }
-            List<CoursePoint> coursePoints = database.customDao().getAllCoursePoints();//TODO: Check whether any remaining at this point
-            for (CoursePoint point:coursePoints) {
-                database.customDao().deleteCoursePoint(point);
-            }
-            return null;
+    private static class getAllCoursesFromDatabase extends AsyncTask<Void,Void,List<Course>>{
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context;
+        private WeakReference<RecyclerView>  CoursesRecyclerView;
 
+        private getAllCoursesFromDatabase(Context context,RecyclerView CoursesRecyclerView){
+            this.context = new WeakReference<>(context);
+            this.CoursesRecyclerView = new WeakReference<>(CoursesRecyclerView);
         }
-    }
-
-    private class getAllCoursesFromDatabase extends AsyncTask<Void,Void,Void>{
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(HomeScreen.this);
-            progressDialog.setTitle(getString(R.string.initialising_app));
-            progressDialog.setMessage(getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.initialising_app));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(HomeScreen.this, MainDatabase.class, getString(R.string.database_location)).build();
-            courses = database.customDao().getAllCourses();
-            hasCourses = courses.size()>0;
-            return null;
+        protected List<Course> doInBackground(Void... voids) {
+            MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
+            return database.customDao().getAllCourses();
 
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(List<Course> courses){
            progressDialog.dismiss();
-            if(hasCourses){
+            if(courses.size()>0){
 
 
-                RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
-                CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));
-                CoursesRecyclerView.setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, HomeScreen.this));
+
+                CoursesRecyclerView.get().setLayoutManager(new LinearLayoutManager(context.get()));
+                CoursesRecyclerView.get().setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, context.get()));
             }else{
-                showNoCoursesAlertDialog();
+                showNoCoursesAlertDialog(context.get());
             }
         }
     }

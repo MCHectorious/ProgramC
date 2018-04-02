@@ -22,12 +22,12 @@
                 android:id="@+id/courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/deleteCourseButton"
+                android:layout_toEndOf="@+id/deleteCourseButton"
                 android:layout_toStartOf="@+id/deleteCourseButton"
                 android:background="@color/red"
                 android:padding="1sp"
@@ -49,6 +49,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_alignTop="@+id/courseName"
                 android:layout_alignBottom="@+id/courseName"
+                android:contentDescription="@string/delete_course_button"
                 app:srcCompat="@drawable/delete_icon" />
 
             <TextView
@@ -82,8 +83,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@+id/date"
-                android:layout_toRightOf="@+id/qualification"
+                android:layout_toStartOf="@+id/date"
+                android:layout_toEndOf="@+id/qualification"
                 android:text="@string/aqa"
                 android:textAlignment="center"
                 android:textColor="@color/darkDarkGrey" />

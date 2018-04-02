@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -22,6 +20,8 @@ import com.hector.csprojectprogramc.Database.CoursePoint;
 import com.hector.csprojectprogramc.Database.MainDatabase;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePointsScreenEditAdapter.ViewHolder> {
@@ -58,7 +58,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
         return coursePoints.size();
     }
 
-
+    @SuppressWarnings("WeakerAccess")
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView flashcardFormFrontTextView, flashcardFormBackTextView, sentenceFormTextView;
         CardView cardView;
@@ -107,7 +107,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                                    new deleteCoursePointFromDatabase().execute();
+                                    new deleteCoursePointFromDatabase(context, temporaryCoursePoint, courseID).execute();
                                 }
                             });
                             warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -131,7 +131,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                             temporaryCoursePoint.setFlashcard_front(cardFrontEdit.getText().toString());
                             temporaryCoursePoint.setFlashcard_back(cardBackEdit.getText().toString());
                             temporaryCoursePoint.setSentence(sentenceEdit.getText().toString());
-                            new updateCoursePointInDatabase().execute();
+                            new updateCoursePointInDatabase(context, temporaryCoursePoint, courseID).execute();
 
                         }
                     });
@@ -154,11 +154,21 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
     }
 
-    private class updateCoursePointInDatabase extends AsyncTask<String,Void,Void>{
+    private static class updateCoursePointInDatabase extends AsyncTask<String,Void,Void>{
+
+        private WeakReference<Context> context;
+        private CoursePoint temporaryCoursePoint;
+        private int courseID;
+
+        private updateCoursePointInDatabase(Context context, CoursePoint temporaryCoursePoint, int courseID){
+            this.context = new WeakReference<>(context);
+            this.temporaryCoursePoint = temporaryCoursePoint;
+            this.courseID = courseID;
+        }
 
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
             //database.customDao().deleteCoursePoint(temporaryCoursePoint);
             //database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));
             database.customDao().updateCoursePoint(temporaryCoursePoint);
@@ -167,29 +177,39 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
         @Override
         protected void onPostExecute(Void result){
-            Intent refreshCoursePointsScreen = new Intent(context, CoursePointsScreen.class);
-            refreshCoursePointsScreen.putExtra( context.getString(R.string.course_id) , courseID);
-            refreshCoursePointsScreen.putExtra(context.getString(R.string.perspective), 2);
+            Intent refreshCoursePointsScreen = new Intent(context.get(), CoursePointsScreen.class);
+            refreshCoursePointsScreen.putExtra( context.get().getString(R.string.course_id) , courseID);
+            refreshCoursePointsScreen.putExtra(context.get().getString(R.string.perspective), 2);
 
-            context.startActivity(refreshCoursePointsScreen);
+            context.get().startActivity(refreshCoursePointsScreen);
         }
 
     }
 
-    private class deleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void>{
+    private static class deleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void>{
+
+        private WeakReference<Context> context;
+        private CoursePoint temporaryCoursePoint;
+        private int courseID;
+
+        private deleteCoursePointFromDatabase(Context context, CoursePoint temporaryCoursePoint, int courseID){
+            this.context = new WeakReference<>(context);
+            this.temporaryCoursePoint = temporaryCoursePoint;
+            this.courseID = courseID;
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(context, MainDatabase.class, "my-db").build();
+            MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
             database.customDao().deleteCoursePoint(temporaryCoursePoint);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
-            Intent intent = new Intent(context, CoursePointsScreen.class);
-            intent.putExtra( context.getString(R.string.course_id) , courseID);
-            context.startActivity(intent);
+            Intent intent = new Intent(context.get(), CoursePointsScreen.class);
+            intent.putExtra( context.get().getString(R.string.course_id) , courseID);
+            context.get().startActivity(intent);
         }
     }
 

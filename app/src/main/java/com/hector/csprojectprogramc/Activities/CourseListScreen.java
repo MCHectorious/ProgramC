@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,10 +52,19 @@ public class CourseListScreen extends AppCompatActivity {
         final RecyclerView recyclerViewForCourses =  findViewById(R.id.courseListScreenRecyclerView); //Initialises the recycler view which shows the courses
 
         //new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()).execute();//Gets the list of courses from the AQA website and then afterwards it displays them
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        try{
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        getCoursesIfConnectedToWifi(new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()));
+            //noinspection ConstantConditions
+            wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+
+            getCoursesIfConnectedToWifi(new getCoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()));
+
+        }catch (NullPointerException exception){
+            Log.w("Warning","Null Pointer");
+            //TODO: handle appropriately
+        }
 
     }
 

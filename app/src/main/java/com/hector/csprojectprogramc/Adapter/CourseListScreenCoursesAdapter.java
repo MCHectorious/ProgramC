@@ -22,6 +22,7 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
     private Context context, appContext;
     private String qualification;
 
+    @SuppressWarnings("WeakerAccess")
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView courseNameTextView;
         private CardView courseCardView;
@@ -39,9 +40,9 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     }
 
-    public CourseListScreenCoursesAdapter(ArrayList<String> courseNames, ArrayList<String> courseWebsites, Context context, Context appContext, String qualification){
-        this.courseNames = courseNames;
-        this.courseWebsites = courseWebsites;
+    public CourseListScreenCoursesAdapter(ArrayList<String> courseNamesArrayList, ArrayList<String> courseWebsitesArrayList, Context context, Context appContext, String qualification){
+        courseNames = courseNamesArrayList;
+        courseWebsites = courseWebsitesArrayList;
         this.context = context;
         this.appContext = appContext;
         this.qualification = qualification;
@@ -62,5 +63,18 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
     public int getItemCount() {
         return courseNames.size();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

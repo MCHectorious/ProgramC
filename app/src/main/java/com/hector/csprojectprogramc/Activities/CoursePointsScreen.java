@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -30,8 +31,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 public class CoursePointsScreen extends AppCompatActivity {
 
-    //private int courseID;// Stores the ID of the course in the database
-    //private int perspective;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // Runs when the screen is created
@@ -40,19 +40,31 @@ public class CoursePointsScreen extends AppCompatActivity {
 
         Bundle intentsBundle = getIntent().getExtras();
 
-        int courseID = intentsBundle.getInt(getString(R.string.course_id),0); //gets the course ID from the previous screen //TODO: make sure it handles null
-        int perspective = intentsBundle.getInt(getString(R.string.perspective),0);
+        try{
+            //noinspection ConstantConditions
+            int courseID = intentsBundle.getInt(getString(R.string.course_id),0); //gets the course ID from the previous screen //TODO: make sure it handles null
+            int perspective = intentsBundle.getInt(getString(R.string.perspective),0);
 
-        final RecyclerView flashcardsRecyclerView = findViewById(R.id.cardsRecyclerView);// Initialises recycler view which contains the course points in their flashcard form
-        final RecyclerView editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
-        final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);//Initialises the button which allows the user to add a course point
-        final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView); //Initialises recycler view which contains the course points in their sentence form
-        BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);//Intialises the navigation which allows the user to pick which form of course points to show  //TODO: bottom navigation?
-        final MenuView.ItemView sentenceListNav =  findViewById(R.id.sentenceListNav);
-        final MenuView.ItemView cardListNav =  findViewById(R.id.cardListNav);
-        final MenuView.ItemView editNav =  findViewById(R.id.editNav);
+            final RecyclerView flashcardsRecyclerView = findViewById(R.id.cardsRecyclerView);// Initialises recycler view which contains the course points in their flashcard form
+            final RecyclerView editPointsRecyclerView = findViewById(R.id.editsRecyclerView);//Initialises the recycler view which allows the course points to be edited
+            final FloatingActionButton addCoursePointButton = findViewById(R.id.addCoursePointButton);//Initialises the button which allows the user to add a course point
+            final RecyclerView sentencesRecyclerView = findViewById(R.id.sentencesRecyclerView); //Initialises recycler view which contains the course points in their sentence form
+            BottomNavigationView navigationForCoursePointsPerspective =  findViewById(R.id.navigation);//Intialises the navigation which allows the user to pick which form of course points to show  //TODO: bottom navigation?
+            final MenuView.ItemView sentenceListNav =  findViewById(R.id.sentenceListNav);
+            final MenuView.ItemView cardListNav =  findViewById(R.id.cardListNav);
+            final MenuView.ItemView editNav =  findViewById(R.id.editNav);
 
-        new getCoursePointsFromDatabase(perspective, CoursePointsScreen.this, courseID).execute();// Gets the course points for the course and then after displays them
+            new getCoursePointsFromDatabase(perspective, CoursePointsScreen.this, courseID, flashcardsRecyclerView,
+                    editPointsRecyclerView, sentencesRecyclerView, addCoursePointButton, navigationForCoursePointsPerspective,
+                    sentenceListNav, cardListNav, editNav).execute();// Gets the course points for the course and then after displays them
+
+        }catch (NullPointerException exception){
+            Log.w("Error","Null pointer exception");
+            //TODO: handle appropriately
+        }
+
+
+
     }
 
     private static class getCoursePointsFromDatabase extends AsyncTask<Void, Void, List<CoursePoint>> {// gets the course points for the course from the database in a background thread //TODO: make static
@@ -85,8 +97,8 @@ public class CoursePointsScreen extends AppCompatActivity {
         protected void onPreExecute() {//Shows the user that a long-running background task is running
             super.onPreExecute();// TODO: research what this does
             progressDialog = new ProgressDialog(context.get());//Idealises the dialog
-            progressDialog.setTitle(getString(R.string.loading_course_points));// Explains what this task is doing
-            progressDialog.setMessage(getString(R.string.this_should_be_quick));// TODO: change and then explain
+            progressDialog.setTitle(context.get().getString(R.string.loading_course_points));// Explains what this task is doing
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));// TODO: change and then explain
             progressDialog.setIndeterminate(false);// The dialog shows an animation which doesn't represent how far throught the task is //TODO: improve description
             progressDialog.show();//Shows the dialog on the screen
         }
@@ -106,7 +118,7 @@ public class CoursePointsScreen extends AppCompatActivity {
                 noCoursesAlertDialogBuilder.setMessage(noCoursesWarning);//Shows the message
                 noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) { //Adds an action button which the user can be pressed to add a course point
-                        showAddCoursePointDialog(false);//Shows a dialog which forces the user to add a course point
+                        showAddCoursePointDialog(false, perspective, context.get(),courseID);//Shows a dialog which forces the user to add a course point
                     }
                 });
                 noCoursesAlertDialogBuilder.create().show();// Shows the alert dialog
@@ -122,7 +134,7 @@ public class CoursePointsScreen extends AppCompatActivity {
                 addCoursePointButton.get().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showAddCoursePointDialog(true);//Because the action was optional, the user can cancel it
+                        showAddCoursePointDialog(true, perspective, context.get(), courseID);//Because the action was optional, the user can cancel it
                     }
                 });
                 addCoursePointButton.get().setVisibility(View.GONE);//TODO: should I always show this?
@@ -134,15 +146,16 @@ public class CoursePointsScreen extends AppCompatActivity {
                 switch (perspective){//Decides which perspective to show
                     case 0:
                         sentencesRecyclerView.get().setVisibility(View.VISIBLE); //Shows sentence perspective
-                        findViewById(R.id.sentenceListNav).setSelected(true); //Show the sentence navigation item as selected
+                        sentenceListNav.get().setChecked(true); //Show the sentence navigation item as selected
+
                         break;
                     case 1:
                         flashcardsRecyclerView.get().setVisibility(View.VISIBLE); //Shows flashcard perspective
-                        findViewById(R.id.cardListNav).setSelected(true);//Show the flashcard navigation item as selected
+                        cardListNav.get().setChecked(true);//Show the flashcard navigation item as selected
                         break;
                     case 2:
                         editPointsRecyclerView.get().setVisibility(View.VISIBLE); //Show edit perspective
-                        findViewById(R.id.editNav).setSelected(true);//Show the edit navigation item as selected
+                        editNav.get().setChecked(true);//Show the edit navigation item as selected
                         break;
                 }
 
@@ -187,30 +200,30 @@ public class CoursePointsScreen extends AppCompatActivity {
         }
     }
 
-    public void showAddCoursePointDialog(boolean cancelable, final int perspective){
-        final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(CoursePointsScreen.this);//Initialises the alert dialog which will allow the user to add a new course point
-        AddCoursePointAlertDialogBuilder.setTitle(getString(R.string.add_new_course_point));//Sets the title of the dialog
-        LinearLayout layoutForAlertDialog = new LinearLayout(CoursePointsScreen.this);//Organises the views in a vertical list
+    public static void showAddCoursePointDialog(boolean cancelable, final int perspective, final Context context, final int courseID){
+        final AlertDialog.Builder AddCoursePointAlertDialogBuilder = new AlertDialog.Builder(context);//Initialises the alert dialog which will allow the user to add a new course point
+        AddCoursePointAlertDialogBuilder.setTitle(context.getString(R.string.add_new_course_point));//Sets the title of the dialog
+        LinearLayout layoutForAlertDialog = new LinearLayout(context);//Organises the views in a vertical list
         layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL); //TODO: do i need to do this
-        final EditText cardFrontEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the front of the flashcard form of the course point
-        cardFrontEditableTextView.setHint( getString(R.string.enter_flashcard_front) );//Provides instructions for the user
+        final EditText cardFrontEditableTextView = new EditText(context);// Initialises the area where the user can add the front of the flashcard form of the course point
+        cardFrontEditableTextView.setHint( context.getString(R.string.enter_flashcard_front) );//Provides instructions for the user
         layoutForAlertDialog.addView(cardFrontEditableTextView);//Adds view to the layout
-        final EditText cardBackEditableTextView = new EditText(CoursePointsScreen.this);// Initialises the area where the user can add the back of the flashcard form of the course point
-        cardBackEditableTextView.setHint(getString(R.string.enter_flashcard_back) );//Provides instructions for the user
+        final EditText cardBackEditableTextView = new EditText(context);// Initialises the area where the user can add the back of the flashcard form of the course point
+        cardBackEditableTextView.setHint(context.getString(R.string.enter_flashcard_back) );//Provides instructions for the user
         layoutForAlertDialog.addView(cardBackEditableTextView);//Adds view to the layout
-        final EditText sentenceEditableTextView = new EditText(CoursePointsScreen.this); // Initialises the area where the user can add the sentence form of the course point
-        sentenceEditableTextView.setHint(getString(R.string.enter_sentence) );//Provides instructions for the user
+        final EditText sentenceEditableTextView = new EditText(context); // Initialises the area where the user can add the sentence form of the course point
+        sentenceEditableTextView.setHint(context.getString(R.string.enter_sentence) );//Provides instructions for the user
         layoutForAlertDialog.addView(sentenceEditableTextView);//Adds view to the layout
         AddCoursePointAlertDialogBuilder.setView(layoutForAlertDialog);//Adds the list of view to the dialog
-        AddCoursePointAlertDialogBuilder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
+        AddCoursePointAlertDialogBuilder.setPositiveButton(context.getString(R.string.add), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String[] coursePointComponents = {cardFrontEditableTextView.getText().toString(),cardBackEditableTextView.getText().toString(),sentenceEditableTextView.getText().toString()};//The aspects of the new course point
-                new addCoursePointToDatabase(courseID, CoursePointsScreen.this, perspective).execute(coursePointComponents);//adds the new course point and refreshes the screen
+                new addCoursePointToDatabase(courseID, context, perspective).execute(coursePointComponents);//adds the new course point and refreshes the screen
             }
         });
         if(cancelable){
-            AddCoursePointAlertDialogBuilder.setNegativeButton( getString(R.string.cancel) , new DialogInterface.OnClickListener() {
+            AddCoursePointAlertDialogBuilder.setNegativeButton( context.getString(R.string.cancel) , new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {//Just closes the dialog if it is cancelled
                 }

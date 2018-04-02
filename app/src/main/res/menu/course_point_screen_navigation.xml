@@ -6,18 +6,18 @@
     <item
         android:id="@+id/sentenceListNav"
         android:icon="@drawable/sentence_list_icon"
-        android:title="Sentences"
+        android:title="@string/sentences"
 
         />
 
     <item
     android:id="@+id/cardListNav"
     android:icon="@drawable/flashcard_list_icon"
-    android:title="Cards" />
+    android:title="@string/flashcards" />
 
     <item
         android:id="@+id/editNav"
         android:icon="@drawable/edit_icon"
-        android:title="Edit" />
+        android:title="@string/edit" />
 
 </menu>

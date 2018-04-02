@@ -15,47 +15,46 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
 public class MemRiseScraper{
-    private Context context,appContext;
-    private ArrayList<String> relatedWebsites = new ArrayList<>();
-    private GetFlashcardsFromRelatedMemRiseCourses getFlashcardsFromWebsite = new GetFlashcardsFromRelatedMemRiseCourses();
-    private Course course;
-    private int courseID;
+
 
     public void insertCoursePointsToDataBase(Context context, Course course, Context appContext){
-        this.context = context;
-        this.appContext = appContext;
-        this.course = course;
-        courseID = course.getCourse_ID();
-        StringBuilder builder = new StringBuilder();
-        builder.append(course.getExamBoard()).append(" ");
-        builder.append(course.getQualification()).append(" ");
-        builder.append(course.getColloquial_name());
-        new GetRelatedFlashcards().execute(builder.toString());
+        new GetRelatedFlashcards(context, course, appContext).execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
     }
 
-    private class GetRelatedFlashcards extends AsyncTask<String,Void,Void>{
-        ProgressDialog progressDialog;
+    private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>>{
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context, appContext;
+        private Course course;
+
+        private GetRelatedFlashcards(Context context, Course course, Context appContext){
+            this.context = new WeakReference<>(context);
+            this.course = course;
+            this.appContext = new WeakReference<>(appContext);
+        }
+
+
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle(context.getString(R.string.get_memrise_courses));
-            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.get_memrise_courses));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
+        protected ArrayList<String> doInBackground(String... strings) {
+            ArrayList<String> relatedWebsites = new ArrayList<>();
             for ( String string: strings) {
-                StringBuilder builder = new StringBuilder();
-                builder.append("https://www.memrise.com/courses/english/?q=");
-                builder.append(GeneralStringUtils.convertSpacesToPluses(string));
-                String url = builder.toString();
+                String url = "https://www.memrise.com/courses/english/?q="+GeneralStringUtils.convertSpacesToPluses(string);
                 Log.w("URL",url);
                 try {
                     Document document = Jsoup.connect(url).get();
@@ -79,7 +78,7 @@ public class MemRiseScraper{
                                     relatedWebsites.add(website);
                                     Log.w("Website",website);
                                     if (relatedWebsites.size()==5){
-                                        return null;
+                                        return relatedWebsites;
                                     }
                                 }
                             }
@@ -90,31 +89,40 @@ public class MemRiseScraper{
                     Log.e("Error",e.getMessage());
                 }
             }
-            return null;
+            return relatedWebsites;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            getFlashcardsFromWebsite.execute(relatedWebsites.toArray(new String[0]));
+            new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, appContext.get()).execute(relatedWebsites.toArray(new String[0]));
         }
     }
 
-    private class GetFlashcardsFromRelatedMemRiseCourses extends AsyncTask<String,Void,Void>{
-        ProgressDialog progressDialog;
+    private static class GetFlashcardsFromRelatedMemRiseCourses extends AsyncTask<String,Void,Void>{
+        private ProgressDialog progressDialog;
+        private WeakReference<Context> context, appContext;
+        private Course course;
+
+        private GetFlashcardsFromRelatedMemRiseCourses(Context context, Course course, Context appContext){
+            this.context = new WeakReference<>(context);
+            this.course = course;
+            this.appContext = new WeakReference<>(appContext);
+        }
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle(context.getString(R.string.getting_information_from_memrise_courses));
-            progressDialog.setMessage(context.getString(R.string.this_should_be_quick));
+            progressDialog = new ProgressDialog(context.get());
+            progressDialog.setTitle(context.get().getString(R.string.getting_information_from_memrise_courses));
+            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
             progressDialog.setIndeterminate(false);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(appContext,MainDatabase.class,"my-db").build();
+            MainDatabase database = Room.databaseBuilder(appContext.get(),MainDatabase.class,"my-db").build();
             boolean foundCard = false;
 
             for (String url: strings) {
@@ -129,7 +137,7 @@ public class MemRiseScraper{
                             String back = div.select("div[class=col_b col text]").select("div[class=text]").first().text();
                             String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
                             foundCard = true;
-                            database.customDao().insertCoursePoint(new CoursePoint(courseID,front,back,sentence));
+                            database.customDao().insertCoursePoint(new CoursePoint(course.getCourse_ID(),front,back,sentence));
                         }
 
                     }
@@ -147,7 +155,7 @@ public class MemRiseScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            new CramScraper().insertCoursePointsInDataBase(context, course,appContext);
+            new CramScraper().insertCoursePointsInDataBase(context.get(), course,appContext.get());
         }
     }
 }

@@ -10,7 +10,7 @@ public class GeneralStringUtils {
         return builder.toString();
     }
 
-    public static String convertOfficialCoursenameToColloquialCourseName(String text){
+    public static String convertOfficialCourseNameToColloquialCourseName(String text){
         String[] prefixesToRemove = {"AS and A-level","A-level ", "GCSE", "GCSE ","AS","AS "};
         String[] phrasesToRemove = {"New ", "New"};
         for (String s:prefixesToRemove){
@@ -37,7 +37,7 @@ public class GeneralStringUtils {
         return text;
     }
 
-    public static int countOfCarInString(Character c,String s){
+    public static int countOfCharInString(Character c, String s){
         int count = 0;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i)==c){

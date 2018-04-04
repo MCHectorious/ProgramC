@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Database;
+package com.hector.csprojectprogramc.CourseDatabase;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;

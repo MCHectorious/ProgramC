@@ -15,7 +15,7 @@ import android.util.Log;
 
 
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Adapter.CourseListScreenCoursesAdapter;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.CourseListScreenCoursesAdapter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Adapter;
+package com.hector.csprojectprogramc.RecyclerViewAdapters;
 
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
-import com.hector.csprojectprogramc.Database.CoursePoint;
-import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
+import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
+import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.hector.csprojectprogramc.MachineLearningModels;
+package com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities;
 
 
-import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
+import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtils;
 
 public class FlashcardToSentenceModel {
 

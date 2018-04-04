@@ -20,11 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import com.hector.csprojectprogramc.Adapter.CoursePointsScreenFlashcardAdapter;
-import com.hector.csprojectprogramc.Adapter.CoursePointsScreenEditAdapter;
-import com.hector.csprojectprogramc.Adapter.CoursePointsScreenSentencesAdapter;
-import com.hector.csprojectprogramc.Database.CoursePoint;
-import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.CoursePointsScreenFlashcardAdapter;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.CoursePointsScreenEditAdapter;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.CoursePointsScreenSentencesAdapter;
+import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
+import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;

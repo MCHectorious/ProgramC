@@ -1,16 +1,17 @@
-package com.hector.csprojectprogramc.WebScraping;
+package com.hector.csprojectprogramc.CoursePointsImport;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.CoursePoint;
-import com.hector.csprojectprogramc.Database.MainDatabase;
-import com.hector.csprojectprogramc.MachineLearningModels.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.CourseDatabase.Course;
+import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
+import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
+import com.hector.csprojectprogramc.CoursePointsImport.CramScraper;
+import com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities.FlashcardToSentenceModel;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Utilities.GeneralStringUtils;
+import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

@@ -18,11 +18,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hector.csprojectprogramc.Database.CoursePoint;
-import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
+import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Utilities.CommonWordsChecker;
-import com.hector.csprojectprogramc.Utilities.StringDistance;
+import com.hector.csprojectprogramc.GeneralUtilities.CommonWordsChecker;
+import com.hector.csprojectprogramc.GeneralUtilities.StringDistance;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

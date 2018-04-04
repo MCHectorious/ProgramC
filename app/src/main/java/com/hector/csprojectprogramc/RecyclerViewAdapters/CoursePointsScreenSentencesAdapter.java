@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Adapter;
+package com.hector.csprojectprogramc.RecyclerViewAdapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Database.CoursePoint;
+import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
+import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
 import java.util.List;
 
 public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<CoursePointsScreenSentencesAdapter.ViewHolder> {

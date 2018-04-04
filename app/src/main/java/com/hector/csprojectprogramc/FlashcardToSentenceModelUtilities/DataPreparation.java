@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.MachineLearningModels;
+package com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities;
 
 
 import java.util.ArrayList;

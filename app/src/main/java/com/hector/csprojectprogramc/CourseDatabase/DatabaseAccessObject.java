@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Database;
+package com.hector.csprojectprogramc.CourseDatabase;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

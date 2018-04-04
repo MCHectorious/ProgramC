@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Adapter;
+package com.hector.csprojectprogramc.RecyclerViewAdapters;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.Utilities.CustomColourCreator;
-import com.hector.csprojectprogramc.WebScraping.AQAScraper;
+import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
+import com.hector.csprojectprogramc.CoursesImport.AQAScraper;
 
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.Utilities;
+package com.hector.csprojectprogramc.GeneralUtilities;
 
 public class GeneralStringUtils {
 

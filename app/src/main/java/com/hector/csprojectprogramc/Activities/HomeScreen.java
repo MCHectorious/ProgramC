@@ -15,9 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import com.hector.csprojectprogramc.Adapter.HomeScreenCoursesRecyclerAdapter;
-import com.hector.csprojectprogramc.Database.Course;
-import com.hector.csprojectprogramc.Database.MainDatabase;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.HomeScreenCoursesRecyclerAdapter;
+import com.hector.csprojectprogramc.CourseDatabase.Course;
+import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;

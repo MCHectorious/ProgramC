@@ -9,18 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
-import com.hector.csprojectprogramc.CoursesImport.AQAScraper;
-
-
-import java.util.ArrayList;
-
+import com.hector.csprojectprogramc.CourseImport.AQAScraper;
+import java.util.Collection;
+import java.util.Set;
 
 
 public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseListScreenCoursesAdapter.ViewHolder>{
 
-    private static ArrayList<String> courseNames, courseWebsites;
     private Context context, appContext;
     private String qualification;
+    private String[] courseNames, courseWebsites;
 
     @SuppressWarnings("WeakerAccess")
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -33,16 +31,17 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    new AQAScraper(courseWebsites.get(getAdapterPosition()),context,appContext, qualification,courseNames.get(getAdapterPosition()));
+
+                    new AQAScraper(courseWebsites[getAdapterPosition()],context,appContext, qualification,courseNames[getAdapterPosition()]);
                 }
             });
         }
 
     }
 
-    public CourseListScreenCoursesAdapter(ArrayList<String> courseNamesArrayList, ArrayList<String> courseWebsitesArrayList, Context context, Context appContext, String qualification){
-        courseNames = courseNamesArrayList;
-        courseWebsites = courseWebsitesArrayList;
+    public CourseListScreenCoursesAdapter(Set<String> courseNames, Collection<String> courseWebsites, Context context, Context appContext, String qualification){
+        this.courseNames = courseNames.toArray(new String[0]);
+        this.courseWebsites = courseWebsites.toArray(new String[0]);
         this.context = context;
         this.appContext = appContext;
         this.qualification = qualification;
@@ -55,13 +54,13 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.courseNameTextView.setText(courseNames.get(position));
-        holder.courseCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames.get(position)));
+        holder.courseNameTextView.setText(courseNames[position]);
+        holder.courseCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames[position]));
     }
 
     @Override
     public int getItemCount() {
-        return courseNames.size();
+        return courseNames.length;
     }
 
 

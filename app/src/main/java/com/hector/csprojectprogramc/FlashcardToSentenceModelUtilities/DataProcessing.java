@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by Hector - New on 18/03/2018.
  */
 
-public class DataPreparation {
+public class DataProcessing {
 
     private static final int FIXED_VECTOR_SIZE = 100;
     private static final Random rand = new Random();

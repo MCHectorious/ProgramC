@@ -1,4 +1,4 @@
-package com.hector.csprojectprogramc.CoursesImport;
+package com.hector.csprojectprogramc.CourseImport;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;

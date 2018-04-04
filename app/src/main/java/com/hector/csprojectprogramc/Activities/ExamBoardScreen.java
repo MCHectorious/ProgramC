@@ -19,6 +19,7 @@ public class ExamBoardScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toQualificationScreen = new Intent(ExamBoardScreen.this, QualificationListScreen.class);
+                //TODO: add extra
                 startActivity(toQualificationScreen);//Goes the Qualification List Screen
             }
         });

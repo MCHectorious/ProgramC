@@ -1,11 +1,8 @@
 package com.hector.csprojectprogramc.Activities;
 
-import android.app.ProgressDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -15,12 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+
+import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.GetAllCoursesFromDatabase;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.RecyclerViewAdapters.HomeScreenCoursesRecyclerAdapter;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
-import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.R;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeScreen extends AppCompatActivity {
@@ -43,8 +41,7 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
-        new getAllCoursesFromDatabase(HomeScreen.this,CoursesRecyclerView).execute();
+        new GetAllCoursesFromDatabase(HomeScreen.this, new AfterGettingCourses()).execute();
 
     }
 
@@ -63,47 +60,18 @@ public class HomeScreen extends AppCompatActivity {
         noCoursesAlertDialogBuilder.create().show();
     }
 
-
-    private static class getAllCoursesFromDatabase extends AsyncTask<Void,Void,List<Course>>{
-        private ProgressDialog progressDialog;
-        private WeakReference<Context> context;
-        private WeakReference<RecyclerView>  CoursesRecyclerView;
-
-        private getAllCoursesFromDatabase(Context context,RecyclerView CoursesRecyclerView){
-            this.context = new WeakReference<>(context);
-            this.CoursesRecyclerView = new WeakReference<>(CoursesRecyclerView);
-        }
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(context.get());
-            progressDialog.setTitle(context.get().getString(R.string.initialising_app));
-            progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
-            progressDialog.setIndeterminate(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected List<Course> doInBackground(Void... voids) {
-            MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
-            return database.customDao().getAllCourses();
-
-        }
-
-        @Override
-        protected void onPostExecute(List<Course> courses){
-           progressDialog.dismiss();
+    private class AfterGettingCourses implements AsyncTaskCompleteListener<List<Course>>{
+        public void onAsyncTaskComplete(List<Course> courses){
+            RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
             if(courses.size()>0){
-
-
-
-                CoursesRecyclerView.get().setLayoutManager(new LinearLayoutManager(context.get()));
-                CoursesRecyclerView.get().setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, context.get()));
+                CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));
+                CoursesRecyclerView.setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, HomeScreen.this));
             }else{
-                showNoCoursesAlertDialog(context.get());
+                showNoCoursesAlertDialog(HomeScreen.this);
             }
         }
+
     }
+
 
 }

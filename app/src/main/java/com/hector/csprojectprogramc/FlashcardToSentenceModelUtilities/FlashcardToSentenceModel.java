@@ -203,12 +203,12 @@ public class FlashcardToSentenceModel {
 
         String extra= (input.length()>100)? input.substring(100):"";
 
-        double[] inputArray = DataPreparation.stringToDoubleArray(input);
+        double[] inputArray = DataProcessing.stringToDoubleArray(input);
         //Log.w("Got this far","Converted message");
         double[] outputArray = LinearLayer.forward(inputArray);
 
         //Log.w("Got this far","Ran Model");
-        return DataPreparation.doubleArrayToString(outputArray)+extra;
+        return DataProcessing.doubleArrayToString(outputArray)+extra;
 
     }
 

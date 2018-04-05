@@ -24,11 +24,20 @@ public class InsertCourseToDatabase extends AsyncTask<Course,Void,Void> {
 
     @Override
     protected Void doInBackground(Course... courses) {
-        MainDatabase database = Room.databaseBuilder(appContext.get(),MainDatabase.class,context.get().getString(R.string.database_location)).build();
-        for (Course course: courses) {
-            database.customDao().insertCourse(course);
+        MainDatabase database = null;
+        try{
+            database = Room.databaseBuilder(appContext.get(),MainDatabase.class,context.get().getString(R.string.database_location)).build();
+            for (Course course: courses) {
+                database.customDao().insertCourse(course);
+            }
+        }catch (Exception exception){
+            //TODO: handle appropriately
+        }finally {
+            if (database != null){
+                database.close();
+            }
         }
-        database.close();
+
         return null;
     }
 

@@ -38,8 +38,19 @@ public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>
 
     @Override
     protected List<Course> doInBackground(Void... voids) {
-        MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
-        return database.customDao().getAllCourses();
+        MainDatabase database = null;
+        try{
+            database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
+            return database.customDao().getAllCourses();
+        }catch (Exception exception){
+            //TODO: handle appropriately
+        }finally {
+            if(database != null){
+                database.close();
+            }
+        }
+
+        return null;//Todo: handle appropriately
 
     }
 

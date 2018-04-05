@@ -24,8 +24,18 @@ public class InsertCoursePointToDatabase extends AsyncTask<String,Void,Void> { /
 
     @Override
     protected Void doInBackground(String... strings) {
-        MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();//Accesses the database
-        database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));//inserts the course point via an SQL statement
+        MainDatabase database = null;
+        try{
+            database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();//Accesses the database
+            database.customDao().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));//inserts the course point via an SQL statement
+        }catch (Exception exception){
+            //TODO: handle appropriately
+        }finally {
+            if (database != null){
+                database.close();
+            }
+        }
+
         return null;//In order to override the method correctly
     }
 

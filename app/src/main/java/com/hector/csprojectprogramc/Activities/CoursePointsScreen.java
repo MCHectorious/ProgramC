@@ -198,8 +198,28 @@ public class CoursePointsScreen extends AppCompatActivity {
             AddCoursePointAlertDialogBuilder.setPositiveButton(context.getString(R.string.add), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    String[] coursePointComponents = {cardFrontEditableTextView.getText().toString(),cardBackEditableTextView.getText().toString(),sentenceEditableTextView.getText().toString()};//The aspects of the new course point
-                    new InsertCoursePointToDatabase(courseID, context, new RefreshScreen()).execute(coursePointComponents);//adds the new course point and refreshes the screen
+                    String cardFront = cardFrontEditableTextView.getText().toString();
+                    String cardBack = cardBackEditableTextView.getText().toString();
+                    String sentence = sentenceEditableTextView.getText().toString();
+
+                    if(cardFront.equals("")||cardBack.equals("")||sentence.equals("")){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CoursePointsScreen.this);
+                        builder.setTitle(R.string.warning);
+                        builder.setMessage(R.string.blank_components_warning);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        builder.create().show();
+                    }else{
+                        String[] coursePointComponents = {cardFront,cardBack,sentence};//The aspects of the new course point
+                        new InsertCoursePointToDatabase(courseID, context, new RefreshScreen()).execute(coursePointComponents);//adds the new course point and refreshes the screen
+                    }
+
+
                 }
             });
             if(cancelable){

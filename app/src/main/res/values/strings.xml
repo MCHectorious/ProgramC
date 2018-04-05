@@ -67,7 +67,6 @@
     <string name="temp_answer">Please Enter Your Answer Here</string>
     <string name="home">Home</string>
     <string name="completely_wrong">Completely Wrong</string>
-    <string name="warning">Warning</string>
     <string name="deleting_course_point_warning">Are you sure you want to delete this course point?</string>
     <string name="deleting_course_warning">Are you sure you want to delete this course?</string>
     <string name="perspective">Perspective</string>
@@ -86,5 +85,13 @@
     <string name="edit">Edit</string>
     <string name="fill_in_the_gap_title">Fill In The Gap</string>
     <string name="question_answer_title">Question-Answer</string>
+    <string name="you_have_enabled">You have enabled</string>
+    <string name="questions">questions</string>
+    <string name="you_have_disabled">You have disabled</string>
+    <string name="no_answer">No answer has been received</string>
+    <string name="please_reattempt_question">Please re-attempt the question</string>
+    <string name="reattempt">Re-attempt</string>
+    <string name="warning">Warning</string>
+    <string name="blank_components_warning">No components of a course point can be blank</string>
 
 </resources>

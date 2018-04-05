@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.GetCoursePointsFromDatabase;
@@ -74,40 +75,60 @@ public class RevisionScreen extends AppCompatActivity {
             submitAnswerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder answerReviewAlertDialogBuilder = new AlertDialog.Builder(RevisionScreen.this);
 
-                    double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(userAnswerEditableTextView.getText().toString().toLowerCase(), correctAnswer.toLowerCase());
+                    String input = userAnswerEditableTextView.getText().toString().toLowerCase();
+                    if(input.equals("")){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
+                        builder.setTitle(R.string.no_answer);
+                        builder.setMessage(R.string.please_reattempt_question);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                    if(answerAccuracy>90){
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.well_done)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + getString(R.string.percentage_similar)+"!");
-
-                    } else if(answerAccuracy>50) {
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.almost) + " - " + String.format(Locale.UK, "%.2f", answerAccuracy) + getString(R.string.percentage_similar));
-                    } else if(answerAccuracy==0){
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.completely_wrong));
-
+                            }
+                        });
+                        builder.create().show();
                     }else{
-                        answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+" "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
+
+                        AlertDialog.Builder answerReviewAlertDialogBuilder = new AlertDialog.Builder(RevisionScreen.this);
+
+                        double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(input, correctAnswer.toLowerCase());
+
+                        userAnswerEditableTextView.setText("");
+
+                        if(answerAccuracy>90){
+                            answerReviewAlertDialogBuilder.setTitle(getString(R.string.well_done)+" - "+ String.format(Locale.UK,"%.2f",answerAccuracy)  + getString(R.string.percentage_similar)+"!");
+
+                        } else if(answerAccuracy>50) {
+                            answerReviewAlertDialogBuilder.setTitle(getString(R.string.almost) + " - " + String.format(Locale.UK, "%.2f", answerAccuracy) + getString(R.string.percentage_similar));
+                        } else if(answerAccuracy==0){
+                            answerReviewAlertDialogBuilder.setTitle(getString(R.string.completely_wrong));
+
+                        }else{
+                            answerReviewAlertDialogBuilder.setTitle(getString(R.string.wrong)+" "+ String.format(Locale.UK,"%.2f",answerAccuracy) + getString(R.string.percentage_similar));
+
+                        }
+
+                        TextView answerReviewTextView = new TextView(RevisionScreen.this);
+
+                        //String answerReviewText = getString(R.string.th e_answer_is)+correctAnswer;
+                        SpannableStringBuilder answerReviewTextBuilder = new SpannableStringBuilder();
+                        answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(" ").append(correctAnswer);
+                        answerReviewTextBuilder.setSpan(new StyleSpan(Typeface.BOLD),getString(R.string.the_answer_is).length(),answerReviewTextBuilder.length(),0);
+
+                        answerReviewTextView.setText(answerReviewTextBuilder);
+
+                        answerReviewAlertDialogBuilder.setView(answerReviewTextView);
+                        answerReviewAlertDialogBuilder.setPositiveButton( getString(R.string.generate_new_question), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                generateQuestion(coursePoints, coursePointsSize);
+                            }
+                        });
+                        answerReviewAlertDialogBuilder.create().show();
 
                     }
-
-                    TextView answerReviewTextView = new TextView(RevisionScreen.this);
-
-                    //String answerReviewText = getString(R.string.th e_answer_is)+correctAnswer;
-                    SpannableStringBuilder answerReviewTextBuilder = new SpannableStringBuilder();
-                    answerReviewTextBuilder.append(getString(R.string.the_answer_is)).append(" ").append(correctAnswer);
-                    answerReviewTextBuilder.setSpan(new StyleSpan(Typeface.BOLD),getString(R.string.the_answer_is).length(),answerReviewTextBuilder.length(),0);
-
-                    answerReviewTextView.setText(answerReviewTextBuilder);
-
-                    answerReviewAlertDialogBuilder.setView(answerReviewTextView);
-                    answerReviewAlertDialogBuilder.setPositiveButton( getString(R.string.generate_new_question), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            generateQuestion(coursePoints, coursePointsSize);
-                        }
-                    });
-                    answerReviewAlertDialogBuilder.create().show();
                 }
             });
             includeGapQuestions = true;
@@ -120,8 +141,18 @@ public class RevisionScreen extends AppCompatActivity {
                 public void onClick(View v) {
                     if (includeGapQuestions){
                         includeQAQuestions = !includeQAQuestions;
-                        QuestionAnswerOption.setTextColor((includeQAQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
-                        QuestionAnswerIcon.setImageResource((includeQAQuestions)? R.drawable.question_answer_icon_selected :R.drawable.question_answer_icon_unselected);
+                        if (includeQAQuestions){
+                            QuestionAnswerOption.setTextColor(getResources().getColor(R.color.colorAccent));
+                            QuestionAnswerIcon.setImageResource(R.drawable.question_answer_icon_selected);
+                            Toast.makeText(RevisionScreen.this, getString(R.string.you_have_enabled)+" "+getString(R.string.fill_in_the_gap_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            QuestionAnswerOption.setTextColor(getResources().getColor(R.color.black));
+                            QuestionAnswerIcon.setImageResource(R.drawable.question_answer_icon_unselected);
+                            Toast.makeText(RevisionScreen.this, getString(R.string.you_have_disabled)+" "+getString(R.string.fill_in_the_gap_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
+
+                        }
+
                     }
                 }
             };
@@ -131,8 +162,18 @@ public class RevisionScreen extends AppCompatActivity {
                 public void onClick(View v) {
                     if (includeQAQuestions){
                         includeGapQuestions = !includeGapQuestions;
-                        GapOption.setTextColor((includeGapQuestions)? getResources().getColor(R.color.colorAccent):getResources().getColor(R.color.black));
-                        GapIcon.setImageResource((includeGapQuestions)? R.drawable.fill_in_the_gap_icon_selected :R.drawable.fill_in_the_gap_icon_unselected);
+                        if(includeGapQuestions){
+                            GapOption.setTextColor(getResources().getColor(R.color.colorAccent));
+                            GapIcon.setImageResource(R.drawable.fill_in_the_gap_icon_selected);
+                            Toast.makeText(RevisionScreen.this, getString(R.string.you_have_enabled)+" "+getString(R.string.question_answer_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            GapOption.setTextColor(getResources().getColor(R.color.black));
+                            GapIcon.setImageResource(R.drawable.fill_in_the_gap_icon_unselected);
+                            Toast.makeText(RevisionScreen.this, getString(R.string.you_have_disabled)+" "+getString(R.string.question_answer_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
+
+                        }
+
 
                     }
                 }

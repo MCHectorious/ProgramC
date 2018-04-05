@@ -25,8 +25,18 @@ public class DeleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
-        database.customDao().deleteCoursePoint(temporaryCoursePoint);
+        MainDatabase database = null;
+        try{
+            database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
+            database.customDao().deleteCoursePoint(temporaryCoursePoint);
+        }catch(Exception exception){
+            //TODO: handle appropriately
+        }finally {
+            if (database != null){
+                database.close();
+            }
+        }
+
         return null;
     }
 

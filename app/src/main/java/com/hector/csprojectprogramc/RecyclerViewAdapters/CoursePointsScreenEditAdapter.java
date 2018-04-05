@@ -126,10 +126,32 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                         public void onClick(DialogInterface dialog, int which) {
                             //String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
                             temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                            temporaryCoursePoint.setFlashcard_front(cardFrontEdit.getText().toString());
-                            temporaryCoursePoint.setFlashcard_back(cardBackEdit.getText().toString());
-                            temporaryCoursePoint.setSentence(sentenceEdit.getText().toString());
-                            new UpdateCoursePointInDatabase(context, temporaryCoursePoint, new RefreshScreen()).execute();
+
+                            String cardFront = cardFrontEdit.getText().toString();
+                            String cardBack = cardBackEdit.getText().toString();
+                            String sentence = sentenceEdit.getText().toString();
+
+                            if(cardFront.equals("")||cardBack.equals("")||sentence.equals("")){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle(R.string.warning);
+                                builder.setMessage(R.string.blank_components_warning);
+                                builder.setCancelable(false);
+                                builder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                                builder.create().show();
+                            }else{
+                                temporaryCoursePoint.setFlashcard_front(cardFront);
+                                temporaryCoursePoint.setFlashcard_back(cardBack);
+                                temporaryCoursePoint.setSentence(sentence);
+                                new UpdateCoursePointInDatabase(context, temporaryCoursePoint, new RefreshScreen()).execute();
+                            }
+
+
+
 
                         }
                     });

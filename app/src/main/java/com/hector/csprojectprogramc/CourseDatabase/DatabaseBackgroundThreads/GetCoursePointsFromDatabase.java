@@ -39,8 +39,20 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
     @Override
     protected List<CoursePoint> doInBackground(Void... voids) {
-        MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();//Accesses the database
-        return database.customDao().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
+        MainDatabase database = null;
+        try{
+             database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();//Accesses the database
+            return database.customDao().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
+        }catch (Exception exception){
+            //TODO: handle appropriately
+        }finally {
+            if(database != null){
+                database.close();
+            }
+        }
+
+        return null;//TODO: handle appropriately
+
     }
 
 

@@ -36,8 +36,7 @@ public class CoursePointsScreenFlashcardAdapter extends RecyclerView.Adapter<Cou
         return coursePoints.size();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder{
         TextView flashcardFormSideTextView;
         CardView flashcardCardView;
         boolean showFront = true;

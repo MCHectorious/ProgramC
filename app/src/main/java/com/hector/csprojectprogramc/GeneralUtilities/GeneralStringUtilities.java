@@ -1,6 +1,6 @@
 package com.hector.csprojectprogramc.GeneralUtilities;
 
-public class GeneralStringUtils {
+public class GeneralStringUtilities {
 
     public static String convertSpacesToPluses(String string){
         StringBuilder builder = new StringBuilder();

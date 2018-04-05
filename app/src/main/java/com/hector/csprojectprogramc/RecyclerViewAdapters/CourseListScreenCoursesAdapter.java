@@ -7,21 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.hector.csprojectprogramc.CourseImport.AQACourseImport;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
-import com.hector.csprojectprogramc.CourseImport.AQAScraper;
 import java.util.Collection;
 import java.util.Set;
 
 
 public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseListScreenCoursesAdapter.ViewHolder>{
 
-    private Context context, appContext;
+    private Context context;
     private String qualification;
     private String[] courseNames, courseWebsites;
 
-    @SuppressWarnings("WeakerAccess")
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
         private TextView courseNameTextView;
         private CardView courseCardView;
         private ViewHolder(View view){
@@ -31,19 +31,17 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-
-                    new AQAScraper(courseWebsites[getAdapterPosition()],context,appContext, qualification,courseNames[getAdapterPosition()]);
+                    new AQACourseImport(context, courseNames[getAdapterPosition()],  qualification, courseWebsites[getAdapterPosition()]).execute();
                 }
             });
         }
 
     }
 
-    public CourseListScreenCoursesAdapter(Set<String> courseNames, Collection<String> courseWebsites, Context context, Context appContext, String qualification){
+    public CourseListScreenCoursesAdapter(Set<String> courseNames, Collection<String> courseWebsites, Context context, String qualification){
         this.courseNames = courseNames.toArray(new String[0]);
         this.courseWebsites = courseWebsites.toArray(new String[0]);
         this.context = context;
-        this.appContext = appContext;
         this.qualification = qualification;
     }
 

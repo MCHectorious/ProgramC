@@ -7,30 +7,28 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 
 import com.hector.csprojectprogramc.CourseListImport.GetAQACoursesAndTheirWebsites;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
+import com.hector.csprojectprogramc.RecyclerViewAdapters.CourseListScreenCoursesAdapter;
+
+import java.util.HashMap;
 
 public class CourseListScreen extends AppCompatActivity {
     private NetworkInfo wifi;
+    private String qualification;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Runs when the screen starts
         super.onCreate(savedInstanceState); //TODO: research what this does
         setContentView(R.layout.course_list_screen); //Links the XML file that defines the layout of the screen
-        String qualification = getIntent().getStringExtra("Qualification"); //Gets the qualification of the courses to show from the previous screen //TODO: Prepare for null
-        String HTMLDividerClassForQualification = "";
-        if(qualification.equals(getString(R.string.gcse))){
-            HTMLDividerClassForQualification = "panelInner gcse-header"; //Sets the divider to the name of the section which includes the GCSE courses
-        }
-        if (qualification.equals(getString(R.string.as_and_a_level))){
-            HTMLDividerClassForQualification = "panelInner as_and_a-level-header"; //Sets the divider to the name of the section which includes the A-Level courses
-        }
-        final RecyclerView recyclerViewForCourses =  findViewById(R.id.courseListScreenRecyclerView); //Initialises the recycler view which shows the courses
+        qualification = getIntent().getStringExtra("Qualification"); //Gets the qualification of the courses to show from the previous screen //TODO: Prepare for null
 
         //new GetAQACoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()).execute();//Gets the list of courses from the AQA website and then afterwards it displays them
         try{
@@ -40,7 +38,7 @@ public class CourseListScreen extends AppCompatActivity {
             wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 
-            getCoursesIfConnectedToWifi(new GetAQACoursesAndTheirWebsites(CourseListScreen.this, qualification, HTMLDividerClassForQualification,recyclerViewForCourses, getApplicationContext()));
+            getCoursesIfConnectedToWifi(new GetAQACoursesAndTheirWebsites(CourseListScreen.this, qualification, new AfterGettingCourses()));
 
         }catch (NullPointerException exception){
             Log.w("Warning","Null Pointer");
@@ -64,6 +62,22 @@ public class CourseListScreen extends AppCompatActivity {
                 }
             });
             noWiFiAlertDialogBuilder.create().show();
+        }
+    }
+
+    private  class AfterGettingCourses implements AsyncTaskCompleteListener<HashMap<String,String>>{
+
+
+
+        @Override
+        public void onAsyncTaskComplete(HashMap<String, String> courseNamesAndWebsites) {
+            final RecyclerView recyclerViewForCourses =  findViewById(R.id.courseListScreenRecyclerView); //Initialises the recycler view which shows the courses
+
+
+            recyclerViewForCourses.setHasFixedSize(true);// Improves the speed of using the recycler view
+            recyclerViewForCourses.setLayoutManager(new LinearLayoutManager(CourseListScreen.this));// Shows the courses in a vertical list
+            recyclerViewForCourses.setAdapter(new CourseListScreenCoursesAdapter(courseNamesAndWebsites.keySet(), courseNamesAndWebsites.values(), CourseListScreen.this,  qualification));//Define how the courses are handled
+
         }
     }
 

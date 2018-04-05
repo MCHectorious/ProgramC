@@ -5,27 +5,47 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "courses")
 public class Course {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int course_ID;
 
     private String colloquial_name;
     private String official_name;
     private String website;
+
+
     private String examBoard;
     private String qualification;
     private String next_key_date;
     private String next_key_date_detail;
 
-    public Course(int course_ID, String colloquial_name, String official_name, String website, String examBoard, String qualification, String next_key_date, String next_key_date_detail){
+    public void setCourse_ID(int course_ID) {
         this.course_ID = course_ID;
+    }
+
+    public void setColloquial_name(String colloquial_name) {
         this.colloquial_name = colloquial_name;
+    }
+
+    public void setOfficial_name(String official_name) {
         this.official_name = official_name;
+    }
+
+    public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public void setExamBoard(String examBoard) {
         this.examBoard = examBoard;
-        this.qualification = qualification;
+    }
+
+    public void setNext_key_date(String next_key_date) {
         this.next_key_date = next_key_date;
+    }
+
+    public void setNext_key_date_detail(String next_key_date_detail) {
         this.next_key_date_detail = next_key_date_detail;
     }
+
 
     public int getCourse_ID() {
         return course_ID;

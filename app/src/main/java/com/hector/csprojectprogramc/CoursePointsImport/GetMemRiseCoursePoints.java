@@ -8,10 +8,10 @@ import android.util.Log;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
-import com.hector.csprojectprogramc.CoursePointsImport.CramScraper;
 import com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtils;
+import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,22 +21,24 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
-public class MemRiseScraper{
+class GetMemRiseCoursePoints implements CoursePointsImporter{
 
 
-    public void insertCoursePointsToDataBase(Context context, Course course, Context appContext){
-        new GetRelatedFlashcards(context, course, appContext).execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
+    public void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
+        new GetRelatedFlashcards(context, course, appContext, listener).execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
     }
 
     private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>>{
         private ProgressDialog progressDialog;
         private WeakReference<Context> context, appContext;
         private Course course;
+        private AsyncTaskCompleteListener<Void> listener;
 
-        private GetRelatedFlashcards(Context context, Course course, Context appContext){
+        private GetRelatedFlashcards(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
             this.context = new WeakReference<>(context);
             this.course = course;
             this.appContext = new WeakReference<>(appContext);
+            this.listener = listener;
         }
 
 
@@ -55,7 +57,7 @@ public class MemRiseScraper{
         protected ArrayList<String> doInBackground(String... strings) {
             ArrayList<String> relatedWebsites = new ArrayList<>();
             for ( String string: strings) {
-                String url = "https://www.memrise.com/courses/english/?q="+GeneralStringUtils.convertSpacesToPluses(string);
+                String url = "https://www.memrise.com/courses/english/?q="+ GeneralStringUtilities.convertSpacesToPluses(string);
                 Log.w("URL",url);
                 try {
                     Document document = Jsoup.connect(url).get();
@@ -96,7 +98,7 @@ public class MemRiseScraper{
         @Override
         protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, appContext.get()).execute(relatedWebsites.toArray(new String[0]));
+            new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, appContext.get(), listener).execute(relatedWebsites.toArray(new String[0]));
         }
     }
 
@@ -104,11 +106,13 @@ public class MemRiseScraper{
         private ProgressDialog progressDialog;
         private WeakReference<Context> context, appContext;
         private Course course;
+        private AsyncTaskCompleteListener<Void> listener;
 
-        private GetFlashcardsFromRelatedMemRiseCourses(Context context, Course course, Context appContext){
+        private GetFlashcardsFromRelatedMemRiseCourses(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
             this.context = new WeakReference<>(context);
             this.course = course;
             this.appContext = new WeakReference<>(appContext);
+            this.listener = listener;
         }
 
         @Override
@@ -156,7 +160,9 @@ public class MemRiseScraper{
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
-            new CramScraper().insertCoursePointsInDataBase(context.get(), course,appContext.get());
+
+            listener.onAsyncTaskComplete(result);
+
         }
     }
 }

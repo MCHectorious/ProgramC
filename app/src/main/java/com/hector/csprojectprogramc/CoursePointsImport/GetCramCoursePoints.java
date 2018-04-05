@@ -1,21 +1,19 @@
 package com.hector.csprojectprogramc.CoursePointsImport;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities.FlashcardToSentenceModel;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtils;
+import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,22 +23,26 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class CramScraper{
+class GetCramCoursePoints implements CoursePointsImporter{
 
-    public void insertCoursePointsInDataBase(Context context, Course course, Context appContext){
-        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards(context, course, appContext);
+
+    public void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
+        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards(context, course, appContext, listener);
         getRelatedFlashcards.execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
+
     }
 
     private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>> {
         private ProgressDialog progressDialog;
         private WeakReference<Context> context, appContext;
         private Course course;
+        private AsyncTaskCompleteListener<Void> listener;
 
-        private GetRelatedFlashcards(Context context, Course course, Context appContext){
+        private GetRelatedFlashcards(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
             this.context = new WeakReference<>(context);
             this.course = course;
             this.appContext = new WeakReference<>(appContext);
+            this.listener = listener;
         }
 
         @Override
@@ -58,7 +60,7 @@ public class CramScraper{
             ArrayList<String> relatedWebsites = new ArrayList<>();
             for ( String string: strings) {
 
-                String url = "http://www.cram.com/search?query="+GeneralStringUtils.convertSpacesToPluses(string)+"&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any";
+                String url = "http://www.cram.com/search?query="+ GeneralStringUtilities.convertSpacesToPluses(string)+"&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any";
                 try {
                     Log.i("Overall Cram Website",url);
                     Document document = Jsoup.connect(url).get();
@@ -87,7 +89,7 @@ public class CramScraper{
         @Override
         protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            new GetFlashcardsFromRelatedCramCourses(context.get(), course, appContext.get()).execute(relatedWebsites.toArray(new String[0]));
+            new GetFlashcardsFromRelatedCramCourses(context.get(), course, appContext.get(),listener).execute(relatedWebsites.toArray(new String[0]));
         }
     }
 
@@ -96,11 +98,13 @@ public class CramScraper{
         private ProgressDialog progressDialog;
         private WeakReference<Context> context, appContext;
         private Course course;
+        private AsyncTaskCompleteListener<Void> listener;
 
-        private GetFlashcardsFromRelatedCramCourses(Context context, Course course, Context appContext){
+        private GetFlashcardsFromRelatedCramCourses(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
             this.context = new WeakReference<>(context);
             this.course = course;
             this.appContext = new WeakReference<>(appContext);
+            this.listener = listener;
         }
 
         @Override
@@ -155,16 +159,9 @@ public class CramScraper{
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
 
-            AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(context.get());// Initialises the alert dialog which will warn the user that some sentences may be machine generated
-            String machineLearningWarningText =  context.get().getString(R.string.you_can_view_course_points)+ System.getProperty("line.separator")+ context.get().getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+context.get().getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
-            machineLearningWarningAlertDialogBuilder.setMessage(machineLearningWarningText);
-            machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.get().getString(R.string.okay), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
-                    Intent intent = new Intent(context.get(), HomeScreen.class);
-                    context.get().startActivity(intent);
-                }
-            });
-            machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen
+            listener.onAsyncTaskComplete(result);
+
+
 
 
         }

@@ -1,11 +1,9 @@
 package com.hector.csprojectprogramc.RecyclerViewAdapters;
 
 import android.app.AlertDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,12 +14,11 @@ import android.widget.TextView;
 import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
-import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
-import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
+import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.DeleteCourseFromDatabase;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeScreenCoursesRecyclerAdapter.ViewHolder> {
@@ -63,8 +60,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
         public Context context;
         public Course course;
 
-        @SuppressWarnings("WeakerAccess")
-        public ViewHolder(View cv, final List<Course> courses, final Context context){
+        ViewHolder(View cv, final List<Course> courses, final Context context){
             super(cv);
             this.context = context;
 
@@ -101,7 +97,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             course = courses.get(getAdapterPosition());
-                            new deleteCourseFromDatabase(context,course).execute();
+                            new DeleteCourseFromDatabase(context,course, new RefreshScreen()).execute();
                         }
                     });
                     warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -117,34 +113,18 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
             });
         }
 
-        private static class deleteCourseFromDatabase extends AsyncTask<Void,Void,Void>{
-
-            private WeakReference<Context> context;
-            private Course course;
-
-            private deleteCourseFromDatabase(Context context, Course course){
-                this.context = new WeakReference<>(context);
-                this.course = course;
-            }
+        private class RefreshScreen implements AsyncTaskCompleteListener<Void>{
 
             @Override
-            protected Void doInBackground(Void... voids) {
-                MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
-                database.customDao().deleteCourse(course);
-                List<CoursePoint> coursePoints = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
-                for(CoursePoint point:coursePoints){
-                    database.customDao().deleteCoursePoint(point);
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result){
-                Intent refreshHomeScreen = new Intent(context.get(),HomeScreen.class);
-                context.get().startActivity(refreshHomeScreen);
+            public void onAsyncTaskComplete(Void result) {
+                Intent refreshHomeScreen = new Intent(context,HomeScreen.class);
+                context.startActivity(refreshHomeScreen);
             }
         }
 
     }
+
+
+
+
 }

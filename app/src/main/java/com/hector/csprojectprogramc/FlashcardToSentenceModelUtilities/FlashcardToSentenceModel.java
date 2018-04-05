@@ -1,7 +1,7 @@
 package com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities;
 
 
-import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtils;
+import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtilities;
 
 public class FlashcardToSentenceModel {
 
@@ -32,7 +32,7 @@ public class FlashcardToSentenceModel {
 
         if(!frontToTest.contains(" ")){
             return front+" means "+back;
-        }else if(GeneralStringUtils.countOfCharInString(' ',frontToTest)==1){
+        }else if(GeneralStringUtilities.countOfCharInString(' ',frontToTest)==1){
             return front+" means "+back;
         }
 

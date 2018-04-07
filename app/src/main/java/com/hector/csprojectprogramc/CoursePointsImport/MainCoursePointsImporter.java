@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
@@ -24,11 +25,11 @@ public class MainCoursePointsImporter {
 
     }
 
-    public void getCoursePoints(Course course){
+    public void getCoursePoints(Course course, AsyncTaskErrorListener errorListener){
         AfterGettingCoursePoints afterGettingCoursePoints = new AfterGettingCoursePoints();
 
-        new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints);
-        new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints);
+        new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
+        new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
 
 
     }
@@ -44,8 +45,8 @@ public class MainCoursePointsImporter {
                 machineLearningWarningAlertDialogBuilder.setMessage(machineLearningWarningText);
                 machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.get().getString(R.string.okay), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
-                        Intent intent = new Intent(context.get(), HomeScreen.class);
-                        context.get().startActivity(intent);
+                        Intent toHomeScreen = new Intent(context.get(), HomeScreen.class);
+                        context.get().startActivity(toHomeScreen);
                     }
                 });
                 machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen

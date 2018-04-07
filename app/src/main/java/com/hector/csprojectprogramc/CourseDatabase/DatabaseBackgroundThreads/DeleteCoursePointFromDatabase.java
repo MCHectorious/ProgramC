@@ -1,12 +1,14 @@
 package com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
+import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
 
@@ -15,22 +17,22 @@ public class DeleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void> {
     private WeakReference<Context> context;
     private CoursePoint temporaryCoursePoint;
 
-    private AsyncTaskCompleteListener<Void> listener;
+    private AsyncTaskCompleteListener<Void> onCompleteListener;
 
     public DeleteCoursePointFromDatabase(Context context, CoursePoint temporaryCoursePoint, AsyncTaskCompleteListener<Void> listener){
         this.context = new WeakReference<>(context);
         this.temporaryCoursePoint = temporaryCoursePoint;
-        this.listener = listener;
+        this.onCompleteListener = listener;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        MainDatabase database = null;
+        MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
-            database = Room.databaseBuilder(context.get(), MainDatabase.class, "my-db").build();
-            database.customDao().deleteCoursePoint(temporaryCoursePoint);
-        }catch(Exception exception){
-            //TODO: handle appropriately
+            database.databaseAccessObject().deleteCoursePoint(temporaryCoursePoint);
+        }catch(NullPointerException exception){
+            Toast.makeText(context.get(), R.string.unable_to_delete_course_point,Toast.LENGTH_LONG).show();
+            Log.w(context.get().getString(R.string.unable_to_delete_course_point),exception.getMessage());
         }finally {
             if (database != null){
                 database.close();
@@ -44,7 +46,7 @@ public class DeleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void> {
     protected void onPostExecute(Void result){
         super.onPostExecute(result);
 
-        listener.onAsyncTaskComplete(result);
+        onCompleteListener.onAsyncTaskComplete(result);
 
     }
 }

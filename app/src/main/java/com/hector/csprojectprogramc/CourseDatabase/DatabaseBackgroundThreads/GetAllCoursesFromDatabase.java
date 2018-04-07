@@ -1,17 +1,17 @@
 package com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
+import com.hector.csprojectprogramc.Activities.ExamBoardScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
-import com.hector.csprojectprogramc.RecyclerViewAdapters.HomeScreenCoursesRecyclerAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.List;
 public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>> {
     private ProgressDialog progressDialog;
     private WeakReference<Context> context;
-    private AsyncTaskCompleteListener<List<Course>> listener;
+    private AsyncTaskCompleteListener<List<Course>> onCompleteListener;
 
-    public GetAllCoursesFromDatabase(Context context, AsyncTaskCompleteListener<List<Course>> listener){
+    public GetAllCoursesFromDatabase(Context context, AsyncTaskCompleteListener<List<Course>> onCompleteListener){
         this.context = new WeakReference<>(context);
-        this.listener = listener;
+        this.onCompleteListener = onCompleteListener;
     }
 
     @Override
@@ -38,12 +38,22 @@ public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>
 
     @Override
     protected List<Course> doInBackground(Void... voids) {
-        MainDatabase database = null;
+        MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
-            database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
-            return database.customDao().getAllCourses();
-        }catch (Exception exception){
-            //TODO: handle appropriately
+            return database.databaseAccessObject().getAllCourses();
+        }catch (NullPointerException exception){
+            AlertDialog.Builder cantAccessCoursesAlertDialogBuilder = new AlertDialog.Builder(context.get());
+            cantAccessCoursesAlertDialogBuilder.setTitle(R.string.unable_to_load_courses);
+            cantAccessCoursesAlertDialogBuilder.setMessage(R.string.press_button_to_go_to_exam_board_screen);
+            cantAccessCoursesAlertDialogBuilder.setCancelable(false);
+            cantAccessCoursesAlertDialogBuilder.setPositiveButton(context.get().getString(R.string.okay), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent toExamBoardScreen = new Intent(context.get(),ExamBoardScreen.class);
+                    context.get().startActivity(toExamBoardScreen);
+                }
+            });
+            cantAccessCoursesAlertDialogBuilder.create().show();
         }finally {
             if(database != null){
                 database.close();
@@ -57,7 +67,7 @@ public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>
     @Override
     protected void onPostExecute(List<Course> courses){
         progressDialog.dismiss();
-        listener.onAsyncTaskComplete(courses);
+        onCompleteListener.onAsyncTaskComplete(courses);
 
     }
 }

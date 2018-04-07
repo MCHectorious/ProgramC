@@ -1,17 +1,19 @@
 package com.hector.csprojectprogramc.CoursePointsImport;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
-import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
+import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.InsertCoursePointsToDatabase;
 import com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities.FlashcardToSentenceModel;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtilities;
 import org.jsoup.Jsoup;
@@ -21,28 +23,32 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 class GetCramCoursePoints implements CoursePointsImporter{
 
+    private static int timeout = 10000;
 
-    public void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
-        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards(context, course, appContext, listener);
+    public void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener, AsyncTaskErrorListener errorListener){
+        GetRelatedFlashcards getRelatedFlashcards = new GetRelatedFlashcards(context, course, listener, errorListener);
         getRelatedFlashcards.execute(course.getExamBoard()+" "+course.getQualification()+" "+course.getColloquial_name());
 
     }
 
     private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>> {
         private ProgressDialog progressDialog;
-        private WeakReference<Context> context, appContext;
+        private WeakReference<Context> context;
         private Course course;
-        private AsyncTaskCompleteListener<Void> listener;
+        private AsyncTaskCompleteListener<Void> onCompleteListener;
+        private AsyncTaskErrorListener errorListener;
 
-        private GetRelatedFlashcards(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
+
+        private GetRelatedFlashcards(Context context, Course course, AsyncTaskCompleteListener<Void> onCompleteListener, AsyncTaskErrorListener errorListener){
             this.context = new WeakReference<>(context);
             this.course = course;
-            this.appContext = new WeakReference<>(appContext);
-            this.listener = listener;
+            this.onCompleteListener = onCompleteListener;
+            this.errorListener = errorListener;
         }
 
         @Override
@@ -63,8 +69,8 @@ class GetCramCoursePoints implements CoursePointsImporter{
                 String url = "http://www.cram.com/search?query="+ GeneralStringUtilities.convertSpacesToPluses(string)+"&search_in%5B%5D=title&search_in%5B%5D=body&search_in%5B%5D=subject&search_in%5B%5D=username&image_filter=exclude_imgs&period=any";
                 try {
                     Log.i("Overall Cram Website",url);
-                    Document document = Jsoup.connect(url).get();
-                    Elements section = document.select("div[id=searchResults]").select("a[href]");
+                    Document overallCramWebsite = Jsoup.connect(url).timeout(timeout).get();
+                    Elements section = overallCramWebsite.select("div[id=searchResults]").select("a[href]");
 
                     for (Element element:section ) {
                         String website = element.attr("href");
@@ -78,9 +84,27 @@ class GetCramCoursePoints implements CoursePointsImporter{
                             }
                         }
                     }
-                } catch (Exception e) {
-                    Log.e("Issue with Cram Overall",course.getOfficial_name());
-                    Log.e("Error",e.getMessage());
+                }catch (SocketTimeoutException e) {
+                    AlertDialog.Builder timeoutAlertDialogBuilder = new AlertDialog.Builder(context.get());
+                    timeoutAlertDialogBuilder.setTitle(R.string.connection_timed_out);
+                    timeoutAlertDialogBuilder.setMessage(context.get().getString(R.string.timeout_instructions));
+                    timeoutAlertDialogBuilder.setCancelable(false);
+                    timeoutAlertDialogBuilder.setPositiveButton(R.string.double_the_timeout, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            timeout *= 2;
+                            doInBackground();
+                        }
+                    });
+                    timeoutAlertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            errorListener.onAsyncTaskError();
+                        }
+                    });
+                    timeoutAlertDialogBuilder.create().show();
+                }catch (IOException exception){
+                    Log.w(context.get().getString(R.string.issue_with_getting_cram_courses),exception.getMessage());
                 }
             }
             return relatedWebsites;
@@ -89,22 +113,21 @@ class GetCramCoursePoints implements CoursePointsImporter{
         @Override
         protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            new GetFlashcardsFromRelatedCramCourses(context.get(), course, appContext.get(),listener).execute(relatedWebsites.toArray(new String[0]));
+            new GetFlashcardsFromRelatedCramCourses(context.get(), course, onCompleteListener).execute(relatedWebsites.toArray(new String[0]));
         }
     }
 
     private static class GetFlashcardsFromRelatedCramCourses extends AsyncTask<String,Void,Void>{
 
         private ProgressDialog progressDialog;
-        private WeakReference<Context> context, appContext;
+        private WeakReference<Context> context;
         private Course course;
-        private AsyncTaskCompleteListener<Void> listener;
+        private AsyncTaskCompleteListener<Void> onCompleteListener;
 
-        private GetFlashcardsFromRelatedCramCourses(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener){
+        private GetFlashcardsFromRelatedCramCourses(Context context, Course course, AsyncTaskCompleteListener<Void> onCompleteListener){
             this.context = new WeakReference<>(context);
             this.course = course;
-            this.appContext = new WeakReference<>(appContext);
-            this.listener = listener;
+            this.onCompleteListener = onCompleteListener;
         }
 
         @Override
@@ -119,47 +142,46 @@ class GetCramCoursePoints implements CoursePointsImporter{
 
         @Override
         protected Void doInBackground(String... strings) {
-            MainDatabase database = Room.databaseBuilder(appContext.get(),MainDatabase.class,context.get().getString(R.string.database_location)).build();
+
+            ArrayList<CoursePoint> coursePoints = new ArrayList<>();
 
             boolean foundCard = false;
 
-            //Log.w("Got this far","yes");
 
             for (String url: strings) {
                 try {
-                    Document courseWebsite = Jsoup.connect("http://www.cram.com"+url).get();
+                    Document courseWebsite = Jsoup.connect("http://www.cram.com"+url).timeout(timeout).get();
                     Elements FlashCardSection = courseWebsite.select("table[class=flashCardsListingTable]").select("tr");
                     for (Element e: FlashCardSection){
                         String front = e.select("div[class=front_text card_text]").text();
                         String back = e.select("div[class=back_text card_text]").text();
-
-                        //Log.w( (front.length()>10)? front.substring(0,10):front,(back.length()>10)? back.substring(0,10):back);
                         String sentence = FlashcardToSentenceModel.convertFlashcardToSentence(front,back);
-                        //Log.w("Sentence","Yes");
 
-                        //Log.w("Sentence", (sentence.length()>30)? sentence.substring(0,30):sentence);
                         foundCard = true;
-                        database.customDao().insertCoursePoint(new CoursePoint(course.getCourse_ID(),front,back,sentence));
+                        coursePoints.add(new CoursePoint(course.getCourse_ID(),front,back,sentence));
                     }
-                } catch (IOException e) {
-                    Log.e("Issue with Cram",course.getOfficial_name());
-                    Log.e("Error",e.getMessage());
+                } catch (IOException exception) {
+                    Log.w(context.get().getString(R.string.issue_with_getting_cram_courses),exception.getMessage());
 
 
                 }
 
             }
-            database.close();
-            if (!foundCard){
-                Log.e("No Cram for",course.getOfficial_name());
+
+            if (foundCard){
+                new InsertCoursePointsToDatabase(context.get()).execute(coursePoints.toArray(new CoursePoint[0]));
+            }else{
+                Log.w("No Cram courses for",course.getOfficial_name());
             }
+
             return null;
         }
+
         @Override
         protected void onPostExecute(Void result){
             progressDialog.dismiss();
 
-            listener.onAsyncTaskComplete(result);
+            onCompleteListener.onAsyncTaskComplete(result);
 
 
 

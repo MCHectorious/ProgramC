@@ -27,7 +27,7 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
     private List<CoursePoint> coursePoints;
     private Context context;
-    private CoursePoint temporaryCoursePoint;
+    private CoursePoint coursePoint;
     private int courseID;
 
     public CoursePointsScreenEditAdapter(List<CoursePoint> coursePoints, Context context, int courseID){
@@ -44,11 +44,11 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        temporaryCoursePoint = coursePoints.get(position);
-        viewHolder.flashcardFormFrontTextView.setText(temporaryCoursePoint.getFlashcard_front());
-        viewHolder.flashcardFormBackTextView.setText(temporaryCoursePoint.getFlashcard_back());
-        viewHolder.sentenceFormTextView.setText(temporaryCoursePoint.getSentence());
-        viewHolder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(temporaryCoursePoint.getSentence()));
+        coursePoint = coursePoints.get(position);
+        viewHolder.flashcardFormFrontTextView.setText(coursePoint.getFlashcard_front());
+        viewHolder.flashcardFormBackTextView.setText(coursePoint.getFlashcard_back());
+        viewHolder.sentenceFormTextView.setText(coursePoint.getSentence());
+        viewHolder.cardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(coursePoint.getSentence()));
 
         }
 
@@ -73,24 +73,24 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     editCoursePointAlertDialogBuilder.setTitle( context.getString(R.string.edit_course_points) );
                     LinearLayout layoutForAlertDialog = new LinearLayout(context);
                     layoutForAlertDialog.setOrientation(LinearLayout.VERTICAL);
-                    final TextView cardFront = new TextView(context);
-                    cardFront.setText(R.string.flashcard_front);
-                    layoutForAlertDialog.addView(cardFront);
-                    final EditText cardFrontEdit = new EditText(context);
-                    temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                    cardFrontEdit.setText(temporaryCoursePoint.getFlashcard_front());
-                    layoutForAlertDialog.addView(cardFrontEdit);
-                    final TextView cardBack = new TextView(context);
-                    cardBack.setText(R.string.flashcard_back);
-                    layoutForAlertDialog.addView(cardBack);
-                    final EditText cardBackEdit = new EditText(context);
-                    cardBackEdit.setText(temporaryCoursePoint.getFlashcard_back() );
-                    layoutForAlertDialog.addView(cardBackEdit);
+                    final TextView flashcardFront = new TextView(context);
+                    flashcardFront.setText(R.string.flashcard_front);
+                    layoutForAlertDialog.addView(flashcardFront);
+                    final EditText flashcardFrontEdit = new EditText(context);
+                    coursePoint = coursePoints.get(getAdapterPosition());
+                    flashcardFrontEdit.setText(coursePoint.getFlashcard_front());
+                    layoutForAlertDialog.addView(flashcardFrontEdit);
+                    final TextView flashcardBack = new TextView(context);
+                    flashcardBack.setText(R.string.flashcard_back);
+                    layoutForAlertDialog.addView(flashcardBack);
+                    final EditText flashcardBackEdit = new EditText(context);
+                    flashcardBackEdit.setText(coursePoint.getFlashcard_back() );
+                    layoutForAlertDialog.addView(flashcardBackEdit);
                     final TextView sentence = new TextView(context);
                     sentence.setText(R.string.sentence);
                     layoutForAlertDialog.addView(sentence);
                     final EditText sentenceEdit = new EditText(context);
-                    sentenceEdit.setText(temporaryCoursePoint.getSentence() );
+                    sentenceEdit.setText(coursePoint.getSentence() );
                     layoutForAlertDialog.addView(sentenceEdit);
 
                     Button deleteButton = new Button(context);
@@ -104,8 +104,8 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                             warningBuilder.setCancelable(true).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    temporaryCoursePoint = coursePoints.get(getAdapterPosition());
-                                    new DeleteCoursePointFromDatabase(context, temporaryCoursePoint, new RefreshScreen()).execute();
+                                    coursePoint = coursePoints.get(getAdapterPosition());
+                                    new DeleteCoursePointFromDatabase(context, coursePoint, new RefreshScreen()).execute();
                                 }
                             });
                             warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -124,30 +124,29 @@ public class CoursePointsScreenEditAdapter extends RecyclerView.Adapter<CoursePo
                     editCoursePointAlertDialogBuilder.setPositiveButton( context.getString(R.string.make_these_changes) , new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //String[] coursePointComponentsArray = {cardFrontEdit.getText().toString(),cardBackEdit.getText().toString(),sentenceEdit.getText().toString()};
-                            temporaryCoursePoint = coursePoints.get(getAdapterPosition());
+                            coursePoint = coursePoints.get(getAdapterPosition());
 
-                            String cardFront = cardFrontEdit.getText().toString();
-                            String cardBack = cardBackEdit.getText().toString();
+                            String flashcardFront = flashcardFrontEdit.getText().toString();
+                            String flashcardBack = flashcardBackEdit.getText().toString();
                             String sentence = sentenceEdit.getText().toString();
 
-                            if(cardFront.equals("")||cardBack.equals("")||sentence.equals("")){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(R.string.warning);
-                                builder.setMessage(R.string.blank_components_warning);
-                                builder.setCancelable(false);
-                                builder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
+                            if(flashcardFront.equals("")||flashcardBack.equals("")||sentence.equals("")){
+                                AlertDialog.Builder coursePointComponentBlankAlertDialogBuilder = new AlertDialog.Builder(context);
+                                coursePointComponentBlankAlertDialogBuilder.setTitle(R.string.warning);
+                                coursePointComponentBlankAlertDialogBuilder.setMessage(R.string.blank_components_warning);
+                                coursePointComponentBlankAlertDialogBuilder.setCancelable(false);
+                                coursePointComponentBlankAlertDialogBuilder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
                                     }
                                 });
-                                builder.create().show();
+                                coursePointComponentBlankAlertDialogBuilder.create().show();
                             }else{
-                                temporaryCoursePoint.setFlashcard_front(cardFront);
-                                temporaryCoursePoint.setFlashcard_back(cardBack);
-                                temporaryCoursePoint.setSentence(sentence);
-                                new UpdateCoursePointInDatabase(context, temporaryCoursePoint, new RefreshScreen()).execute();
+                                coursePoint.setFlashcard_front(flashcardFront);
+                                coursePoint.setFlashcard_back(flashcardBack);
+                                coursePoint.setSentence(sentence);
+                                new UpdateCoursePointInDatabase(context, coursePoint, new RefreshScreen()).execute();
                             }
 
 

@@ -48,8 +48,8 @@ public class HomeScreen extends AppCompatActivity {
     public static void showNoCoursesAlertDialog(final Context context){
         AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(context);
         TextView noCoursesWarningTextView = new TextView(context);
-        String noCoursesWarningText = context.getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+context.getString(R.string.no_courses_instructions);
-        noCoursesWarningTextView.setText(noCoursesWarningText);
+        String noCoursesWarning = context.getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+context.getString(R.string.no_courses_instructions);
+        noCoursesWarningTextView.setText(noCoursesWarning);
         noCoursesAlertDialogBuilder.setView(noCoursesWarningTextView);
         noCoursesAlertDialogBuilder.setCancelable(false).setPositiveButton( context.getString(R.string.okay) , new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -62,10 +62,10 @@ public class HomeScreen extends AppCompatActivity {
 
     private class AfterGettingCourses implements AsyncTaskCompleteListener<List<Course>>{
         public void onAsyncTaskComplete(List<Course> courses){
-            RecyclerView CoursesRecyclerView = findViewById(R.id.cardList);
+            RecyclerView coursesRecyclerView = findViewById(R.id.cardList);
             if(courses.size()>0){
-                CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));
-                CoursesRecyclerView.setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, HomeScreen.this));
+                coursesRecyclerView.setLayoutManager(new LinearLayoutManager(HomeScreen.this));
+                coursesRecyclerView.setAdapter(new HomeScreenCoursesRecyclerAdapter(courses, HomeScreen.this));
             }else{
                 showNoCoursesAlertDialog(HomeScreen.this);
             }

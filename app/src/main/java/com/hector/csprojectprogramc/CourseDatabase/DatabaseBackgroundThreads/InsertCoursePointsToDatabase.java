@@ -7,27 +7,25 @@ import android.widget.Toast;
 
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
-import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
 
-public class InsertCoursePointToDatabase extends AsyncTask<String,Void,Void> { //Adds the course point to the database
-    private WeakReference<Context> context;
-    private int courseID;
-    private AsyncTaskCompleteListener<Void> onCompleteListener;
+public class InsertCoursePointsToDatabase extends AsyncTask<CoursePoint,Void, Void>{
 
-    public InsertCoursePointToDatabase(int courseID, Context context, AsyncTaskCompleteListener<Void> onCompleteListener){
-        this.courseID = courseID;
+    private WeakReference<Context> context;
+
+    public InsertCoursePointsToDatabase(Context context){
         this.context = new WeakReference<>(context);
-        this.onCompleteListener = onCompleteListener;
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(CoursePoint... coursePoints) {
         MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
-            database.databaseAccessObject().insertCoursePoint(new CoursePoint(courseID,strings[0],strings[1],strings[2]));//inserts the course point via an SQL statement
+            for(CoursePoint coursePoint: coursePoints){
+                database.databaseAccessObject().insertCoursePoint(coursePoint);//inserts the course point via an SQL statement
+            }
         }catch (NullPointerException exception){
             Toast.makeText(context.get(), R.string.unable_to_add_course_point,Toast.LENGTH_LONG).show();
             Log.w(context.get().getString(R.string.unable_to_add_course_point),exception.getMessage());
@@ -44,8 +42,6 @@ public class InsertCoursePointToDatabase extends AsyncTask<String,Void,Void> { /
     protected void onPostExecute(Void result){
         super.onPostExecute(result);
 
-        onCompleteListener.onAsyncTaskComplete(result);
-
-
     }
+
 }

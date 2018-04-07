@@ -1,43 +1,38 @@
 package com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.hector.csprojectprogramc.CourseDatabase.Course;
-import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 public class DeleteCourseFromDatabase extends AsyncTask<Void,Void,Void> {
 
     private WeakReference<Context> context;
     private Course course;
-    private AsyncTaskCompleteListener<Void> listener;
+    private AsyncTaskCompleteListener<Void> onCompleteListener;
 
-    public DeleteCourseFromDatabase(Context context, Course course, AsyncTaskCompleteListener<Void> listener){
+    public DeleteCourseFromDatabase(Context context, Course course, AsyncTaskCompleteListener<Void> onCompleteListener){
         this.context = new WeakReference<>(context);
         this.course = course;
-        this.listener = listener;
+        this.onCompleteListener = onCompleteListener;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
 
-        MainDatabase database = null;
+        MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
-            database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
-            database.customDao().deleteCourse(course);
-            List<CoursePoint> coursePoints = database.customDao().getCoursePointsForCourse(course.getCourse_ID());
-            for(CoursePoint point:coursePoints){
-                database.customDao().deleteCoursePoint(point);
-            }
-        }catch (IllegalAccessError exception){
-            //TODO: handle appropriately
+            database.databaseAccessObject().deleteCourse(course);
+        }catch (NullPointerException exception){
+            Toast.makeText(context.get(), R.string.unable_to_delete_course,Toast.LENGTH_LONG).show();
+            Log.w(context.get().getString(R.string.unable_to_delete_course),exception.getMessage());
         }finally {
             if(database != null){
                 database.close();
@@ -51,7 +46,7 @@ public class DeleteCourseFromDatabase extends AsyncTask<Void,Void,Void> {
     protected void onPostExecute(Void result){
         super.onPostExecute(result);
 
-        listener.onAsyncTaskComplete(result);
+        onCompleteListener.onAsyncTaskComplete(result);
 
 
 

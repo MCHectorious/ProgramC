@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hector.csprojectprogramc.CourseImport.AQACourseImport;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
 import java.util.Collection;
@@ -24,18 +25,33 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
     class ViewHolder extends RecyclerView.ViewHolder{
         private TextView courseNameTextView;
         private CardView courseCardView;
-        private ViewHolder(View view){
+        private ViewHolder(final View view){
             super(view);
             courseNameTextView = view.findViewById(R.id.courseNameInList);
             courseCardView = view.findViewById(R.id.courseListCard);
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    new AQACourseImport(context, courseNames[getAdapterPosition()],  qualification, courseWebsites[getAdapterPosition()]).execute();
+                    new AQACourseImport(context, courseNames[getAdapterPosition()],  qualification, courseWebsites[getAdapterPosition()], new IfAnErrorOccursHideView(view)).execute();
                 }
             });
+
         }
 
+    }
+
+    public class IfAnErrorOccursHideView implements AsyncTaskErrorListener{
+
+        private View view;
+
+        IfAnErrorOccursHideView(View view){
+            this.view = view;
+        }
+
+        @Override
+        public void onAsyncTaskError() {
+            view.setVisibility(View.GONE);
+        }
     }
 
     public CourseListScreenCoursesAdapter(Set<String> courseNames, Collection<String> courseWebsites, Context context, String qualification){

@@ -1,11 +1,10 @@
 package com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.hector.csprojectprogramc.Activities.CoursePointsScreen;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
@@ -16,20 +15,29 @@ import java.lang.ref.WeakReference;
 public class UpdateCoursePointInDatabase extends AsyncTask<String,Void,Void> {
 
     private WeakReference<Context> context;
-    private CoursePoint temporaryCoursePoint;
+    private CoursePoint chosenCoursePoint;
 
     private AsyncTaskCompleteListener<Void> listener;
 
-    public UpdateCoursePointInDatabase(Context context, CoursePoint temporaryCoursePoint, AsyncTaskCompleteListener<Void> listener){
+    public UpdateCoursePointInDatabase(Context context, CoursePoint chosenCoursePoint, AsyncTaskCompleteListener<Void> listener){
         this.context = new WeakReference<>(context);
-        this.temporaryCoursePoint = temporaryCoursePoint;
+        this.chosenCoursePoint = chosenCoursePoint;
         this.listener = listener;
     }
 
     @Override
     protected Void doInBackground(String... strings) {
-        MainDatabase database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();
-        database.customDao().updateCoursePoint(temporaryCoursePoint);
+        MainDatabase database =  MainDatabase.getDatabase(context.get());
+
+        try{
+            database.databaseAccessObject().updateCoursePoint(chosenCoursePoint);
+        }catch (NullPointerException exception){
+            Toast.makeText(context.get(), R.string.unable_to_update_course_point,Toast.LENGTH_LONG).show();
+            Log.w(context.get().getString(R.string.unable_to_update_course_point),exception.getMessage());
+        }finally {
+            database.close();
+        }
+
         return null;
     }
 
@@ -38,12 +46,6 @@ public class UpdateCoursePointInDatabase extends AsyncTask<String,Void,Void> {
         super.onPostExecute(result);
 
         listener.onAsyncTaskComplete(result);
-
-        //Intent refreshCoursePointsScreen = new Intent(context.get(), CoursePointsScreen.class);
-        //refreshCoursePointsScreen.putExtra( context.get().getString(R.string.course_id) , courseID);
-       // refreshCoursePointsScreen.putExtra(context.get().getString(R.string.perspective), 2);
-
-        //context.get().startActivity(refreshCoursePointsScreen);
     }
 
 }

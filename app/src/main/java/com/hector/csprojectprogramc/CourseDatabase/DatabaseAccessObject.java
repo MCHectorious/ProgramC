@@ -22,8 +22,8 @@ public interface DatabaseAccessObject {
     List<Course> getAllCourses();
 
 
-    @Query("SELECT * FROM course_points WHERE course_ID_foreign = :id")
-    List<CoursePoint> getCoursePointsForCourse(int id);
+    @Query("SELECT * FROM course_points WHERE course_ID_foreign = :courseID")
+    List<CoursePoint> getCoursePointsForCourse(int courseID);
 
     @Update
     void updateCoursePoint(CoursePoint coursePoint);
@@ -33,5 +33,5 @@ public interface DatabaseAccessObject {
     void deleteCourse(Course course);
 
     @Delete
-    void deleteCoursePoint(CoursePoint points);
+    void deleteCoursePoint(CoursePoint coursePoint);
 }

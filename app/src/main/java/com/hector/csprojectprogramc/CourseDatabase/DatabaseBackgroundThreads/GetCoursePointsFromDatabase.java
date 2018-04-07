@@ -1,13 +1,13 @@
 package com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads;
 
 import android.app.ProgressDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
+import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
@@ -18,12 +18,12 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
     private ProgressDialog progressDialog;// Stores the dialog which shows the user that a background task is running
     private int courseID;
     private WeakReference<Context> context;
-    private AsyncTaskCompleteListener<List<CoursePoint>> listener;
+    private AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener;
 
-    public GetCoursePointsFromDatabase(Context context, int courseID, AsyncTaskCompleteListener<List<CoursePoint>> listener) {
+    public GetCoursePointsFromDatabase(Context context, int courseID, AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener) {
         this.context = new WeakReference<>(context);
         this.courseID = courseID;
-        this.listener = listener;
+        this.onCompleteListener = onCompleteListener;
 
     }
 
@@ -39,19 +39,18 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
     @Override
     protected List<CoursePoint> doInBackground(Void... voids) {
-        MainDatabase database = null;
+        MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
-             database = Room.databaseBuilder(context.get(), MainDatabase.class, context.get().getString(R.string.database_location)).build();//Accesses the database
-            return database.customDao().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
-        }catch (Exception exception){
-            //TODO: handle appropriately
+            return database.databaseAccessObject().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
+        }catch (NullPointerException exception){
+            CommonAlertDialogs.showCannotAccessCoursePointsDialog(context.get());
         }finally {
             if(database != null){
                 database.close();
             }
         }
 
-        return null;//TODO: handle appropriately
+        return null;
 
     }
 
@@ -61,7 +60,7 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
     @Override
     protected void onPostExecute(List<CoursePoint> coursePoints) {
         progressDialog.dismiss();//hides the alert to the user
-        listener.onAsyncTaskComplete(coursePoints);
+        onCompleteListener.onAsyncTaskComplete(coursePoints);
 
     }
 }

@@ -73,7 +73,7 @@
     <string name="revision">Revision</string>
     <string name="you_can_view_course_points">You can view course points for this course in both their sentence and flashcard form.</string>
     <string name="no_wifi_available">No WiFi Available</string>
-    <string name="no_wifi_message">To try again press Try Again</string>
+    <string name="press_try_again">To try again press Try Again</string>
     <string name="try_again">Try Again</string>
     <string name="arrow_pointing_left">Arrow pointing left</string>
     <string name="arrow_pointing_right">Arrow pointing right</string>
@@ -93,5 +93,26 @@
     <string name="reattempt">Re-attempt</string>
     <string name="warning">Warning</string>
     <string name="blank_components_warning">No components of a course point can be blank</string>
+    <string name="you_need_to_be_connected_to_wifi">You need to be connected to WiFi</string>
+    <string name="no_wifi_available_instructions">This may be due to the device not supporting WiFi. Otherwise you may try restarting the app</string>
+    <string name="cant_access_intents">Unable to access information from previous screen</string>
+    <string name="press_button_to_return_to_home_screen">To continue press Continue and you be brought back to the Home Screen</string>
+    <string name="course">Course</string>
+    <string name="cant_access_database">Unable to access database of courses and their course points</string>
+    <string name="please_restart_app">Please try restarting the app</string>
+    <string name="unable_to_delete_course">Unable to delete course</string>
+    <string name="unable_to_delete_course_point">Unable to delete course point</string>
+    <string name="unable_to_load_courses">Unable to load courses</string>
+    <string name="press_button_to_go_to_exam_board_screen">This may be resolved by adding a course. Pressing Continue will bring you to the Exam Board Screen</string>
+    <string name="unable_to_access_course_points">Unable to access course points</string>
+    <string name="unable_to_add_course_point">Unable to add course point</string>
+    <string name="unable_to_update_course_point">Unable to update course point</string>
+    <string name="connection_timed_out">Connection timed out</string>
+    <string name="timeout_instructions">You may either reattempt with double the timeout or cancel adding this course</string>
+    <string name="double_the_timeout">Double the timeout</string>
+    <string name="error_acessing_AQA_website">An error occurred accessing the AQA website for this course</string>
+    <string name="error_accessing_AQA_website_instructions">You may either re-try or cancel adding this course</string>
+    <string name="issue_with_getting_cram_courses">Issue with getting Cram courses</string>
+    <string name="issue_with_memrise_course">Issue with Memrise course</string>
 
 </resources>

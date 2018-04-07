@@ -1,10 +1,27 @@
 package com.hector.csprojectprogramc.CourseDatabase;
 
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.content.Context;
+
+import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
+import com.hector.csprojectprogramc.R;
 
 @Database(entities = {Course.class,CoursePoint.class},
         version = 2, exportSchema = false)
 public abstract class MainDatabase extends RoomDatabase{
-    public abstract DatabaseAccessObject customDao();
+    public abstract DatabaseAccessObject databaseAccessObject();
+
+    public static MainDatabase getDatabase(Context context){
+        MainDatabase database = null;
+        try{
+            database = Room.databaseBuilder(context, MainDatabase.class, context.getString(R.string.database_location)).build();
+        }catch (NullPointerException exception){
+            CommonAlertDialogs.showDatabaseNullWarningDialog(context);
+        }
+        return database;
+
+    }
+
 }

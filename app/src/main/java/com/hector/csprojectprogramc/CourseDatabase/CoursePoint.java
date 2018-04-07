@@ -16,8 +16,11 @@ import android.arch.persistence.room.PrimaryKey;
 public class CoursePoint {
     @PrimaryKey(autoGenerate=true)
     private int point_ID;
-
     private int course_ID_foreign;
+    private String flashcard_front;
+    private String flashcard_back;
+    private String sentence;
+
 
     public void setFlashcard_front(String flashcard_front) {
         this.flashcard_front = flashcard_front;
@@ -31,9 +34,7 @@ public class CoursePoint {
         this.sentence = sentence;
     }
 
-    private String flashcard_front;
-    private String flashcard_back;
-    private String sentence;
+
 
     public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){
         this.course_ID_foreign = course_ID_foreign;

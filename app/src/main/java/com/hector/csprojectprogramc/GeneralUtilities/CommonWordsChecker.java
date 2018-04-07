@@ -13,7 +13,7 @@ public class CommonWordsChecker {
     public static boolean checkIfCommonWord(String input){
         String wordToTest = input.toLowerCase();
 
-        switch (input.length()){
+        switch (wordToTest.length()){
             case 1:
                 return true;
             case 2:

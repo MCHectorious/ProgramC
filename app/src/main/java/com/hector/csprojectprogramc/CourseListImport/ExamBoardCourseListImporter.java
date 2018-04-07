@@ -12,7 +12,7 @@ import java.util.HashMap;
 abstract class ExamBoardCourseListImporter extends AsyncTask<Void,Void,HashMap<String,String>> {
 
     private ProgressDialog progressDialog; //An dialog which shows the user that a long-running process is occurring
-    AsyncTaskCompleteListener<HashMap<String,String>> listener = null;
+    AsyncTaskCompleteListener<HashMap<String,String>> onCompleteListener = null;
     protected WeakReference<Context> context = null;
 
     protected String qualification = "";
@@ -32,7 +32,7 @@ abstract class ExamBoardCourseListImporter extends AsyncTask<Void,Void,HashMap<S
         super.onPostExecute(courseNamesAndWebsites);
         progressDialog.dismiss();//Hides the
 
-        listener.onAsyncTaskComplete(courseNamesAndWebsites);
+        onCompleteListener.onAsyncTaskComplete(courseNamesAndWebsites);
     }
 
 }

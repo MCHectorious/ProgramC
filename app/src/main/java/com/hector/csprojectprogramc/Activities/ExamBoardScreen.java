@@ -14,12 +14,11 @@ public class ExamBoardScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exam_board_screen);
-        CardView AQACardView =  findViewById(R.id.AQACard);
-        AQACardView.setOnClickListener(new View.OnClickListener() {
+        CardView AQACard =  findViewById(R.id.AQACard);
+        AQACard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toQualificationScreen = new Intent(ExamBoardScreen.this, QualificationListScreen.class);
-                //TODO: add extra
                 startActivity(toQualificationScreen);//Goes the Qualification List Screen
             }
         });

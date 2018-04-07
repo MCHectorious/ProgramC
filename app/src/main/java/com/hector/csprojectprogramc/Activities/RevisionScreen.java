@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.GetCoursePointsFromDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
+import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CommonWordsChecker;
 import com.hector.csprojectprogramc.GeneralUtilities.StringDistance;
@@ -37,24 +38,24 @@ public class RevisionScreen extends AppCompatActivity {
         toolbar.setTitle(R.string.revision);
         setSupportActionBar(toolbar);
 
-
-
-
+        int courseID = -1;
         try{
 
             //noinspection ConstantConditions
-             int CourseID = getIntent().getExtras().getInt(getString(R.string.course_id),0);//TODO: change to just get int
+             courseID = getIntent().getExtras().getInt(getString(R.string.course_id),0);//TODO: change to just get int
 
-            new GetCoursePointsFromDatabase(RevisionScreen.this,CourseID,new AfterGettingCoursePoints()).execute();
         }catch (NullPointerException exception){
-            //TODO: handle appropriately
+            CommonAlertDialogs.showCannotAccessIntentsDialog(RevisionScreen.this);
         }
+        new GetCoursePointsFromDatabase(RevisionScreen.this,courseID,new AfterGettingCoursePoints()).execute();
+
+
     }
 
 
     private class AfterGettingCoursePoints implements AsyncTaskCompleteListener<List<CoursePoint>>{
 
-        private boolean includeQAQuestions, includeGapQuestions;// Booleans used to decide what type of question to ask
+        private boolean includeQuestionAnswerQuestions, includeFillInTheGapGapQuestions;// Booleans used to decide what type of question to ask
         private String prompt, correctAnswer; //The question to be showed to user and the actual answer to that question
         private Random random = new Random(); // Used to randomly choose which type of question to ask and to randomly choose which course point ot test on
         private TextView promptTextView;
@@ -63,10 +64,10 @@ public class RevisionScreen extends AppCompatActivity {
             final int coursePointsSize = coursePoints.size();
 
             FloatingActionButton submitAnswerButton = findViewById(R.id.fab);
-            final TextView QuestionAnswerOption = findViewById(R.id.QuestionAnswerOption);
-            final ImageView QuestionAnswerIcon = findViewById(R.id.QuestionAnswerIcon);
-            final TextView GapOption = findViewById(R.id.FillInTheGapOption);
-            final ImageView GapIcon = findViewById(R.id.FillInTheGapIcon);
+            final TextView questionAnswerButtonText = findViewById(R.id.QuestionAnswerOption);
+            final ImageView questionAnswerButtonIcon = findViewById(R.id.QuestionAnswerIcon);
+            final TextView fillInTheGapButtonText = findViewById(R.id.FillInTheGapOption);
+            final ImageView fillInTheGapButtonIcon = findViewById(R.id.FillInTheGapIcon);
             final EditText userAnswerEditableTextView =  findViewById(R.id.answerText); //Where the user inputs their answer
             promptTextView =  findViewById(R.id.questionText);
 
@@ -76,24 +77,24 @@ public class RevisionScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    String input = userAnswerEditableTextView.getText().toString().toLowerCase();
-                    if(input.equals("")){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RevisionScreen.this);
-                        builder.setTitle(R.string.no_answer);
-                        builder.setMessage(R.string.please_reattempt_question);
-                        builder.setCancelable(false);
-                        builder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
+                    String userInput = userAnswerEditableTextView.getText().toString().toLowerCase();
+                    if(userInput.equals("")){
+                        AlertDialog.Builder noUserInputAlertDialogBuilder = new AlertDialog.Builder(RevisionScreen.this);
+                        noUserInputAlertDialogBuilder.setTitle(R.string.no_answer);
+                        noUserInputAlertDialogBuilder.setMessage(R.string.please_reattempt_question);
+                        noUserInputAlertDialogBuilder.setCancelable(false);
+                        noUserInputAlertDialogBuilder.setPositiveButton(R.string.reattempt, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
                             }
                         });
-                        builder.create().show();
+                        noUserInputAlertDialogBuilder.create().show();
                     }else{
 
                         AlertDialog.Builder answerReviewAlertDialogBuilder = new AlertDialog.Builder(RevisionScreen.this);
 
-                        double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(input, correctAnswer.toLowerCase());
+                        double answerAccuracy = 100*StringDistance.getNormalisedSimilarity(userInput, correctAnswer.toLowerCase());
 
                         userAnswerEditableTextView.setText("");
 
@@ -131,24 +132,24 @@ public class RevisionScreen extends AppCompatActivity {
                     }
                 }
             });
-            includeGapQuestions = true;
-            includeQAQuestions = true;
+            includeFillInTheGapGapQuestions = true;
+            includeQuestionAnswerQuestions = true;
 
 
 
-            View.OnClickListener QuestionAnswerOnClick = new View.OnClickListener() {
+            View.OnClickListener questionAnswerOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (includeGapQuestions){
-                        includeQAQuestions = !includeQAQuestions;
-                        if (includeQAQuestions){
-                            QuestionAnswerOption.setTextColor(getResources().getColor(R.color.colorAccent));
-                            QuestionAnswerIcon.setImageResource(R.drawable.question_answer_icon_selected);
+                    if (includeFillInTheGapGapQuestions){
+                        includeQuestionAnswerQuestions = !includeQuestionAnswerQuestions;
+                        if (includeQuestionAnswerQuestions){
+                            questionAnswerButtonText.setTextColor(getResources().getColor(R.color.colorAccent));
+                            questionAnswerButtonIcon.setImageResource(R.drawable.question_answer_icon_selected);
                             Toast.makeText(RevisionScreen.this, getString(R.string.you_have_enabled)+" "+getString(R.string.fill_in_the_gap_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
 
                         }else{
-                            QuestionAnswerOption.setTextColor(getResources().getColor(R.color.black));
-                            QuestionAnswerIcon.setImageResource(R.drawable.question_answer_icon_unselected);
+                            questionAnswerButtonText.setTextColor(getResources().getColor(R.color.black));
+                            questionAnswerButtonIcon.setImageResource(R.drawable.question_answer_icon_unselected);
                             Toast.makeText(RevisionScreen.this, getString(R.string.you_have_disabled)+" "+getString(R.string.fill_in_the_gap_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
 
                         }
@@ -157,19 +158,19 @@ public class RevisionScreen extends AppCompatActivity {
                 }
             };
 
-            View.OnClickListener GapOnClick = new View.OnClickListener() {
+            View.OnClickListener FillInTheGapOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (includeQAQuestions){
-                        includeGapQuestions = !includeGapQuestions;
-                        if(includeGapQuestions){
-                            GapOption.setTextColor(getResources().getColor(R.color.colorAccent));
-                            GapIcon.setImageResource(R.drawable.fill_in_the_gap_icon_selected);
+                    if (includeQuestionAnswerQuestions){
+                        includeFillInTheGapGapQuestions = !includeFillInTheGapGapQuestions;
+                        if(includeFillInTheGapGapQuestions){
+                            fillInTheGapButtonText.setTextColor(getResources().getColor(R.color.colorAccent));
+                            fillInTheGapButtonIcon.setImageResource(R.drawable.fill_in_the_gap_icon_selected);
                             Toast.makeText(RevisionScreen.this, getString(R.string.you_have_enabled)+" "+getString(R.string.question_answer_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
 
                         }else{
-                            GapOption.setTextColor(getResources().getColor(R.color.black));
-                            GapIcon.setImageResource(R.drawable.fill_in_the_gap_icon_unselected);
+                            fillInTheGapButtonText.setTextColor(getResources().getColor(R.color.black));
+                            fillInTheGapButtonIcon.setImageResource(R.drawable.fill_in_the_gap_icon_unselected);
                             Toast.makeText(RevisionScreen.this, getString(R.string.you_have_disabled)+" "+getString(R.string.question_answer_title)+" "+getString(R.string.questions), Toast.LENGTH_SHORT).show();
 
                         }
@@ -179,11 +180,11 @@ public class RevisionScreen extends AppCompatActivity {
                 }
             };
 
-            QuestionAnswerIcon.setOnClickListener(QuestionAnswerOnClick);
-            QuestionAnswerOption.setOnClickListener(QuestionAnswerOnClick);
+            questionAnswerButtonIcon.setOnClickListener(questionAnswerOnClickListener);
+            questionAnswerButtonText.setOnClickListener(questionAnswerOnClickListener);
 
-            GapIcon.setOnClickListener(GapOnClick);
-            GapOption.setOnClickListener(GapOnClick);
+            fillInTheGapButtonIcon.setOnClickListener(FillInTheGapOnClickListener);
+            fillInTheGapButtonText.setOnClickListener(FillInTheGapOnClickListener);
 
             generateQuestion(coursePoints, coursePointsSize);
 
@@ -191,44 +192,44 @@ public class RevisionScreen extends AppCompatActivity {
 
         private void generateQuestion(List<CoursePoint> coursePoints, int coursePointsSize){
             CoursePoint chosenCoursePoint = coursePoints.get(random.nextInt(coursePointsSize));// Gets a randomly chosen course point
-            if (includeGapQuestions&&includeQAQuestions){
+            if (includeFillInTheGapGapQuestions && includeQuestionAnswerQuestions){
                 if(random.nextBoolean()){//If both are available it chooses randomly
-                    generateGapQuestion(chosenCoursePoint);
+                    generateFillInTheGapQuestion(chosenCoursePoint);
                 }else {
-                    generateQAQuestion(chosenCoursePoint);
+                    generateQuestionAnswerQuestion(chosenCoursePoint);
                 }
-            }else if (includeGapQuestions){ //If only gap questions are available
-                generateGapQuestion(chosenCoursePoint);
+            }else if (includeFillInTheGapGapQuestions){ //If only gap questions are available
+                generateFillInTheGapQuestion(chosenCoursePoint);
             }else{
-                generateQAQuestion(chosenCoursePoint);//If only QA questions are available
+                generateQuestionAnswerQuestion(chosenCoursePoint);//If only QA questions are available
             }
             promptTextView.setText(prompt);//Shows the question on the screen
 
         }
 
-        private void generateGapQuestion(CoursePoint chosenCoursePoint){
+        private void generateFillInTheGapQuestion(CoursePoint chosenCoursePoint){
             String sentenceFormOfChosenCoursePoint = chosenCoursePoint.getSentence();
             String[] wordsFromSentenceFormOfChosenCoursePoint = sentenceFormOfChosenCoursePoint.split("[\\p{Punct}\\s]+"); //Generates an array of each word in the sentence form of the course point
             int hiddenWordIndex = random.nextInt(wordsFromSentenceFormOfChosenCoursePoint.length);//Randomly decides the index of the word to be hidden
             String hiddenWord = wordsFromSentenceFormOfChosenCoursePoint[hiddenWordIndex];//The hidden word
             if (CommonWordsChecker.checkIfCommonWord(hiddenWord)){
-                generateGapQuestion(chosenCoursePoint); //If the word shouldn't be chosen then it generates a new question
+                generateFillInTheGapQuestion(chosenCoursePoint); //If the word shouldn't be chosen then it generates a new question
             }else {
 
-                int index = sentenceFormOfChosenCoursePoint.indexOf(hiddenWord);
+                int positionOfHiddenWord = sentenceFormOfChosenCoursePoint.indexOf(hiddenWord);
                 StringBuilder promptStringBuilder = new StringBuilder();
-                promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(0,index));
+                promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(0,positionOfHiddenWord));
                 for (int hiddenWordCharacterIndex = 0; hiddenWordCharacterIndex < hiddenWord.length(); hiddenWordCharacterIndex++) {
                     promptStringBuilder.append("_");
                 }
-                promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(index+hiddenWord.length(), sentenceFormOfChosenCoursePoint.length()));
+                promptStringBuilder.append(sentenceFormOfChosenCoursePoint.substring(positionOfHiddenWord+hiddenWord.length(), sentenceFormOfChosenCoursePoint.length()));
 
                 prompt = promptStringBuilder.toString();
                 correctAnswer = hiddenWord;
             }
         }
 
-        private void generateQAQuestion(CoursePoint chosenCoursePoint){
+        private void generateQuestionAnswerQuestion(CoursePoint chosenCoursePoint){
             prompt = chosenCoursePoint.getFlashcard_front();
             correctAnswer = chosenCoursePoint.getFlashcard_back();
         }

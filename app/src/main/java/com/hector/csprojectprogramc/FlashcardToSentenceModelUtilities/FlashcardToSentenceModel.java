@@ -32,7 +32,7 @@ public class FlashcardToSentenceModel {
 
         if(!frontToTest.contains(" ")){
             return front+" means "+back;
-        }else if(GeneralStringUtilities.countOfCharInString(' ',frontToTest)==1){
+        }else if(GeneralStringUtilities.countOfCharacterInString(' ',frontToTest)==1){
             return front+" means "+back;
         }
 

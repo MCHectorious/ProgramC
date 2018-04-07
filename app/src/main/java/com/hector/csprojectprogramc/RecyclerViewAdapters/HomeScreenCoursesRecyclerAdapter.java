@@ -69,15 +69,15 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                 @Override
                 public void onClick(View v) {
                     course = courses.get(getAdapterPosition());
-                    Intent intent = new Intent(context, CourseScreen.class);
-                    intent.putExtra(context.getString(R.string.course_id),course.getCourse_ID() );
-                    intent.putExtra(context.getString(R.string.official_name),course.getOfficial_name() );
-                    intent.putExtra(context.getString(R.string.colloquial_name),course.getColloquial_name() );
-                    intent.putExtra(context.getString(R.string.exam_board),course.getExamBoard() );
-                    intent.putExtra(context.getString(R.string.qualification),course.getQualification() );
-                    intent.putExtra(context.getString(R.string.key_date),course.getNext_key_date() );
-                    intent.putExtra(context.getString(R.string.key_date_details), course.getNext_key_date_detail());
-                    context.startActivity(intent);
+                    Intent toCourseScreen = new Intent(context, CourseScreen.class);
+                    toCourseScreen.putExtra(context.getString(R.string.course_id),course.getCourse_ID() );
+                    toCourseScreen.putExtra(context.getString(R.string.official_name),course.getOfficial_name() );
+                    toCourseScreen.putExtra(context.getString(R.string.colloquial_name),course.getColloquial_name() );
+                    toCourseScreen.putExtra(context.getString(R.string.exam_board),course.getExamBoard() );
+                    toCourseScreen.putExtra(context.getString(R.string.qualification),course.getQualification() );
+                    toCourseScreen.putExtra(context.getString(R.string.key_date),course.getNext_key_date() );
+                    toCourseScreen.putExtra(context.getString(R.string.key_date_details), course.getNext_key_date_detail());
+                    context.startActivity(toCourseScreen);
                 }
             });
             courseNameTextView =  cv.findViewById(R.id.courseName);
@@ -90,24 +90,24 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                 @Override
                 public void onClick(View v) {
 
-                    AlertDialog.Builder warningBuilder = new AlertDialog.Builder(context);
-                    warningBuilder.setTitle(R.string.warning);
-                    warningBuilder.setMessage(R.string.deleting_course_warning);
-                    warningBuilder.setCancelable(true).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder deleteWarningBuilder = new AlertDialog.Builder(context);
+                    deleteWarningBuilder.setTitle(R.string.warning);
+                    deleteWarningBuilder.setMessage(R.string.deleting_course_warning);
+                    deleteWarningBuilder.setCancelable(true).setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             course = courses.get(getAdapterPosition());
                             new DeleteCourseFromDatabase(context,course, new RefreshScreen()).execute();
                         }
                     });
-                    warningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    deleteWarningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     });
 
-                    warningBuilder.create().show();
+                    deleteWarningBuilder.create().show();
 
                 }
             });

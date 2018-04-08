@@ -16,6 +16,10 @@ import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.RecyclerViewAdapters.CourseListScreenCoursesAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class CourseListScreen extends AppCompatActivity {
@@ -93,7 +97,21 @@ public class CourseListScreen extends AppCompatActivity {
             final RecyclerView recyclerViewForCourses =  findViewById(R.id.courseListScreenRecyclerView); //Initialises the recycler view which shows the courses
             recyclerViewForCourses.setHasFixedSize(true);// Improves the speed of using the recycler view
             recyclerViewForCourses.setLayoutManager(new LinearLayoutManager(CourseListScreen.this));// Shows the courses in a vertical list
-            recyclerViewForCourses.setAdapter(new CourseListScreenCoursesAdapter(courseNamesAndWebsites.keySet(), courseNamesAndWebsites.values(), CourseListScreen.this,  qualification));//Define how the courses are handled
+
+            ArrayList<String> courseNames = new ArrayList<>(courseNamesAndWebsites.keySet());
+            Collections.sort(courseNames, new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    return s1.compareToIgnoreCase(s2);
+                }
+            });
+
+            ArrayList<String> courseWebsites = new ArrayList<>();
+            for (String courseName: courseNames){
+                courseWebsites.add(courseNamesAndWebsites.get(courseName));
+            }
+
+            recyclerViewForCourses.setAdapter(new CourseListScreenCoursesAdapter(courseNames, courseWebsites, CourseListScreen.this,  qualification));//Define how the courses are handled
 
         }
     }

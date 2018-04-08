@@ -12,9 +12,8 @@ import com.hector.csprojectprogramc.CourseImport.AQACourseImport;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
-import java.util.Collection;
-import java.util.Set;
 
+import java.util.ArrayList;
 
 public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseListScreenCoursesAdapter.ViewHolder>{
 
@@ -54,7 +53,7 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
         }
     }
 
-    public CourseListScreenCoursesAdapter(Set<String> courseNames, Collection<String> courseWebsites, Context context, String qualification){
+    public CourseListScreenCoursesAdapter(ArrayList<String> courseNames, ArrayList<String> courseWebsites, Context context, String qualification){
         this.courseNames = courseNames.toArray(new String[0]);
         this.courseWebsites = courseWebsites.toArray(new String[0]);
         this.context = context;

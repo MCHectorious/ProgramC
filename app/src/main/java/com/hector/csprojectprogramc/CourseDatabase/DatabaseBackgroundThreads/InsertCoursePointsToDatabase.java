@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
+import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
@@ -14,9 +15,12 @@ import java.lang.ref.WeakReference;
 public class InsertCoursePointsToDatabase extends AsyncTask<CoursePoint,Void, Void>{
 
     private WeakReference<Context> context;
+    private AsyncTaskCompleteListener<Void> onCompleteListener;
 
-    public InsertCoursePointsToDatabase(Context context){
+
+    public InsertCoursePointsToDatabase(Context context, AsyncTaskCompleteListener<Void> onCompleteListener){
         this.context = new WeakReference<>(context);
+        this.onCompleteListener = onCompleteListener;
     }
 
     @Override
@@ -41,6 +45,8 @@ public class InsertCoursePointsToDatabase extends AsyncTask<CoursePoint,Void, Vo
     @Override
     protected void onPostExecute(Void result){
         super.onPostExecute(result);
+
+        onCompleteListener.onAsyncTaskComplete(result);
 
     }
 

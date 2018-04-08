@@ -17,6 +17,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>> {
+
     private ProgressDialog progressDialog;
     private WeakReference<Context> context;
     private AsyncTaskCompleteListener<List<Course>> onCompleteListener;
@@ -60,13 +61,13 @@ public class GetAllCoursesFromDatabase  extends AsyncTask<Void,Void,List<Course>
             }
         }
 
-        return null;//Todo: handle appropriately
-
+        return null;
     }
 
     @Override
     protected void onPostExecute(List<Course> courses){
         progressDialog.dismiss();
+
         onCompleteListener.onAsyncTaskComplete(courses);
 
     }

@@ -15,6 +15,7 @@ import com.hector.csprojectprogramc.Activities.CourseScreen;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.DeleteCourseFromDatabase;
+import com.hector.csprojectprogramc.GeneralUtilities.AlertDialogHelper;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.GeneralUtilities.CustomColourCreator;
@@ -36,7 +37,6 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_screen_card,parent,false);
         return new ViewHolder(card, courses, context);
-
     }
 
     @Override
@@ -80,12 +80,13 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                     context.startActivity(toCourseScreen);
                 }
             });
+
             courseNameTextView =  cv.findViewById(R.id.courseName);
             qualificationTextView =  cv.findViewById(R.id.qualification);
             examBoardTextView =  cv.findViewById(R.id.examBoard);
             nextKeyDateTextView =  cv.findViewById(R.id.date);
-            deleteButton =  cv.findViewById(R.id.deleteCourseButton);
 
+            deleteButton =  cv.findViewById(R.id.deleteCourseButton);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,13 +101,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                             new DeleteCourseFromDatabase(context,course, new RefreshScreen()).execute();
                         }
                     });
-                    deleteWarningBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-
+                    deleteWarningBuilder.setNegativeButton(R.string.cancel, AlertDialogHelper.onClickDismissDialog());
                     deleteWarningBuilder.create().show();
 
                 }
@@ -120,6 +115,7 @@ public class HomeScreenCoursesRecyclerAdapter extends RecyclerView.Adapter<HomeS
                 Intent refreshHomeScreen = new Intent(context,HomeScreen.class);
                 context.startActivity(refreshHomeScreen);
             }
+
         }
 
     }

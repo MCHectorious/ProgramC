@@ -59,6 +59,7 @@ public class AQACourseImport extends ExamBoardCourseImporter {
                 nextKeyDate = keyDateSection.select("span[class=timestamp]").text();
                 nextKeyDateDetails = keyDateSection.text().substring(nextKeyDate.length());
             }
+
         } catch (SocketTimeoutException e) {
             AlertDialog.Builder timeoutAlertDialogBuilder = new AlertDialog.Builder(context.get());
             timeoutAlertDialogBuilder.setTitle(R.string.connection_timed_out);
@@ -98,8 +99,6 @@ public class AQACourseImport extends ExamBoardCourseImporter {
             errorAlertDialogBuilder.create().show();
         }
 
-
-
         Course course = new Course();
         course.setColloquial_name(colloquialName);
         course.setExamBoard(examBoard);
@@ -108,9 +107,8 @@ public class AQACourseImport extends ExamBoardCourseImporter {
         course.setOfficial_name(officialName);
         course.setQualification(qualification);
         course.setWebsite(website);
-
-
         return course;
+
     }
 
 }

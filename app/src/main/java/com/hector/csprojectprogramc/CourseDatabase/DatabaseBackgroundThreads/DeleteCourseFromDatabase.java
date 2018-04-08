@@ -47,8 +47,5 @@ public class DeleteCourseFromDatabase extends AsyncTask<Void,Void,Void> {
         super.onPostExecute(result);
 
         onCompleteListener.onAsyncTaskComplete(result);
-
-
-
     }
 }

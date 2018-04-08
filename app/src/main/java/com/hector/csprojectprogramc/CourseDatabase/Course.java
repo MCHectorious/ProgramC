@@ -11,8 +11,6 @@ public class Course {
     private String colloquial_name;
     private String official_name;
     private String website;
-
-
     private String examBoard;
     private String qualification;
     private String next_key_date;

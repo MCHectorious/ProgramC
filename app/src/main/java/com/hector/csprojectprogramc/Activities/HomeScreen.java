@@ -41,7 +41,7 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        new GetAllCoursesFromDatabase(HomeScreen.this, new AfterGettingCourses()).execute();
+        new GetAllCoursesFromDatabase(HomeScreen.this, new WhenTaskCompleteShowCourses()).execute();
 
     }
 
@@ -60,7 +60,7 @@ public class HomeScreen extends AppCompatActivity {
         noCoursesAlertDialogBuilder.create().show();
     }
 
-    private class AfterGettingCourses implements AsyncTaskCompleteListener<List<Course>>{
+    private class WhenTaskCompleteShowCourses implements AsyncTaskCompleteListener<List<Course>>{
         public void onAsyncTaskComplete(List<Course> courses){
             RecyclerView coursesRecyclerView = findViewById(R.id.cardList);
             if(courses.size()>0){

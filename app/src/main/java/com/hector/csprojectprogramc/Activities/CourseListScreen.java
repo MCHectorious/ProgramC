@@ -13,7 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import com.hector.csprojectprogramc.CourseListImport.GetAQACoursesAndTheirWebsites;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
-import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
+import com.hector.csprojectprogramc.GeneralUtilities.AlertDialogHelper;
 import com.hector.csprojectprogramc.R;
 import com.hector.csprojectprogramc.RecyclerViewAdapters.CourseListScreenCoursesAdapter;
 
@@ -33,16 +33,14 @@ public class CourseListScreen extends AppCompatActivity {
         try{
             qualification = getIntent().getStringExtra(getString(R.string.qualification)); //Gets the qualification of the courses to show from the previous screen
         }catch (NullPointerException exception){
-            CommonAlertDialogs.showCannotAccessIntentsDialog(CourseListScreen.this);
+            AlertDialogHelper.showCannotAccessIntentsDialog(CourseListScreen.this);
         }
 
-        NetworkInfo networkInformation;
-
+        NetworkInfo networkInformation = null;
         try{
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             //noinspection ConstantConditions
             networkInformation = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            getCoursesIfConnectedToWifi(new GetAQACoursesAndTheirWebsites(CourseListScreen.this, qualification, new AfterGettingCourses(qualification), new IfAnErrorOccursGettingCoursesReturnToHomeScreen()), networkInformation);
 
         }catch (NullPointerException exception){
             AlertDialog.Builder noWiFiAvailableAlertDialogBuilder = new AlertDialog.Builder(CourseListScreen.this);
@@ -50,8 +48,11 @@ public class CourseListScreen extends AppCompatActivity {
             noWiFiAvailableAlertDialogBuilder.setMessage(R.string.no_wifi_available_instructions);
             noWiFiAvailableAlertDialogBuilder.setCancelable(false);
             noWiFiAvailableAlertDialogBuilder.create().show();
-
         }
+        if (networkInformation != null){
+            getCoursesIfConnectedToWifi(new GetAQACoursesAndTheirWebsites(CourseListScreen.this, qualification, new ShowCourseListWhenTaskComplete(qualification), new IfAnErrorOccursGettingCoursesReturnToHomeScreen()), networkInformation);
+        }
+
 
     }
 
@@ -83,11 +84,11 @@ public class CourseListScreen extends AppCompatActivity {
     }
 
 
-    private class AfterGettingCourses implements AsyncTaskCompleteListener<HashMap<String,String>>{
+    private class ShowCourseListWhenTaskComplete implements AsyncTaskCompleteListener<HashMap<String,String>>{
 
         private String qualification;
 
-        AfterGettingCourses(String qualification){
+        ShowCourseListWhenTaskComplete(String qualification){
             this.qualification = qualification;
         }
 

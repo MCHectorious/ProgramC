@@ -21,6 +21,12 @@ public class CoursePoint {
     private String flashcard_back;
     private String sentence;
 
+    public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){
+        this.course_ID_foreign = course_ID_foreign;
+        this.flashcard_front = flashcard_front;
+        this.flashcard_back = flashcard_back;
+        this.sentence = sentence;
+    }
 
     public void setFlashcard_front(String flashcard_front) {
         this.flashcard_front = flashcard_front;
@@ -33,16 +39,6 @@ public class CoursePoint {
     public void setSentence(String sentence) {
         this.sentence = sentence;
     }
-
-
-
-    public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){
-        this.course_ID_foreign = course_ID_foreign;
-        this.flashcard_front = flashcard_front;
-        this.flashcard_back = flashcard_back;
-        this.sentence = sentence;
-    }
-
 
     public int getPoint_ID() {
         return point_ID;

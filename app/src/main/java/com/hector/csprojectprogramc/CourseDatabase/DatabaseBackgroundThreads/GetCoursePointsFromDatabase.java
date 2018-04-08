@@ -7,14 +7,15 @@ import android.os.AsyncTask;
 import com.hector.csprojectprogramc.CourseDatabase.CoursePoint;
 import com.hector.csprojectprogramc.CourseDatabase.MainDatabase;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
-import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
+import com.hector.csprojectprogramc.GeneralUtilities.AlertDialogHelper;
 import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 
-public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<CoursePoint>> {// gets the course points for the course from the database in a background thread //TODO: make static
+public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<CoursePoint>> {// gets the course points for the course from the database in a background thread
+
     private ProgressDialog progressDialog;// Stores the dialog which shows the user that a background task is running
     private int courseID;
     private WeakReference<Context> context;
@@ -29,11 +30,11 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
     @Override
     protected void onPreExecute() {//Shows the user that a long-running background task is running
-        super.onPreExecute();// TODO: research what this does
+        super.onPreExecute();
         progressDialog = new ProgressDialog(context.get());//Idealises the dialog
         progressDialog.setTitle(context.get().getString(R.string.loading_course_points));// Explains what this task is doing
-        progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));// TODO: change and then explain
-        progressDialog.setIndeterminate(false);// The dialog shows an animation which doesn't represent how far throught the task is //TODO: improve description
+        progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick));
+        progressDialog.setIndeterminate(false);// The dialog shows an animation which doesn't represent how far through the task is
         progressDialog.show();//Shows the dialog on the screen
     }
 
@@ -43,7 +44,7 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
         try{
             return database.databaseAccessObject().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
         }catch (NullPointerException exception){
-            CommonAlertDialogs.showCannotAccessCoursePointsDialog(context.get());
+            AlertDialogHelper.showCannotAccessCoursePointsDialog(context.get());
         }finally {
             if(database != null){
                 database.close();
@@ -59,6 +60,7 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
     @Override
     protected void onPostExecute(List<CoursePoint> coursePoints) {
+        super.onPostExecute(coursePoints);
         progressDialog.dismiss();//hides the alert to the user
         onCompleteListener.onAsyncTaskComplete(coursePoints);
 

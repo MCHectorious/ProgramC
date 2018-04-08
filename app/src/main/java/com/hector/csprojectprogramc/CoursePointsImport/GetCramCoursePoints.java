@@ -37,6 +37,7 @@ class GetCramCoursePoints implements CoursePointsImporter{
     }
 
     private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>> {
+
         private ProgressDialog progressDialog;
         private WeakReference<Context> context;
         private Course course;
@@ -84,6 +85,7 @@ class GetCramCoursePoints implements CoursePointsImporter{
                             }
                         }
                     }
+
                 }catch (SocketTimeoutException e) {
                     AlertDialog.Builder timeoutAlertDialogBuilder = new AlertDialog.Builder(context.get());
                     timeoutAlertDialogBuilder.setTitle(R.string.connection_timed_out);
@@ -106,6 +108,7 @@ class GetCramCoursePoints implements CoursePointsImporter{
                 }catch (IOException exception){
                     Log.w(context.get().getString(R.string.issue_with_getting_cram_courses),exception.getMessage());
                 }
+
             }
             return relatedWebsites;
         }
@@ -144,9 +147,7 @@ class GetCramCoursePoints implements CoursePointsImporter{
         protected Void doInBackground(String... strings) {
 
             ArrayList<CoursePoint> coursePoints = new ArrayList<>();
-
             boolean foundCard = false;
-
 
             for (String url: strings) {
                 try {
@@ -169,7 +170,7 @@ class GetCramCoursePoints implements CoursePointsImporter{
             }
 
             if (foundCard){
-                new InsertCoursePointsToDatabase(context.get()).execute(coursePoints.toArray(new CoursePoint[0]));
+                new InsertCoursePointsToDatabase(context.get(), new WhenTaskCompleteDoNothing()).execute(coursePoints.toArray(new CoursePoint[0]));
             }else{
                 Log.w("No Cram courses for",course.getOfficial_name());
             }
@@ -179,12 +180,17 @@ class GetCramCoursePoints implements CoursePointsImporter{
 
         @Override
         protected void onPostExecute(Void result){
+            super.onPostExecute(result);
             progressDialog.dismiss();
-
             onCompleteListener.onAsyncTaskComplete(result);
 
+        }
+    }
 
+    private static class WhenTaskCompleteDoNothing implements AsyncTaskCompleteListener<Void>{
 
+        @Override
+        public void onAsyncTaskComplete(Void result) {
 
         }
     }

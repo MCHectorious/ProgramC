@@ -33,8 +33,6 @@ public class GetAQACoursesAndTheirWebsites extends ExamBoardCourseListImporter {
             this.errorListener = errorListener;
         }
 
-
-
         @Override
         protected HashMap<String, String> doInBackground(Void... voids) {
             HashMap<String,String> courseNamesAndWebsites = new HashMap<>();
@@ -54,9 +52,8 @@ public class GetAQACoursesAndTheirWebsites extends ExamBoardCourseListImporter {
                     String courseName = element.text();
                     String courseWebsite = element.attr("href");
                     courseNamesAndWebsites.put(courseName,courseWebsite);
-
-
                 }
+
             } catch (SocketTimeoutException exception) {
                 AlertDialog.Builder timeoutAlertDialogBuilder = new AlertDialog.Builder(context.get());
                 timeoutAlertDialogBuilder.setTitle(R.string.connection_timed_out);
@@ -95,7 +92,8 @@ public class GetAQACoursesAndTheirWebsites extends ExamBoardCourseListImporter {
                 });
                 errorAlertDialogBuilder.create().show();
             }
-            return courseNamesAndWebsites;//So that it implements the method correctly
+
+            return courseNamesAndWebsites;
         }
 
     }

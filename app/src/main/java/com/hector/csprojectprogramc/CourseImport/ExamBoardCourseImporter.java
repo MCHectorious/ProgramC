@@ -19,7 +19,6 @@ abstract class ExamBoardCourseImporter extends  AsyncTask<Void,Void,Course>{
     ProgressDialog progressDialog;
     protected WeakReference<Context> context;
 
-
     @Override
     protected void onPostExecute(Course course){
         progressDialog.dismiss();
@@ -40,12 +39,11 @@ abstract class ExamBoardCourseImporter extends  AsyncTask<Void,Void,Course>{
 
         @Override
         public void onAsyncTaskComplete(Void result) {
-
-            new MainCoursePointsImporter(context.get()).getCoursePoints(course, new IfAnErrorOccurs());
+            new MainCoursePointsImporter(context.get()).getCoursePoints(course, new IfAnErrorOccursGoToExamBoardScreen());
         }
     }
 
-    private class IfAnErrorOccurs implements AsyncTaskErrorListener{
+    private class IfAnErrorOccursGoToExamBoardScreen implements AsyncTaskErrorListener{
 
         @Override
         public void onAsyncTaskError() {

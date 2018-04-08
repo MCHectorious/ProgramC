@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hector.csprojectprogramc.GeneralUtilities.CommonAlertDialogs;
+import com.hector.csprojectprogramc.GeneralUtilities.AlertDialogHelper;
 import com.hector.csprojectprogramc.R;
 
 public class CourseScreen extends AppCompatActivity {
@@ -23,14 +23,12 @@ public class CourseScreen extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         try{
             //noinspection ConstantConditions
-            toolbar.setTitle(intentsBundle.getString(getString(R.string.colloquial_name)));//Changes the title opf the screen to the colloquial name of the course //TODO: handle nulls
+            toolbar.setTitle(intentsBundle.getString(getString(R.string.colloquial_name)));//Changes the title opf the screen to the colloquial name of the course
         }catch (NullPointerException exception){
             toolbar.setTitle(R.string.course);
         }finally {
             setSupportActionBar(toolbar);
         }
-
-
 
         TextView qualificationTextView =  findViewById(R.id.qualificationSpecificNameInCourse);
         try{
@@ -40,8 +38,8 @@ public class CourseScreen extends AppCompatActivity {
             findViewById(R.id.qualificationCard).setVisibility(View.GONE);
         }
 
-        TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
         try{
+            TextView examBoardTextView =  findViewById(R.id.examboardSpecificNameInCourse);
             //noinspection ConstantConditions
             examBoardTextView.setText(intentsBundle.getString(getString(R.string.exam_board))); //Shows the exam board
         }catch (NullPointerException exception){
@@ -62,25 +60,22 @@ public class CourseScreen extends AppCompatActivity {
         }
 
         int courseID;
-
         try{
             //noinspection ConstantConditions
             courseID = intentsBundle.getInt(getString(R.string.course_id));
         }catch (NullPointerException exception){
             courseID = -1;
-            CommonAlertDialogs.showCannotAccessIntentsDialog(CourseScreen.this);
-
+            AlertDialogHelper.showCannotAccessIntentsDialog(CourseScreen.this);
         }
+
         final int finalCourseID = courseID;
         CardView goToCoursePointsButton =  findViewById(R.id.coursePoints);
         goToCoursePointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent toCoursePointsScreen = new Intent(CourseScreen.this, CoursePointsScreen.class);
-
                 toCoursePointsScreen.putExtra(getString(R.string.course_id),finalCourseID);
                 toCoursePointsScreen.putExtra(getString(R.string.perspective), 0);
-
                 startActivity(toCoursePointsScreen);//Opens the course points screen for this course
             }
         });

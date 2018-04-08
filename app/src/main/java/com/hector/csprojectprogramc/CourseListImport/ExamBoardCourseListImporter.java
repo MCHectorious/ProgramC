@@ -14,12 +14,11 @@ abstract class ExamBoardCourseListImporter extends AsyncTask<Void,Void,HashMap<S
     private ProgressDialog progressDialog; //An dialog which shows the user that a long-running process is occurring
     AsyncTaskCompleteListener<HashMap<String,String>> onCompleteListener = null;
     protected WeakReference<Context> context = null;
-
     protected String qualification = "";
 
     @Override
     protected void onPreExecute(){//Shows the user the dialog
-        super.onPreExecute(); //TODO: research what this does
+        super.onPreExecute();
         progressDialog = new ProgressDialog(context.get()); // Initialises the variable
         progressDialog.setTitle(context.get().getString(R.string.getting_latest_list)+" "+qualification+" "+context.get().getString(R.string.courses)); // Sets the title of the dialog shown to the user
         progressDialog.setMessage(context.get().getString(R.string.this_should_be_quick)); //Sets the message of dialog to an instruction for the user to follow

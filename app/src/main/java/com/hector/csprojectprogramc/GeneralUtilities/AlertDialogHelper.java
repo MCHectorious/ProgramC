@@ -8,7 +8,7 @@ import android.content.Intent;
 import com.hector.csprojectprogramc.Activities.HomeScreen;
 import com.hector.csprojectprogramc.R;
 
-public class CommonAlertDialogs {
+public class AlertDialogHelper {
 
     public static void showCannotAccessIntentsDialog(final Context context){
         AlertDialog.Builder cannotAccessIntentsAlertDialogBuilder = new AlertDialog.Builder(context);
@@ -46,6 +46,15 @@ public class CommonAlertDialogs {
             }
         });
         cannotAccessIntentsAlertDialogBuilder.create().show();
+    }
+
+    public static DialogInterface.OnClickListener onClickDismissDialog(){
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        };
     }
 
 

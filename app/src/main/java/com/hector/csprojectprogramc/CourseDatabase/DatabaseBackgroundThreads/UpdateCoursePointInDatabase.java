@@ -28,7 +28,6 @@ public class UpdateCoursePointInDatabase extends AsyncTask<String,Void,Void> {
     @Override
     protected Void doInBackground(String... strings) {
         MainDatabase database =  MainDatabase.getDatabase(context.get());
-
         try{
             database.databaseAccessObject().updateCoursePoint(chosenCoursePoint);
         }catch (NullPointerException exception){

@@ -31,7 +31,6 @@ public class MainCoursePointsImporter {
         new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
         new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
 
-
     }
 
     private class AfterGettingCoursePoints implements AsyncTaskCompleteListener<Void>{

@@ -42,8 +42,6 @@ public class CommonWordsChecker {
 
         while (low <= high) {
             mid = (low + high) >> 1;
-
-
             compare = array[mid].compareTo(string);
             if (compare < 0) {
                 low = mid + 1;

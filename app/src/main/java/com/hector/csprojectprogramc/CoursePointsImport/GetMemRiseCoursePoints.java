@@ -36,6 +36,7 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
     }
 
     private static class GetRelatedFlashcards extends AsyncTask<String,Void,ArrayList<String>>{
+
         private ProgressDialog progressDialog;
         private WeakReference<Context> context;
         private Course course;
@@ -48,8 +49,6 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
             this.listener = listener;
             this.errorListener = errorListener;
         }
-
-
 
         @Override
         protected void onPreExecute(){
@@ -64,36 +63,38 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
             ArrayList<String> relatedWebsites = new ArrayList<>();
+
             for ( String string: strings) {
                 String url = "https://www.memrise.com/courses/english/?q="+ GeneralStringUtilities.convertSpacesToPluses(string);
                 try {
                     Document document = Jsoup.connect(url).timeout(timeout).get();
                     Elements section = document.select("div[class=row]").select("div[class=course-box-wrapper col-xs-12 col-sm-6 col-md-4]");
-                    //Elements section  = document.select("div[class=col-sm-12 col-md-9]").select("div[class=course-box ]");
-                    Log.w("section no", Integer.toString(section.size() ));
+
                     for (Element element:section ) {
                         Element courseNameElement = element.select("a[class=inner]").first();
                         String courseName = courseNameElement.text().toLowerCase();
-                        Log.w("course name", courseName);
                         String categoryName = element.select("a[class=category]").first().text().toLowerCase();
-                        Log.w("category name", categoryName);
-                        Log.w("colloquial name", course.getColloquial_name().toLowerCase());
 
                         if (courseName.contains(course.getColloquial_name().toLowerCase()) ||
                                 categoryName.contains(course.getColloquial_name().toLowerCase())){
 
                             String website = courseNameElement.attr("href");
                             if(website.length()>8){
+
                                 if(website.substring(0,8).equals("/course/")){
                                     relatedWebsites.add(website);
                                     Log.w("Website",website);
+
                                     if (relatedWebsites.size()==5){
                                         return relatedWebsites;
                                     }
+
                                 }
                             }
+
                         }
                     }
+
                 }catch (SocketTimeoutException e) {
                     AlertDialog.Builder timeoutAlertDialogBuilder = new AlertDialog.Builder(context.get());
                     timeoutAlertDialogBuilder.setTitle(R.string.connection_timed_out);
@@ -113,6 +114,7 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
                         }
                     });
                     timeoutAlertDialogBuilder.create().show();
+
                 }catch (IOException exception){
                     Log.w("Memrise courses",exception.getMessage());
                 }
@@ -128,6 +130,7 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
     }
 
     private static class GetFlashcardsFromRelatedMemRiseCourses extends AsyncTask<String,Void,Void>{
+
         private ProgressDialog progressDialog;
         private WeakReference<Context> context;
         private Course course;
@@ -177,12 +180,11 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
             }
 
             if (foundCard){
-                new InsertCoursePointsToDatabase(context.get()).execute(coursePoints.toArray(new CoursePoint[0]));
+                new InsertCoursePointsToDatabase(context.get(), new WhenTaskCompleteDoNothing()).execute(coursePoints.toArray(new CoursePoint[0]));
             }else{
                 Log.w("No Cram courses for",course.getOfficial_name());
 
             }
-
             return null;
         }
 
@@ -194,4 +196,13 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
 
         }
     }
+
+    private static class WhenTaskCompleteDoNothing implements AsyncTaskCompleteListener<Void>{
+
+        @Override
+        public void onAsyncTaskComplete(Void result) {
+
+        }
+    }
+
 }

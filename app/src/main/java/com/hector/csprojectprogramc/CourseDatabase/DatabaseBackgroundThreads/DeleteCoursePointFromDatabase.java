@@ -16,7 +16,6 @@ public class DeleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void> {
 
     private WeakReference<Context> context;
     private CoursePoint temporaryCoursePoint;
-
     private AsyncTaskCompleteListener<Void> onCompleteListener;
 
     public DeleteCoursePointFromDatabase(Context context, CoursePoint temporaryCoursePoint, AsyncTaskCompleteListener<Void> listener){
@@ -47,6 +46,5 @@ public class DeleteCoursePointFromDatabase extends AsyncTask<Void,Void,Void> {
         super.onPostExecute(result);
 
         onCompleteListener.onAsyncTaskComplete(result);
-
     }
 }

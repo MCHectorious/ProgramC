@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.hector.csprojectprogramc.Activities.ExamBoardScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
@@ -22,7 +23,7 @@ abstract class ExamBoardCourseImporter extends  AsyncTask<Void,Void,Course>{
     @Override
     protected void onPostExecute(Course course){
         progressDialog.dismiss();
-
+        Log.w("Got this far","going to insert");
         new InsertCourseToDatabase(context.get(), new GettingCoursePoints(context,course) ).execute(course);
 
     }

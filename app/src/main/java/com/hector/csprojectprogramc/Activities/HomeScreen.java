@@ -45,7 +45,7 @@ public class HomeScreen extends AppCompatActivity {
 
     }
 
-    public static void showNoCoursesAlertDialog(final Context context){
+    private static void showNoCoursesAlertDialog(final Context context){
         AlertDialog.Builder noCoursesAlertDialogBuilder = new AlertDialog.Builder(context);
         TextView noCoursesWarningTextView = new TextView(context);
         String noCoursesWarning = context.getString(R.string.you_have_no_courses)+ System.getProperty("line.separator")+context.getString(R.string.no_courses_instructions);

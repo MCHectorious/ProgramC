@@ -26,8 +26,13 @@ public class InsertCourseToDatabase extends AsyncTask<Course,Void,Void> {
     protected Void doInBackground(Course... courses) {
         MainDatabase database =  MainDatabase.getDatabase(context.get());
         try{
+            int i=1;
+            int maxCourseID = database.databaseAccessObject().getMaxCourseID();
             for (Course course: courses) {
+                course.setCourse_ID(maxCourseID+i);
+                i++;
                 database.databaseAccessObject().insertCourse(course);
+                Log.e("Course ID.", Integer.toString(course.getCourse_ID()));
             }
         }catch (NullPointerException exception){
             Toast.makeText(context.get(), R.string.unable_to_add_course_point,Toast.LENGTH_LONG).show();

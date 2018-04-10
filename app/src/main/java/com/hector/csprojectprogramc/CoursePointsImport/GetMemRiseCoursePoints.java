@@ -83,7 +83,6 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
 
                                 if(website.substring(0,8).equals("/course/")){
                                     relatedWebsites.add(website);
-                                    Log.w("Website",website);
 
                                     if (relatedWebsites.size()==5){
                                         return relatedWebsites;
@@ -125,7 +124,11 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
         @Override
         protected void onPostExecute(ArrayList<String> relatedWebsites){
             progressDialog.dismiss();
-            new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, listener).execute(relatedWebsites.toArray(new String[0]));
+            if(relatedWebsites == null){
+                listener.onAsyncTaskComplete(null);
+            }else{
+                new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, listener).execute(relatedWebsites.toArray(new String[0]));
+            }
         }
     }
 

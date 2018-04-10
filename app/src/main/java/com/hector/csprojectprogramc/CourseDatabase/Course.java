@@ -2,10 +2,11 @@ package com.hector.csprojectprogramc.CourseDatabase;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "courses")
 public class Course {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int course_ID;
 
     private String colloquial_name;
@@ -15,6 +16,18 @@ public class Course {
     private String qualification;
     private String next_key_date;
     private String next_key_date_detail;
+
+    public Course(String colloquial_name, String official_name, String website, String examBoard, String qualification,
+                  String next_key_date, String next_key_date_detail){
+        this.course_ID = -1;
+        this.colloquial_name =colloquial_name;
+        this.official_name = official_name;
+        this.website = website;
+        this.examBoard = examBoard;
+        this.qualification = qualification;
+        this.next_key_date = next_key_date;
+        this.next_key_date_detail = next_key_date_detail;
+    }
 
     public void setCourse_ID(int course_ID) {
         this.course_ID = course_ID;

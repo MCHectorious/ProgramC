@@ -33,7 +33,12 @@ public class GetAQACoursesAndTheirWebsites extends ExamBoardCourseListImporter {
             this.errorListener = errorListener;
         }
 
-        @Override
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
         protected HashMap<String, String> doInBackground(Void... voids) {
             HashMap<String,String> courseNamesAndWebsites = new HashMap<>();
 
@@ -96,4 +101,8 @@ public class GetAQACoursesAndTheirWebsites extends ExamBoardCourseListImporter {
             return courseNamesAndWebsites;
         }
 
+    @Override
+    protected void onPostExecute(HashMap<String, String> courseNamesAndWebsites) {
+        super.onPostExecute(courseNamesAndWebsites);
     }
+}

@@ -21,9 +21,11 @@ public interface DatabaseAccessObject {
     @Query("SELECT * FROM courses")
     List<Course> getAllCourses();
 
+    @Query("SELECT MAX(course_ID) FROM courses")
+    int getMaxCourseID();
 
     @Query("SELECT * FROM course_points WHERE course_ID_foreign = :courseID")
-    List<CoursePoint> getCoursePointsForCourse(int courseID);
+    List<CoursePoint> getCoursePointsForCourse(Integer courseID);
 
     @Update
     void updateCoursePoint(CoursePoint coursePoint);

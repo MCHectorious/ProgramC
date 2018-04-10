@@ -9,7 +9,7 @@ import com.hector.csprojectprogramc.GeneralUtilities.AlertDialogHelper;
 import com.hector.csprojectprogramc.R;
 
 @Database(entities = {Course.class,CoursePoint.class},
-        version = 2, exportSchema = false)
+        version = 8, exportSchema = false)
 
 public abstract class MainDatabase extends RoomDatabase{
     public abstract DatabaseAccessObject databaseAccessObject();
@@ -17,7 +17,7 @@ public abstract class MainDatabase extends RoomDatabase{
     public static MainDatabase getDatabase(Context context){
         MainDatabase database = null;
         try{
-            database = Room.databaseBuilder(context, MainDatabase.class, context.getString(R.string.database_location)).build();
+            database = Room.databaseBuilder(context, MainDatabase.class, context.getString(R.string.database_location)).fallbackToDestructiveMigration().build();
         }catch (NullPointerException exception){
             AlertDialogHelper.showDatabaseNullWarningDialog(context);
         }

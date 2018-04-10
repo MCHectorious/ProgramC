@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import com.hector.csprojectprogramc.CourseDatabase.Course;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
@@ -99,14 +100,8 @@ public class AQACourseImport extends ExamBoardCourseImporter {
             errorAlertDialogBuilder.create().show();
         }
 
-        Course course = new Course();
-        course.setColloquial_name(colloquialName);
-        course.setExamBoard(examBoard);
-        course.setNext_key_date(nextKeyDate);
-        course.setNext_key_date_detail(nextKeyDateDetails);
-        course.setOfficial_name(officialName);
-        course.setQualification(qualification);
-        course.setWebsite(website);
+        Course course = new Course(colloquialName,officialName,website,examBoard,qualification,nextKeyDate,nextKeyDateDetails);
+
         return course;
 
     }

@@ -76,11 +76,12 @@ class GetCramCoursePoints implements CoursePointsImporter{
                     for (Element element:section ) {
                         String website = element.attr("href");
                         if (website.length()>12){
+                            Log.e("website",website.substring(0,12));
                             if(website.substring(0,12).equals("/flashcards/")){
 
                                 relatedWebsites.add(website);
                                 if (relatedWebsites.size()==5){
-                                    return null;
+                                    return relatedWebsites;
                                 }
                             }
                         }
@@ -115,8 +116,13 @@ class GetCramCoursePoints implements CoursePointsImporter{
 
         @Override
         protected void onPostExecute(ArrayList<String> relatedWebsites){
+            super.onPostExecute(relatedWebsites);
             progressDialog.dismiss();
-            new GetFlashcardsFromRelatedCramCourses(context.get(), course, onCompleteListener).execute(relatedWebsites.toArray(new String[0]));
+            if(relatedWebsites == null){
+                onCompleteListener.onAsyncTaskComplete(null);
+            }else{
+                new GetFlashcardsFromRelatedCramCourses(context.get(), course, onCompleteListener).execute(relatedWebsites.toArray(new String[0]));
+            }
         }
     }
 

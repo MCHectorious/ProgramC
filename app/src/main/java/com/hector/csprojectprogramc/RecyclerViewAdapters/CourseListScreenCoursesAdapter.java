@@ -17,21 +17,21 @@ import java.util.ArrayList;
 
 public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseListScreenCoursesAdapter.ViewHolder>{
 
-    private Context context;
-    private String qualification;
-    private String[] courseNames, courseWebsites;
+    private Context context;//The screen the adapter is being used in (CourseListScreen).
+    private String qualification;//The qualification of the courses to be shown
+    private String[] courseNames, courseWebsites;//The list of the course names and their respective websites
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView courseNameTextView;
-        private CardView courseCardView;
+        private TextView courseNameTextView;//Where the name of the course is to be displayed
+        private CardView courseCardView;//The card which contains the above Text View
         private ViewHolder(final View view){
             super(view);
-            courseNameTextView = view.findViewById(R.id.courseNameInList);
-            courseCardView = view.findViewById(R.id.courseListCard);
+            courseNameTextView = view.findViewById(R.id.courseNameInList);//Gets the text view from the XML code
+            courseCardView = view.findViewById(R.id.courseListCard);//Gets the card from the XML code
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    new AQACourseImport(context, courseNames[getAdapterPosition()],  qualification, courseWebsites[getAdapterPosition()], new IfAnErrorOccursHideView(view)).execute();
+                    new AQACourseImport(context, courseNames[getAdapterPosition()],  qualification, courseWebsites[getAdapterPosition()], new IfAnErrorOccursHideView(view)).execute();//Inserts the course into the database and will also get the course points and insert them into the database
                 }
             });
 
@@ -41,7 +41,7 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     public class IfAnErrorOccursHideView implements AsyncTaskErrorListener{
 
-        private View view;
+        private View view;//View that will be hidden
 
         IfAnErrorOccursHideView(View view){
             this.view = view;
@@ -49,7 +49,7 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
         @Override
         public void onAsyncTaskError() {
-            view.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);//Hides the view
         }
     }
 
@@ -62,13 +62,13 @@ public class CourseListScreenCoursesAdapter extends RecyclerView.Adapter<CourseL
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder( LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list_card,parent,false) );
+        return new ViewHolder( LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list_card,parent,false) );//Gets the ViewHolder for the course
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.courseNameTextView.setText(courseNames[position]);
-        holder.courseCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames[position]));
+        holder.courseNameTextView.setText(courseNames[position]);//Shows the courseName
+        holder.courseCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(courseNames[position]));//Bases the colour of the card on the course's official name
     }
 
     @Override

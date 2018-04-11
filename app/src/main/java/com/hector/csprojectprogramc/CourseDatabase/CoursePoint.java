@@ -14,15 +14,15 @@ import android.arch.persistence.room.PrimaryKey;
         indices = @Index("course_ID_foreign")
         )
 public class CoursePoint {
-    @PrimaryKey(autoGenerate=true)
-    private int point_ID;
+    @PrimaryKey(autoGenerate=true)//Room automatically generates a unique id
+    private int point_ID;//the id of the course point
 
-    private int course_ID_foreign;
-    private String flashcard_front;
-    private String flashcard_back;
-    private String sentence;
+    private int course_ID_foreign;//the id of the course this course point belongs to
+    private String flashcard_front;//The front of the flashcard form of the course point
+    private String flashcard_back;//The back of the flashcard form of the course point
+    private String sentence;//The sentence form of the course point
 
-    public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){
+    public CoursePoint(int course_ID_foreign, String flashcard_front, String flashcard_back, String sentence){//Initialises the fields
         this.course_ID_foreign = course_ID_foreign;
         this.flashcard_front = flashcard_front;
         this.flashcard_back = flashcard_back;

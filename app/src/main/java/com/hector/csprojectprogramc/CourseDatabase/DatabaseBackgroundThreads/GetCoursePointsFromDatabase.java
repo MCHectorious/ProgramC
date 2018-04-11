@@ -17,11 +17,11 @@ import java.util.List;
 public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<CoursePoint>> {// gets the course points for the course from the database in a background thread
 
     private ProgressDialog progressDialog;// Stores the dialog which shows the user that a background task is running
-    private int courseID;
-    private WeakReference<Context> context;
-    private AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener;
+    private int courseID;//The id of the course in the course database
+    private WeakReference<Context> context;//The screen that this is being executed from. It is a weak reference because the screen may be closed during this process
+    private AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener;//Handle what should occur after the task is complete
 
-    public GetCoursePointsFromDatabase(Context context, int courseID, AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener) {
+    public GetCoursePointsFromDatabase(Context context, int courseID, AsyncTaskCompleteListener<List<CoursePoint>> onCompleteListener) {//Initialises the fields
         this.context = new WeakReference<>(context);
         this.courseID = courseID;
         this.onCompleteListener = onCompleteListener;
@@ -40,18 +40,18 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
     @Override
     protected List<CoursePoint> doInBackground(Void... voids) {
-        MainDatabase database =  MainDatabase.getDatabase(context.get());
+        MainDatabase database =  MainDatabase.getDatabase(context.get());//Gets the database
         try{
-            return database.databaseAccessObject().getCoursePointsForCourse(courseID);//In order to fulfil the implementation
-        }catch (NullPointerException exception){
-            AlertDialogHelper.showCannotAccessCoursePointsDialog(context.get());
+            return database.databaseAccessObject().getCoursePointsForCourse(courseID);//Gets the course points for this course
+        }catch (NullPointerException exception){//Will occur if the database access object is null
+            AlertDialogHelper.showCannotAccessCoursePointsDialog(context.get());//Warns the user
         }finally {
-            if(database != null){
-                database.close();
+            if(database != null){//Checks whether the database has been initialised correctly
+                database.close();//Closes the connection to the database to avoid leaks
             }
         }
 
-        return null;
+        return null;//To show an error occurred
 
     }
 
@@ -59,10 +59,10 @@ public class GetCoursePointsFromDatabase extends AsyncTask<Void, Void, List<Cour
 
 
     @Override
-    protected void onPostExecute(List<CoursePoint> coursePoints) {
-        super.onPostExecute(coursePoints);
+    protected void onPostExecute(List<CoursePoint> coursePoints) {//When the task is complete
+        super.onPostExecute(coursePoints);//Runs the generic code for after the task is complete
         progressDialog.dismiss();//hides the alert to the user
-        onCompleteListener.onAsyncTaskComplete(coursePoints);
+        onCompleteListener.onAsyncTaskComplete(coursePoints);//Runs the appropriate code for after the task is complete
 
     }
 }

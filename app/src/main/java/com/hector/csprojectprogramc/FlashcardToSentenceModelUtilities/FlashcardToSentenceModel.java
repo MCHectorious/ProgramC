@@ -205,7 +205,7 @@ public class FlashcardToSentenceModel {
 
         double[] inputArray = DataProcessing.stringToDoubleArray(input);
         //Log.w("Got this far","Converted message");
-        double[] outputArray = LinearLayer.forward(inputArray);
+        double[] outputArray = LinearLayer.run(inputArray);
 
         //Log.w("Got this far","Ran Model");
         return DataProcessing.doubleArrayToString(outputArray)+extra;

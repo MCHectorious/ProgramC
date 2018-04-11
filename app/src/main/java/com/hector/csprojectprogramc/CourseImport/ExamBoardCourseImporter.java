@@ -17,39 +17,38 @@ import java.lang.ref.WeakReference;
 
 abstract class ExamBoardCourseImporter extends  AsyncTask<Void,Void,Course>{
 
-    ProgressDialog progressDialog;
-    protected WeakReference<Context> context;
+    ProgressDialog progressDialog;//Shows the user that a background task is occurring
+    protected WeakReference<Context> context;//The screen that this is being executed from. It is a weak reference because the screen may be closed during this process
 
     @Override
-    protected void onPostExecute(Course course){
-        progressDialog.dismiss();
-        Log.w("Got this far","going to insert");
-        new InsertCourseToDatabase(context.get(), new GettingCoursePoints(context,course) ).execute(course);
+    protected void onPostExecute(Course course){//When the task is complete
+        progressDialog.dismiss();//Hides the dialog
+        new InsertCourseToDatabase(context.get(), new GettingCoursePoints(context,course) ).execute(course);//Inserts the course into the database after it has been found
 
     }
 
-    private class GettingCoursePoints implements AsyncTaskCompleteListener<Void> {
+    private class GettingCoursePoints implements AsyncTaskCompleteListener<Void> {//Allow object to be created to run after the course has been inserted to get course points for the course
 
-        private WeakReference<Context> context;
-        private Course course;
+        private WeakReference<Context> context;//The screen that this is being executed from. It is a weak reference because the screen may be closed during this process
+        private Course course;//The course which the course points will belong to
 
-        GettingCoursePoints(WeakReference<Context> context, Course course){
+        GettingCoursePoints(WeakReference<Context> context, Course course){//Initialises the fields
             this.context = context;
             this.course = course;
         }
 
         @Override
-        public void onAsyncTaskComplete(Void result) {
-            new MainCoursePointsImporter(context.get()).getCoursePoints(course, new IfAnErrorOccursGoToExamBoardScreen());
+        public void onAsyncTaskComplete(Void result) {//Runs when the task is complete
+            new MainCoursePointsImporter(context.get()).getCoursePoints(course, new IfAnErrorOccursGoToExamBoardScreen());//Gets the course points for the course
         }
     }
 
-    private class IfAnErrorOccursGoToExamBoardScreen implements AsyncTaskErrorListener{
+    private class IfAnErrorOccursGoToExamBoardScreen implements AsyncTaskErrorListener{//Allows objects to be created which handle if an error occurs
 
         @Override
         public void onAsyncTaskError() {
-            Intent toExamBoardScreen = new Intent(context.get(), ExamBoardScreen.class);
-            context.get().startActivity(toExamBoardScreen);
+            Intent toExamBoardScreen = new Intent(context.get(), ExamBoardScreen.class);//Creates a connection between the context and the exam board screen
+            context.get().startActivity(toExamBoardScreen);//Start the exam board screen
         }
     }
 

@@ -7,19 +7,19 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "courses")
 public class Course {
     @PrimaryKey
-    private int course_ID;
+    private int course_ID;//id of course in the database. I handle setting it to a unique value
 
-    private String colloquial_name;
-    private String official_name;
-    private String website;
-    private String examBoard;
-    private String qualification;
-    private String next_key_date;
-    private String next_key_date_detail;
+    private String colloquial_name;//The shortened name for the course
+    private String official_name;//The official name for the course
+    private String website;//The official website for the course
+    private String examBoard;//The exam board for the course
+    private String qualification;//The qualification of the course
+    private String next_key_date;//The date of the next key event (if available)
+    private String next_key_date_detail;//The details of the next key event (if available)
 
     public Course(String colloquial_name, String official_name, String website, String examBoard, String qualification,
                   String next_key_date, String next_key_date_detail){
-        this.course_ID = -1;
+        this.course_ID = -1;//Initialises to an impossible value to make sure I update it to a correct value
         this.colloquial_name =colloquial_name;
         this.official_name = official_name;
         this.website = website;

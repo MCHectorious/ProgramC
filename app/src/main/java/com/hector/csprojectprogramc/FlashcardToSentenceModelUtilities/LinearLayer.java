@@ -3,7 +3,7 @@ package com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities;
 
 public class LinearLayer {
 
-    public static double[] forward(double[] input) {
+    public static double[] run(double[] input) {
         double[] output = new double[100];
         output[99] = getOutputAtPosition99(input);
         output[98] = getOutputAtPosition98(input);

@@ -8,6 +8,6 @@ import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
 
 public interface CoursePointsImporter {
 
-    void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener, AsyncTaskErrorListener errorListener);
+    void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener, AsyncTaskErrorListener errorListener);//gets the course points for a course
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<CoursePointsScreenSentencesAdapter.ViewHolder> {
 
-    private List<CoursePoint> coursePoints;
+    private List<CoursePoint> coursePoints;//The list of course points to be shown
 
     public CoursePointsScreenSentencesAdapter(List<CoursePoint> coursePoints){
         this.coursePoints = coursePoints;
@@ -29,7 +29,7 @@ public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<Cou
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         String sentenceForm = coursePoints.get(position).getSentence();
         viewHolder.sentenceFormTextView.setText(sentenceForm);
-        viewHolder.sentenceFormCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(sentenceForm));
+        viewHolder.sentenceFormCardView.setCardBackgroundColor(CustomColourCreator.generateCustomColourFromString(sentenceForm));//bases the colour of the course point on the sentence form
 
     }
 
@@ -39,8 +39,8 @@ public class CoursePointsScreenSentencesAdapter extends RecyclerView.Adapter<Cou
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView sentenceFormTextView;
-        CardView sentenceFormCardView;
+        TextView sentenceFormTextView;//Which show the sentence form of the course point
+        CardView sentenceFormCardView;//contains the above text view
 
         private ViewHolder (View v){
             super(v);

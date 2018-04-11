@@ -15,9 +15,9 @@ import java.lang.ref.WeakReference;
 
 public class MainCoursePointsImporter {
 
-    private int numberOfExecutedProcesses;
-    private static final int maximumNumberOfExecutedProcesses = 2;
-    private WeakReference<Context> context;
+    private int numberOfExecutedProcesses;//The number of revision websites that have used to get course points
+    private static final int maximumNumberOfExecutedProcesses = 2;//The maximum number of revision websites that have used to get course points
+    private WeakReference<Context> context;//The screen this is being done on. It is a weak reference because the screen  could be closed during this process
 
     public MainCoursePointsImporter(Context context){
         numberOfExecutedProcesses = 0;
@@ -26,10 +26,10 @@ public class MainCoursePointsImporter {
     }
 
     public void getCoursePoints(Course course, AsyncTaskErrorListener errorListener){
-        AfterGettingCoursePoints afterGettingCoursePoints = new AfterGettingCoursePoints();
+        AfterGettingCoursePoints afterGettingCoursePoints = new AfterGettingCoursePoints();//Check whether all of the async tasks have been completed
 
-        new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
-        new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);
+        new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);//Gets course points from Cram
+        new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);//Gets course point from Memrise
 
     }
 
@@ -37,15 +37,15 @@ public class MainCoursePointsImporter {
 
         @Override
         public void onAsyncTaskComplete(Void result) {
-            numberOfExecutedProcesses++;
-            if (numberOfExecutedProcesses == maximumNumberOfExecutedProcesses){
+            numberOfExecutedProcesses++;//Increases the number of async task that have completed
+            if (numberOfExecutedProcesses == maximumNumberOfExecutedProcesses){//If all the async tasks have been complete
                 AlertDialog.Builder machineLearningWarningAlertDialogBuilder = new AlertDialog.Builder(context.get());// Initialises the alert dialog which will warn the user that some sentences may be machine generated
                 String machineLearningWarningText =  context.get().getString(R.string.you_can_view_course_points)+ System.getProperty("line.separator")+ context.get().getString(R.string.machine_generated_sentences_warning)+ System.getProperty("line.separator")+context.get().getString(R.string.edit_tab_instructions);//The warning to the user and instruction as to how to resolve them
-                machineLearningWarningAlertDialogBuilder.setMessage(machineLearningWarningText);
+                machineLearningWarningAlertDialogBuilder.setMessage(machineLearningWarningText);//Displays the warning
                 machineLearningWarningAlertDialogBuilder.setCancelable(false).setPositiveButton(context.get().getString(R.string.okay), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {//Clicking on the button just closes the dialog
-                        Intent toHomeScreen = new Intent(context.get(), HomeScreen.class);
-                        context.get().startActivity(toHomeScreen);
+                        Intent toHomeScreen = new Intent(context.get(), HomeScreen.class);//Creates a connection between the context and the Home Screen
+                        context.get().startActivity(toHomeScreen);//starts the homescreen
                     }
                 });
                 machineLearningWarningAlertDialogBuilder.create().show();//Shows the warning on the screen

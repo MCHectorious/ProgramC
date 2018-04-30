@@ -83,7 +83,6 @@ public class CourseListScreen extends AppCompatActivity {
         }
     }
 
-
     private class ShowCourseListWhenTaskComplete implements AsyncTaskCompleteListener<HashMap<String,String>>{//Allows an object to be created which handles what happens after the courses have been found
 
         private String qualification;//The qualification of the courses
@@ -91,7 +90,6 @@ public class CourseListScreen extends AppCompatActivity {
         ShowCourseListWhenTaskComplete(String qualification){//When an object of this type is instantiated it must have a qualification
             this.qualification = qualification;//Initialises the qualification of the courses
         }
-
 
         @Override
         public void onAsyncTaskComplete(HashMap<String, String> courseNamesAndWebsites) {//Runs once the courses and their websites have been collected

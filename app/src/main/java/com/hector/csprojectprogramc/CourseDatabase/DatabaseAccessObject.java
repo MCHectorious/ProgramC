@@ -18,7 +18,7 @@ public interface DatabaseAccessObject {
     @Insert(onConflict = OnConflictStrategy.REPLACE)//If a course point with this id already exist replace it with this new one
     void insertCoursePoint(CoursePoint point);//Insert a course into a database
 
-    @Query("SELECT * FROM courses")
+    @Query("SELECT * FROM courses ORDER BY colloquial_name ASC")
     List<Course> getAllCourses();//Gets all the courses in the course table
 
     @Query("SELECT MAX(course_ID) FROM courses")

@@ -4,11 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.hector.csprojectprogramc.Activities.ExamBoardScreen;
 import com.hector.csprojectprogramc.CourseDatabase.Course;
-import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.InsertCourseToDatabase;
+import com.hector.csprojectprogramc.CourseDatabase.DatabaseBackgroundThreads.InsertCoursesToDatabase;
 import com.hector.csprojectprogramc.CoursePointsImport.MainCoursePointsImporter;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskCompleteListener;
 import com.hector.csprojectprogramc.GeneralUtilities.AsyncTaskErrorListener;
@@ -23,7 +22,7 @@ abstract class ExamBoardCourseImporter extends  AsyncTask<Void,Void,Course>{
     @Override
     protected void onPostExecute(Course course){//When the task is complete
         progressDialog.dismiss();//Hides the dialog
-        new InsertCourseToDatabase(context.get(), new GettingCoursePoints(context,course) ).execute(course);//Inserts the course into the database after it has been found
+        new InsertCoursesToDatabase(context.get(), new GettingCoursePoints(context,course) ).execute(course);//Inserts the course into the database after it has been found
 
     }
 

@@ -63,7 +63,6 @@ public class CoursePointsScreen extends AppCompatActivity {
         }
     }
 
-
     private class ActionsAfterGettingCoursePoints implements AsyncTaskCompleteListener<List<CoursePoint>> {//Allows an object to be created which handled what occurs after getting the course points from the database
 
 
@@ -223,9 +222,6 @@ public class CoursePointsScreen extends AppCompatActivity {
             addCoursePointAlertDialogBuilder.create().show();//Shows the alert
         }
 
-
     }
-
-
 
 }

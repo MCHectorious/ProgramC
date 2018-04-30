@@ -1,6 +1,5 @@
 package com.hector.csprojectprogramc.FlashcardToSentenceModelUtilities;
 
-
 import com.hector.csprojectprogramc.GeneralUtilities.GeneralStringUtilities;
 
 public class FlashcardToSentenceModel {
@@ -197,19 +196,20 @@ public class FlashcardToSentenceModel {
             }
         }
 
-        //Log.w("Warning","Using ML model");
-
         String input = flashcardFront+"<F_B_S>"+flashcardBack;
+        String inputText, extra;
+        if (input.length()<107){
+            inputText = input;
+            extra = "";
+        }else{
+            inputText = input.substring(0,107);
+            extra = input.substring(107);
+        }
 
-        String extra= (input.length()>100)? input.substring(100):"";
-
-        double[] inputArray = DataProcessing.stringToDoubleArray(input);
-        //Log.w("Got this far","Converted message");
+        double[] inputArray = DataProcessing.stringToDoubleArray(inputText);
         double[] outputArray = LinearLayer.run(inputArray);
 
-        //Log.w("Got this far","Ran Model");
         return DataProcessing.doubleArrayToString(outputArray)+extra;
-
     }
 
 }

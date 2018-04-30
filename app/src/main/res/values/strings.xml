@@ -48,8 +48,8 @@
     <string name="get_information_from_aqa">Getting Additional Information From AQA</string>
     <string name="get_cram_courses">Finding Cram Courses Related to This Course</string>
     <string name="get_information_from_cram_courses">Getting Flashcards From Related Cram Courses</string>
-    <string name="get_memrise_courses">Finding MemRise Courses Related to This Course</string>
-    <string name="getting_information_from_memrise_courses">Getting Flashcards From Related MemRise Courses</string>
+    <string name="get_memrise_courses">Finding Memrise Courses Related to This Course</string>
+    <string name="getting_information_from_memrise_courses">Getting Flashcards From Related Memrise Courses</string>
     <string name="subject">Subject</string>
     <string name="flashcard_front">Flashcard Front</string>
     <string name="flashcard_back">Flashcard Back</string>

@@ -12,12 +12,12 @@ import com.hector.csprojectprogramc.R;
 
 import java.lang.ref.WeakReference;
 
-public class InsertCourseToDatabase extends AsyncTask<Course,Void,Void> {
+public class InsertCoursesToDatabase extends AsyncTask<Course,Void,Void> {
 
     private AsyncTaskCompleteListener<Void> onCompleteListener;//Handle what should occur when the task is complete
     private WeakReference<Context> context;//The screen that this is being executed from. It is a weak reference because the screen may be closed during this process
 
-    public InsertCourseToDatabase(Context context, AsyncTaskCompleteListener<Void> onCompleteListener){//Initialises the fields
+    public InsertCoursesToDatabase(Context context, AsyncTaskCompleteListener<Void> onCompleteListener){//Initialises the fields
         this.onCompleteListener = onCompleteListener;
         this.context = new WeakReference<>(context);
     }

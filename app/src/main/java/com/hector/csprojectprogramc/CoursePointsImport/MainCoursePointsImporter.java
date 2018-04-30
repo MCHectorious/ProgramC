@@ -29,7 +29,7 @@ public class MainCoursePointsImporter {
         AfterGettingCoursePoints afterGettingCoursePoints = new AfterGettingCoursePoints();//Check whether all of the async tasks have been completed
 
         new GetCramCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);//Gets course points from Cram
-        new GetMemRiseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);//Gets course point from Memrise
+        new GetMemriseCoursePoints().getCoursePoints(context.get(),course,context.get().getApplicationContext(), afterGettingCoursePoints, errorListener);//Gets course point from Memrise
 
     }
 

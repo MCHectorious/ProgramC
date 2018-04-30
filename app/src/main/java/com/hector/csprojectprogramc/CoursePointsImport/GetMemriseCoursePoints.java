@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class GetMemRiseCoursePoints implements CoursePointsImporter{
+class GetMemriseCoursePoints implements CoursePointsImporter{
 
     private static int timeout = 10000;//the timeout is initially set at 10 seconds
 
@@ -127,19 +127,19 @@ class GetMemRiseCoursePoints implements CoursePointsImporter{
             if(relatedWebsites == null){//Checks whether any related websites were found
                 onCompleteListener.onAsyncTaskComplete(null);//skips finding course points if no Memrise courses were found
             }else{
-                new GetFlashcardsFromRelatedMemRiseCourses(context.get(), course, onCompleteListener).execute(relatedWebsites.toArray(new String[0]));//Get course points
+                new GetFlashcardsFromRelatedMemriseCourses(context.get(), course, onCompleteListener).execute(relatedWebsites.toArray(new String[0]));//Get course points
             }
         }
     }
 
-    private static class GetFlashcardsFromRelatedMemRiseCourses extends AsyncTask<String,Void,Void>{
+    private static class GetFlashcardsFromRelatedMemriseCourses extends AsyncTask<String,Void,Void>{
 
         private ProgressDialog progressDialog;//Shows the user that a background task is occurring
         private WeakReference<Context> context;//The screen that this is being executed from. It is a weak reference because the screen may be closed during this process
         private Course course;//The course the course points belong to
         private AsyncTaskCompleteListener<Void> onCompleteListener;//Handles what should occur after the task  is complete
 
-        private GetFlashcardsFromRelatedMemRiseCourses(Context context, Course course, AsyncTaskCompleteListener<Void> onCompleteListener){
+        private GetFlashcardsFromRelatedMemriseCourses(Context context, Course course, AsyncTaskCompleteListener<Void> onCompleteListener){
             this.context = new WeakReference<>(context);
             this.course = course;
             this.onCompleteListener = onCompleteListener;

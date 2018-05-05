@@ -28,7 +28,7 @@ import java.util.List;
 
 class GetMemriseCoursePoints implements CoursePointsImporter{
 
-    private static int timeout = 10000;//the timeout is initially set at 10 seconds
+    private static int timeout = 100000;//the timeout is initially set at 100 seconds
 
 
     public void getCoursePoints(Context context, Course course, Context appContext, AsyncTaskCompleteListener<Void> listener, AsyncTaskErrorListener errorListener){

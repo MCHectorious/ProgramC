@@ -1,5 +1,6 @@
 package com.hector.csprojectprogramc.Activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,6 +81,7 @@ public class CourseListScreen extends AppCompatActivity {
         public void onAsyncTaskError() {//Will run if a known error occurs
             Intent toHomeScreen = new Intent(CourseListScreen.this, HomeScreen.class);//Creates a link between this screen and the Home Screen
             startActivity(toHomeScreen);//Switches to the Home Screen
+
         }
     }
 
